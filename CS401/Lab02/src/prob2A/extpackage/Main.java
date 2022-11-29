@@ -5,12 +5,15 @@ import prob2A.Student;
 public class Main {
 	public static void main(String args[])
 	{
-		Student student = Student.createStudent("Test Name");
+		//Create Student object
+		Student student = Student.createStudent("Student Name");
+		//Set grade
 		student.getGradeReport().setGrade("A");
 		
-		// Student to GradeReport association
+		System.out.println("Student to GradeReport association - Printing Grade using a Student object");
 		System.out.println(student.getGradeReport());
-		// GradeReport to Student association
+
+		System.out.println("GradeReport to Student association - Printing Student Name using a Gradepoint object");
 		System.out.println(student.getGradeReport().getStudent());
 	}
 }

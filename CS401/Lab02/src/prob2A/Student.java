@@ -8,13 +8,6 @@ public class Student {
 		this.name = name;
 	}
 	
-	public static Student createStudent(String name){
-		Student student = new Student(name);
-		GradeReport report = GradeReport.createGradeReport(student);
-		student.setGradeReport(report);
-		return student;
-	}
-	
 	public GradeReport getGradeReport() {
 		return gradeReport;
 	}
@@ -25,6 +18,13 @@ public class Student {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public static Student createStudent(String name){
+		Student student = new Student(name);
+		GradeReport report = GradeReport.createGradeReport(student);
+		student.setGradeReport(report);
+		return student;
 	}
 	
 	public String toString() {

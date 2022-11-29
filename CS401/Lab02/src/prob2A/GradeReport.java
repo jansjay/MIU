@@ -5,6 +5,7 @@ import java.security.InvalidParameterException;
 public class GradeReport {
 	private Student student;
 	private String grade;
+	
 	GradeReport(Student student){
 		if(student == null) {
 			throw new InvalidParameterException("Invalid parameter. Student cannot be null");
@@ -28,14 +29,13 @@ public class GradeReport {
 	
 	public void setGrade(String grade) {
 		this.grade = grade;
-	}
+	}	
 	
 	public static GradeReport createGradeReport(Student student) {
 		return new GradeReport(student);
 	}
-	
-	public String toString()
-	{
+		
+	public String toString() {
 		return grade;
 	}
 }

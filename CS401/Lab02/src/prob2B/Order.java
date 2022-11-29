@@ -10,14 +10,20 @@ public class Order {
 	private List<OrderLine> orderLines;
 	private int orderNumber;
 	private Date orderDate;
+	
 	Order(int orderNumber) {
 		this.orderNumber = orderNumber;
 		this.orderLines = new ArrayList<>();
 	}
 	
-	public static Order createOrder(int orderNumber) {
-		return new Order(orderNumber);
+	public Date getOrderDate() {
+		return orderDate;
 	}
+	
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+	
 	
 	public void addOrderLine(OrderLine orderLine) {
 		if(orderLine == null) {
@@ -39,12 +45,8 @@ public class Order {
 		return null;
 	}
 	
-	public Date getOrderDate() {
-		return orderDate;
-	}
-	
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
+	public static Order createOrder(int orderNumber) {
+		return new Order(orderNumber);
 	}
 	
 	public String toString() {
