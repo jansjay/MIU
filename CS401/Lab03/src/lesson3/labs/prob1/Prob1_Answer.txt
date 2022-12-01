@@ -1,0 +1,15 @@
+1.		Person p1 = new PersonWithJob("Joe", 30000);
+2.		Person p2 = new Person("Joe");
+3.		//As PersonsWithJobs, p1 should be equal to p2
+4.		System.out.println("p1.equals(p2)? " + p1.equals(p2)); //=> false
+5.		System.out.println("p2.equals(p1)? " + p2.equals(p1)); //=> true
+		
+
+(Line 4.) p1.equals invokes the equals method in PersonWithJob. 
+          Which checks whether the object passed using the parameter (p2) is a PersonWithJob. 
+          Since this is false, false is returned.
+
+(Line 5.) p2.equals invokes the equals method in Person. 
+          Which checks whether the object passed using the parameter (p2) is a Person. 
+          According to the Inheritance hierarchy this is true. Hence true is returned
+		
