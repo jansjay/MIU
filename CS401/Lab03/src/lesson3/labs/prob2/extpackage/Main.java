@@ -6,7 +6,7 @@ import lesson3.labs.prob2.Building;
 public class Main {
 	public static void main(String[] args) {
 		// Assumptions
-		// Building can exist without no Apartments
+		// Building can exist without Apartments
 		// Apartment should exist only inside a Building
 		
 		Building building = Building.createBuilding(100);
