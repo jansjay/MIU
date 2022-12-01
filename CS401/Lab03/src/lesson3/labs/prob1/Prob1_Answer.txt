@@ -10,6 +10,8 @@
           Since this is false, false is returned.
 
 (Line 5.) p2.equals invokes the equals method in Person. 
-          Which checks whether the object passed using the parameter (p2) is a Person. 
-          According to the Inheritance hierarchy this is true. Hence true is returned
+          Which checks whether the object passed using the parameter (p2) is a Person and check the name field values are equal or not. 
+          According to the Inheritance hierarchy this is true and  name field values are same of both object. Hence returned true.
+	  
+	  /**boolean isEqual = this.name.equals(p.name);
 		
