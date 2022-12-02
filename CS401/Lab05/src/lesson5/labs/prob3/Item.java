@@ -1,8 +1,8 @@
 package lesson5.labs.prob3;
 
-public class Item {
+class Item implements IItem{
 	String name;
-	public Item(String name) {
+	private Item(String name) {
 		this.name = name;
 	}
 	public String getName() {
@@ -11,5 +11,8 @@ public class Item {
 	@Override
 	public String toString() {
 		return name;
+	}
+	static IItem createItem(String name) {
+		return new Item(name);
 	}
 }
