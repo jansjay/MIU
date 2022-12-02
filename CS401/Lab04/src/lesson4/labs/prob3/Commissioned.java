@@ -23,6 +23,7 @@ public class Commissioned extends Employee
         }
         this.baseSalary = baseSalary;
         this.commision = commision;
+        this.orders = orders;
     }
     
     @Override

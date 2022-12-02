@@ -4,11 +4,11 @@ import java.security.InvalidParameterException;
 
 public final class Paycheck
 {
-    private static final double FICA_RATE = 0.0;
-    private static final double STATE_RATE = 0.0;
-    private static final double LOCAL_RATE = 0.0;
-    private static final double MEDICARE_RATE = 0.0;
-    private static final double SOCIAL_SEC_RATE = 0.075;
+    private static final double FICA_RATE = 0.23d;
+    private static final double STATE_RATE = 0.05d;
+    private static final double LOCAL_RATE = 0.01d;
+    private static final double MEDICARE_RATE = 0.03d;
+    private static final double SOCIAL_SEC_RATE = 0.075d;
     private double grossPay;
     private double fica;
     private double state;
