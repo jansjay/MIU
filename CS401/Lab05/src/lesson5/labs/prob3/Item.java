@@ -1,6 +1,6 @@
 package lesson5.labs.prob3;
 
-public final class Item {
+final class Item {
 	private String name;
 	private Order order;
 	Item(Order order, String name) {
