@@ -65,20 +65,23 @@ public class Commissioned extends Employee
     }
     
     private double calculateCommision(int month, final int year) {
-        double commision = 0.0;
-        int nextMonth = month++;
-        int theYear = year;
-        if (nextMonth > 12) {
-            ++theYear;
-            --nextMonth;
+    	double commisionAmount = 0;
+        int prevMonth = month - 1;
+        int prevMonthYear = year;        
+        if (prevMonth < 1) {
+            prevMonthYear--;
+            prevMonth = 12;
         }
+        final LocalDate prevFirstDayToReport = LocalDate.of(prevMonthYear, prevMonth, 1);
+        final LocalDate currentFirstDayToReport = LocalDate.of(year, month, 1);
+        
         for (final Order order : this.orders) {
             final LocalDate orderDate = order.getOrderDate();
-            final LocalDate nextFirstDayToReport = LocalDate.of(theYear, nextMonth, 1);
-            if (orderDate.compareTo((ChronoLocalDate)nextFirstDayToReport) < 0) {
-                commision += order.getOrderAmount() * commision;
+            if (orderDate.compareTo((ChronoLocalDate)prevFirstDayToReport) >= 0 && 
+            	orderDate.compareTo((ChronoLocalDate)currentFirstDayToReport) < 0) {
+            	commisionAmount += order.getOrderAmount() * commision;
             }
         }
-        return commision;
+        return commisionAmount;
     }
 }

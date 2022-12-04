@@ -62,6 +62,6 @@ public final class Paycheck
     
     @Override
     public String toString() {
-        return "Paystub:\r\n  Gross Pay: " + this.grossPay + "\r\n" + " Fica: " + this.fica + "\r\n" + " State: " + this.state + "\r\n" + " Local: " + this.local + "\r\n" + " Medicare: " + this.medicare + "\r\n" + " Social Security: " + this.socialSecurity + "\r\n" + " NET PAY: " + this.getNetPay() + "0\r\n";
+        return "Paystub:\r\n  Gross Pay: " + this.grossPay + "\r\n" + " Fica: " + FICA_RATE + "\r\n" + " State: " + STATE_RATE + "\r\n" + " Local: " + LOCAL_RATE + "\r\n" + " Medicare: " + MEDICARE_RATE + "\r\n" + " Social Security: " + SOCIAL_SEC_RATE + "\r\n" + " NET PAY: " + this.getNetPay() + "0\r\n";
     }
 }
