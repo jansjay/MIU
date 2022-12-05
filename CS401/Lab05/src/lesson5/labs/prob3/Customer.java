@@ -3,7 +3,7 @@ package lesson5.labs.prob3;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer {
+public final class Customer {
 	private String name;
 	private List<Order> orders;
 	 Customer(String name) {

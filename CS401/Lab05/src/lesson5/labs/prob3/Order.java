@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
- public class Order {
+ public final class Order {
 	private LocalDate orderDate;
 	private List<Item> items;
 	
@@ -22,8 +22,8 @@ import java.util.List;
 		return ord;
 	}
 	
-	public void addItem(String name){
-		items.add(new Item(name));
+	public void addItem(Item item){
+		items.add(item);
 	}
 	@Override
 	public String toString() {
