@@ -1,9 +1,9 @@
 package lesson5.labs.prob3;
 
-final class Item {
+public final class Item {
 	private String name;
 	private Order order;
-	Item(Order order, String name) {
+	private Item(Order order, String name) {
 		this.name = name;
 	}
 	static Item newItem(Order order, String name) {
