@@ -7,7 +7,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import business.Book;
+import business.Context;
 import business.SystemController;
+import dataaccess.Auth;
 import librarysystem.controls.G8Navigatable;
 import librarysystem.controls.G8PanelOverview;
 
@@ -46,8 +48,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	
 	@Override
 	public boolean isNavigatorItemVisible() {
-		// Check has access
-		return true;
+		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
 	}
 	
 	@Override

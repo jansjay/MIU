@@ -2,6 +2,7 @@ package librarysystem.controls;
 
 
 import business.CrudMode;
+import javax.swing.JTextField;
 
 public class G8PanelDetails extends G8JPanel {
 

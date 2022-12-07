@@ -14,11 +14,18 @@ import dataaccess.User;
 
 public class SystemController extends BaseController implements ControllerInterface  {
 	public static Auth currentAuth = null;
+	private static SystemController instance = null;
 	DataAccess da;
 	public SystemController(){
 		da = new DataAccessFacade();
 	}
 
+	public static ControllerInterface getInstance() {
+		if(instance == null)
+			instance = new SystemController();
+		return instance;
+	}
+	
 	//UseCase1: methods 
 	public void login(String id, String password) throws LoginException {
 		HashMap<String, User> map = da.readUserMap();
