@@ -9,9 +9,13 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
 
-public class SystemController implements ControllerInterface {
+public class SystemController extends BaseController implements ControllerInterface  {
 	public static Auth currentAuth = null;
-	
+	DataAccess da;
+	public SystemController(){
+		da = new DataAccessFacade();
+	}
+
 	public void login(String id, String password) throws LoginException {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, User> map = da.readUserMap();
@@ -27,7 +31,6 @@ public class SystemController implements ControllerInterface {
 	}
 	@Override
 	public List<String> allMemberIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readMemberMap().keySet());
 		return retval;
@@ -35,11 +38,19 @@ public class SystemController implements ControllerInterface {
 	
 	@Override
 	public List<String> allBookIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
 	}
-	
-	
+
+	@Override
+	public void checkOutBookCopy(String memberId, String isbn) throws LoginException {
+		if(!super.Authorize()) throw new LoginException("UnAuthorized Access");
+		if(!Utility.isValidMember(memberId)) throw new IllegalArgumentException("Invalid member ID");
+		if(!Utility.isValidIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
+		BorrowBook borrowBook = BorrowBook.borrowABook(memberId,isbn,da);
+		da.saveBorrowBook(borrowBook);
+	}
+
+
 }

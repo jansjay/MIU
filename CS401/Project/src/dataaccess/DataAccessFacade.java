@@ -10,24 +10,23 @@ import java.util.HashMap;
 import java.util.List;
 
 import business.Book;
-import business.BookCopy;
+import business.BorrowBook;
 import business.LibraryMember;
-import dataaccess.DataAccessFacade.StorageType;
 
 
 public class DataAccessFacade implements DataAccess {
 	
 	enum StorageType {
-		BOOKS, MEMBERS, USERS;
+		BOOKS, MEMBERS, USERS, BORROWBOOKS
 	}
 	// Windows user can use
 	
-	/*public static final String OUTPUT_DIR = System.getProperty("user.dir") 
-			+ "\\src\\dataaccess\\storage";*/
+	public static final String OUTPUT_DIR = System.getProperty("user.dir")
+			+ "\\dataaccess\\storage";
 	
 	// For Mac Users path can use / 
-	public static final String OUTPUT_DIR = System.getProperty("user.dir") 
-			+ "/src/dataaccess/storage";
+	//public static final String OUTPUT_DIR = System.getProperty("user.dir")
+			//+ "/src/dataaccess/storage";
 	
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
 	
@@ -38,7 +37,20 @@ public class DataAccessFacade implements DataAccess {
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);	
 	}
-	
+
+	@Override
+	public void saveBorrowBook(BorrowBook borrowBook) {
+		HashMap<Integer, BorrowBook> borrowedBookMap = readBorrowBookMap();
+		if(borrowedBookMap == null) borrowedBookMap = new HashMap<>();
+		int borrowedId = borrowBook.getBorrowedId();
+		borrowedBookMap.put(borrowedId, borrowBook);
+		saveToStorage(StorageType.BORROWBOOKS, borrowedBookMap);
+	}
+
+	public HashMap<Integer, BorrowBook> readBorrowBookMap() {
+		return (HashMap<Integer, BorrowBook>) readFromStorage(StorageType.BORROWBOOKS);
+	}
+
 	@SuppressWarnings("unchecked")
 	public  HashMap<String,Book> readBooksMap() {
 		//Returns a Map with name/value pairs being
