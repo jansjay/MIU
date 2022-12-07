@@ -37,6 +37,7 @@ public class SystemController extends BaseController implements ControllerInterf
 			throw new LoginException("Password incorrect");
 		}
 		currentAuth = map.get(id).getAuthorization();
+		Context.createContext(id, currentAuth);
 		
 	}
 	@Override

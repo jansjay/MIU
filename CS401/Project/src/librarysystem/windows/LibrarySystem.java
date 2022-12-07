@@ -1,6 +1,8 @@
 package librarysystem.windows;
 
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import librarysystem.controls.G8JFrame;
 
@@ -19,7 +21,8 @@ public class LibrarySystem extends G8JFrame {
 			public void run() {
 				try {
 					LibrarySystem frame = new LibrarySystem();
-					frame.setVisible(true);
+					centerFrameOnDesktop(frame);
+					frame.setVisible(true);					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -31,11 +34,20 @@ public class LibrarySystem extends G8JFrame {
 	 * Create the frame.
 	 */
 	public LibrarySystem() {
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 900, 600);
 		setDefaultCloseOperation(G8JFrame.EXIT_ON_CLOSE);
 		registerPanel(new G8LoginWindow("Login"));
 		registerPanel(new G8LibraryBookOverviewWindow("Books overview"));
 		registerPanel(new G8LibraryBookDetailsWindow("Books Detail"));
+	}
+	
+	public static void centerFrameOnDesktop(Component f) {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		int height = toolkit.getScreenSize().height;
+		int width = toolkit.getScreenSize().width;
+		int frameHeight = f.getSize().height;
+		int frameWidth = f.getSize().width;
+		f.setLocation(((width - frameWidth) / 2), (height - frameHeight) / 3);
 	}
 
 }

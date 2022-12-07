@@ -14,11 +14,11 @@ public final class Context {
 
     static Context createContext(String userId, Auth auth){
         if(context == null){
-            synchronized (Context.context){
+            //synchronized (Context.context){
                 if(context == null){
                     context = new Context(userId,auth);
                 }
-            }
+            //}
         }
         return context;
     }

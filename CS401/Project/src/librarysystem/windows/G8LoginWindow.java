@@ -1,5 +1,6 @@
 package librarysystem.windows;
 
+import librarysystem.controls.G8AuthenticateActionListener;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
 
@@ -31,7 +32,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 	private JTextField textField_1;
 	
 	public G8LoginWindow() {
-setLayout(new GridLayout(0, 2, 0, 0));
+		setLayout(new GridLayout(0, 2, 0, 0));
 		
 		JLabel lblNewLabel = new JLabel("Username");
 		add(lblNewLabel);
@@ -51,10 +52,11 @@ setLayout(new GridLayout(0, 2, 0, 0));
 		add(label);
 		
 		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnNewButton.addActionListener(new G8AuthenticateActionListener(this) {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					SystemController.getInstance().login(textField.getText(), textField_1.getText());
+					SystemController.getInstance().login(textField.getText(), textField_1.getText());					
+					this.getG8JPanel().getG8JFrame().authorizationChanged();
 				} catch (LoginException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -82,6 +84,4 @@ setLayout(new GridLayout(0, 2, 0, 0));
 	public boolean isNavigatorItemVisible() {
 		return !Context.isLoggedIn();
 	}
-	
-
 }

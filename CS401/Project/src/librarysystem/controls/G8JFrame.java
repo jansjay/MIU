@@ -50,5 +50,9 @@ public class G8JFrame extends JFrame {
 	public void registerPanel(G8JPanel panel) {
 		JPanelCenter.registerPanel(panel);
 	}
+	
+	public void authorizationChanged() {
+		JPanelCenter.drawNavigator();
+	}
 
 }
