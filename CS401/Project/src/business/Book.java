@@ -101,6 +101,12 @@ final public class Book implements Serializable {
 		return optional.isPresent() ? optional.get() : null;
 	}
 	
+	public List<BookCopy> getUnavailableCopies() {
+		return Arrays.stream(this.copies)
+				.filter(x -> !x.isAvailable())
+				.toList();
+	}
+	
 	public BookCopy getCopy(int copyNum) {
 		for(BookCopy c : copies) {
 			if(copyNum == c.getCopyNum()) {
