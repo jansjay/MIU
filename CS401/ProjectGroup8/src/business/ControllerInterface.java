@@ -2,6 +2,10 @@ package business;
 
 import java.util.List;
 
+import business.Book;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFacade;
+
 public interface ControllerInterface {
 	public void login(String id, String password) throws LoginException;
 	public List<String> allMemberIds();
@@ -10,4 +14,6 @@ public interface ControllerInterface {
 	public void saveBook(Book book);
 	public void saveBookCopy(Book book);
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
+	public LibraryMember searchMember(String memberId);
+	public Book searchOverDueBookByIsbn(String isbn);
 }

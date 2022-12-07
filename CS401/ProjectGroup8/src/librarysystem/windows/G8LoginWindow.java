@@ -4,6 +4,7 @@ import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
 
 import javax.swing.JLabel;
+import javax.swing.BoxLayout;
 
 public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 
@@ -17,6 +18,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 	 * Create the panel.
 	 */
 	public G8LoginWindow() {
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		add(lblNewLabel);
