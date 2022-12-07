@@ -24,5 +24,8 @@ public class G8JPanel extends JPanel {
 	public String getTitle() {
 		return title;
 	}
+	protected void setTitle(String title) {
+		this.title = title;
+	}
 
 }

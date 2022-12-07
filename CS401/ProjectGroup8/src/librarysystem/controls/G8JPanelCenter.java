@@ -39,6 +39,7 @@ public class G8JPanelCenter extends G8JPanel {
 		
 		panelLeft = new JPanel();
 		splitPane.setLeftComponent(panelLeft);
+		panelLeft.setLayout(new BoxLayout(panelLeft, BoxLayout.Y_AXIS));
 		
 		JPanel panel_2 = new JPanel();
 		splitPane.setRightComponent(panel_2);
@@ -55,12 +56,16 @@ public class G8JPanelCenter extends G8JPanel {
 	}
 	
 	private void drawNavigator() {
+		panelLeft.removeAll();
 		for(G8JPanel panel : panels)
 		{
+			if (!(panel instanceof G8Navigatable) || 
+				!((G8Navigatable)panel).isNavigatorItemVisible())
+				continue;
+			
 			JButton btn = new JButton(panel.getTitle());
 			panelLeft.add(btn);
 			btn.addActionListener(new G8NavigatorClickedActionListener(splitPane, panel) );
-			//btn.addActionListener( );
 
 		}
 	}

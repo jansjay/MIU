@@ -1,8 +1,9 @@
 package librarysystem.controls;
 
-import javax.swing.JPanel;
 
-public class G8PanelDetails extends JPanel {
+import business.CrudMode;
+
+public class G8PanelDetails extends G8JPanel {
 
 	/**
 	 * 
@@ -16,4 +17,7 @@ public class G8PanelDetails extends JPanel {
 
 	}
 
+	protected void fillWindow(CrudMode mode) {
+		
+	}
 }

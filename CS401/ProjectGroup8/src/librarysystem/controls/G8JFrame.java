@@ -6,6 +6,9 @@ import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class G8JFrame extends JFrame {
 

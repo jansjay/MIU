@@ -4,10 +4,17 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JTable;
+
+
 import java.awt.BorderLayout;
 import javax.swing.JSplitPane;
+import javax.swing.table.DefaultTableModel;
 
 public class G8PanelOverview extends G8JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTable table;
 
 	/**
@@ -35,9 +42,15 @@ public class G8PanelOverview extends G8JPanel {
 		add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		table = new JTable();
+		table = new JTable();		
 		panel_1.add(table, BorderLayout.CENTER);
 
 	}
+	
+	protected JTable getOverviewTable() {
+		return this.table;
+	}
 
+	protected void fillWindow() {		
+	}
 }
