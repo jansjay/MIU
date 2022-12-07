@@ -3,6 +3,7 @@ package librarysystem.controls;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JSplitPane;
 
 public class G8NavigatorClickedActionListener implements ActionListener{
@@ -13,6 +14,8 @@ public class G8NavigatorClickedActionListener implements ActionListener{
 		this.toBeAddedPanel = tobeAddedPanel;
 		this.splitPane = splitPane;
 		this.parentFrame = frame;
+		this.toBeAddedPanel.setLayout(new BoxLayout(this.toBeAddedPanel, BoxLayout.Y_AXIS));
+		
 	}
 
 	@Override

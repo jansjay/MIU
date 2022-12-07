@@ -39,4 +39,22 @@ public final class Context {
     public void clearContext(){
         this.context = null;
     }
+    
+    public static boolean isAuth(Auth auth) {
+    	try{
+    		return getContext() != null && getContext().getAuth() == auth;
+    	}
+    	catch(LoginException ex) {
+    		return false;
+    	}
+    }
+    
+    public static boolean isLoggedIn() {
+    	try{
+    		return getContext() != null && getContext().getAuth() != null;
+    	}
+    	catch(LoginException ex) {
+    		return false;
+    	}
+    }
 }
