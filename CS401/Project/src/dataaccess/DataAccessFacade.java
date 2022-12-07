@@ -6,11 +6,16 @@ import java.io.Serializable;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import business.Book;
 import business.BookCopy;
+import business.CheckoutEntry;
+import business.CheckoutRecord;
 import business.LibraryMember;
 import dataaccess.DataAccessFacade.StorageType;
 
@@ -18,7 +23,7 @@ import dataaccess.DataAccessFacade.StorageType;
 public class DataAccessFacade implements DataAccess {
 	
 	enum StorageType {
-		BOOKS, MEMBERS, USERS;
+		BOOKS, MEMBERS, USERS, CHECKOUT_RECORDS;
 	}
 	// Windows user can use
 	
@@ -31,12 +36,35 @@ public class DataAccessFacade implements DataAccess {
 	
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
 	
+	@SuppressWarnings("unchecked")
+	public HashMap<String, LibraryMember> readMemberMap() {
+		//Returns a Map with name/value pairs being
+		//   memberId -> LibraryMember
+		return (HashMap<String, LibraryMember>) readFromStorage(
+				StorageType.MEMBERS);
+	}
+	
+	//UseCase2 - save new member by admin 
 	//implement: other save operations
 	public void saveNewMember(LibraryMember member) {
 		HashMap<String, LibraryMember> mems = readMemberMap();
 		String memberId = member.getMemberId();
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);	
+	}
+	
+	//UseCase3 - save book by admin 
+	@Override
+	public void saveNewBook(Book book) {
+		HashMap<String, Book> books = readBooksMap();
+		books.put(book.getIsbn(), book);
+		saveToStorage(StorageType.BOOKS, books);
+	}
+	
+	public void saveBookCopy(Book book) {
+		HashMap<String, Book> books = readBooksMap();
+		books.put(book.getIsbn(), book);
+		saveToStorage(StorageType.BOOKS, books);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -46,20 +74,75 @@ public class DataAccessFacade implements DataAccess {
 		return (HashMap<String,Book>) readFromStorage(StorageType.BOOKS);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public HashMap<String, LibraryMember> readMemberMap() {
-		//Returns a Map with name/value pairs being
-		//   memberId -> LibraryMember
-		return (HashMap<String, LibraryMember>) readFromStorage(
-				StorageType.MEMBERS);
+	//UseCase4 - search book by ISBN 
+	@Override
+	public Book searchBookByIsbn(String isbn) {
+		HashMap<String, Book> booksMap =  readBooksMap();
+		if(booksMap.containsKey(isbn)) {
+			return booksMap.get(isbn);
+		}
+		return null;
 	}
 	
+	@Override
+	public LibraryMember searchMemberById(String id) {
+		 HashMap<String, LibraryMember>  mems = readMemberMap();
+		 if(mems.containsKey(id)) {
+			 return mems.get(id);
+		 }
+		 return null;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public HashMap<String, User> readUserMap() {
 		//Returns a Map with name/value pairs being
 		//   userId -> User
 		return (HashMap<String, User>)readFromStorage(StorageType.USERS);
+	}
+	
+	@Override
+	public void saveCheckoutRecord(CheckoutRecord record) {
+		
+		HashMap<String, CheckoutRecord> recordsMap = readCheckoutRecordsMap();
+				
+		if(recordsMap == null) {
+			recordsMap = new HashMap<>();
+		}
+	
+		recordsMap.put(record.getMember().getMemberId(), record);
+		saveToStorage(StorageType.CHECKOUT_RECORDS, recordsMap);
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public HashMap<String, CheckoutRecord> readCheckoutRecordsMap() {
+		return (HashMap<String, CheckoutRecord>)readFromStorage(StorageType.CHECKOUT_RECORDS);
+	}
+	
+	@Override
+	public CheckoutRecord retrieveCheckoutRecordByMemberId(String memberId) {
+		HashMap<String, CheckoutRecord> recordsMap = readCheckoutRecordsMap();
+		if(recordsMap.containsKey(memberId)) {
+			return recordsMap.get(memberId);
+		}
+		return null;
+	}
+	@Override
+	public List<CheckoutRecord> retrieveCheckoutRecordByBookIsbn(String isbn) {
+		HashMap<String, CheckoutRecord> recordsMap = readCheckoutRecordsMap();
+		
+		List<CheckoutRecord> recordList = new ArrayList<>();
+		for(String key: recordsMap.keySet()) {
+			CheckoutRecord rd = recordsMap.get(key);
+			for(CheckoutEntry entry: rd.getCheckoutEntries()) {
+				if(entry.getBookCopy().getBook().getIsbn().equalsIgnoreCase(isbn)
+						&& LocalDate.now().isAfter(entry.getDueDate())) {
+					recordList.add(rd);
+				}
+			} 		
+		}
+	
+		return recordList;
 	}
 	
 	
@@ -150,5 +233,5 @@ public class DataAccessFacade implements DataAccess {
 		}
 		private static final long serialVersionUID = 5399827794066637059L;
 	}
-	
+
 }
