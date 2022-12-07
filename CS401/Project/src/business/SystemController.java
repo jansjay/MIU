@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import dataaccess.Auth;
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFacade;
-import dataaccess.User;
+import dataaccess.*;
 
 public class SystemController extends BaseController implements ControllerInterface  {
 	public static Auth currentAuth = null;
@@ -45,9 +42,9 @@ public class SystemController extends BaseController implements ControllerInterf
 
 	@Override
 	public void checkOutBookCopy(String memberId, String isbn) throws LoginException {
-		if(!super.Authorize()) throw new LoginException("UnAuthorized Access");
-		if(!Utility.isValidMember(memberId)) throw new IllegalArgumentException("Invalid member ID");
-		if(!Utility.isValidIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
+		if(!super.Authorize(Operation.CheckoutBook)) throw new LoginException("UnAuthorized Access");
+		if(!Validator.isValidMember(memberId)) throw new IllegalArgumentException("Invalid member ID");
+		if(!Validator.isValidIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
 		BorrowBook borrowBook = BorrowBook.borrowABook(memberId,isbn,da);
 		da.saveBorrowBook(borrowBook);
 	}
