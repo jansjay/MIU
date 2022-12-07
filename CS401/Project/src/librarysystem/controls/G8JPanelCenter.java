@@ -56,7 +56,11 @@ public class G8JPanelCenter extends G8JPanel {
 		drawNavigator();
 	}
 	
-	private void drawNavigator() {
+	public void authorizationChanged() {
+		drawNavigator();
+	}
+	
+	void drawNavigator() {
 		panelLeft.removeAll();
 		for(G8JPanel panel : panels)
 		{
@@ -66,17 +70,8 @@ public class G8JPanelCenter extends G8JPanel {
 			
 			JButton btn = new JButton(panel.getTitle());
 			panelLeft.add(btn);
+			splitPane.setRightComponent(panel);
 			btn.addActionListener(new G8NavigatorClickedActionListener(getG8JFrame(), splitPane, panel) );
-
-		}
+		}		
 	}
-	
-	private G8JFrame getG8JFrame() {
-		Container container = getParent();
-		while(!(container instanceof G8JFrame) && container != null) {
-			container = container.getParent();
-		}
-		return (G8JFrame)container;
-	}
-
 }
