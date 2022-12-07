@@ -43,8 +43,8 @@ public class SystemController extends BaseController implements ControllerInterf
 	@Override
 	public void checkOutBookCopy(String memberId, String isbn) throws LoginException {
 		if(!super.Authorize(Operation.CheckoutBook)) throw new LoginException("UnAuthorized Access");
-		if(!Validator.isValidMember(memberId)) throw new IllegalArgumentException("Invalid member ID");
-		if(!Validator.isValidIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
+		if(!Validator.validateMemberId(memberId)) throw new IllegalArgumentException("Invalid member ID");
+		if(!Validator.validateIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
 		BorrowBook borrowBook = BorrowBook.borrowABook(memberId,isbn,da);
 		da.saveBorrowBook(borrowBook);
 	}
