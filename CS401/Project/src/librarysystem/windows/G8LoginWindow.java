@@ -30,12 +30,8 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 	private JTextField textField;
 	private JTextField textField_1;
 	
-	/**
-	 * Create the panel.
-	 */
-	public G8LoginWindow(String title) {
-		setTitle(title);
-		setLayout(new GridLayout(0, 2, 0, 0));
+	public G8LoginWindow() {
+setLayout(new GridLayout(0, 2, 0, 0));
 		
 		JLabel lblNewLabel = new JLabel("Username");
 		add(lblNewLabel);
@@ -72,6 +68,14 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		
 		JLabel label_2 = new JLabel("");
 		add(label_2);
+	}
+	
+	/**
+	 * Create the panel.
+	 */
+	public G8LoginWindow(String title) {
+		this();
+		setTitle(title);		
 	}
 	
 	@Override

@@ -43,6 +43,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	}
 
 	public G8LibraryBookOverviewWindow(String title) {
+		this();
 		setTitle(title);
 	}
 	
