@@ -1,11 +1,13 @@
 package librarysystem.windows;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import business.Book;
+import business.SystemController;
 import librarysystem.controls.G8Navigatable;
 import librarysystem.controls.G8PanelOverview;
 
@@ -22,18 +24,18 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	public G8LibraryBookOverviewWindow() {
 	}
 	
-	public void fillWindow(List<Book> books) {
-		String[][] rows = new String[2][books.size()];
+	public void fillWindow(List<String> bookIds) {
+		String[][] rows = new String[bookIds.size()][2];
 		int i=0;
-		for(Book book : books) {
-			rows[i][0] = book.getIsbn();
-			rows[i][1] = book.getTitle();
+		for(String bookId : bookIds) {
+			rows[i][0] = i + "";
+			rows[i][1] = bookId;
 			i++;
 		}
 		this.getOverviewTable().setModel(new DefaultTableModel(
 				rows,
 				new String[] {
-					"Title", "ISBN"
+					"Index", "Book ID"
 				}
 			));
 	}
@@ -46,5 +48,12 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	public boolean isNavigatorItemVisible() {
 		// Check has access
 		return true;
+	}
+	
+	@Override
+	public void populate() {
+		List<Book> books = new ArrayList<>();
+		SystemController sc = new SystemController();		
+		fillWindow(sc.allBookIds());
 	}
 }

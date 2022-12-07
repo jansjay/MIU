@@ -1,6 +1,7 @@
 package librarysystem.controls;
 import javax.swing.JSplitPane;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -65,9 +66,17 @@ public class G8JPanelCenter extends G8JPanel {
 			
 			JButton btn = new JButton(panel.getTitle());
 			panelLeft.add(btn);
-			btn.addActionListener(new G8NavigatorClickedActionListener(splitPane, panel) );
+			btn.addActionListener(new G8NavigatorClickedActionListener(getG8JFrame(), splitPane, panel) );
 
 		}
+	}
+	
+	private G8JFrame getG8JFrame() {
+		Container container = getParent();
+		while(!(container instanceof G8JFrame) && container != null) {
+			container = container.getParent();
+		}
+		return (G8JFrame)container;
 	}
 
 }
