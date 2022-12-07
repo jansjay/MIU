@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import dataaccess.*;
+import dataaccess.Auth;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessFacade;
+import dataaccess.Operation;
+import dataaccess.User;
+
 
 public class SystemController extends BaseController implements ControllerInterface  {
 	public static Auth currentAuth = null;
@@ -73,13 +78,13 @@ public class SystemController extends BaseController implements ControllerInterf
 	//UseCase4 - methods
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException {
 		
-		LibraryMember member = dataAccess.searchMemberById(memberId);
+		LibraryMember member = da.searchMemberById(memberId);
 		
 		if(member == null) {
 			throw new LibrarySystemException("No member is found with Id: " + memberId);
 		}
 		
-		Book book = dataAccess.searchBookByIsbn(isbn);
+		Book book = da.searchBookByIsbn(isbn);
 		if(book == null) {
 			throw new LibrarySystemException("No Book is found with ISBN: " + isbn);
 		}
@@ -92,7 +97,7 @@ public class SystemController extends BaseController implements ControllerInterf
 		BookCopy bookCopy = book.getNextAvailableCopy();
 		bookCopy.changeAvailability();
 		
-		CheckoutRecord record = dataAccess.retrieveCheckoutRecordByMemberId(memberId);
+		CheckoutRecord record = da.retrieveCheckoutRecordByMemberId(memberId);
 		
 		if(record == null) {
 			record = new CheckoutRecord(member, LocalDate.now());
@@ -102,7 +107,7 @@ public class SystemController extends BaseController implements ControllerInterf
 		CheckoutEntry entry = new CheckoutEntry(bookCopy, LocalDate.now(), checkoutDate);
 		record.addCheckoutEntry(entry);
 		// save new / updated record and entries 
-		dataAccess.saveCheckoutRecord(record);
+		da.saveCheckoutRecord(record);
 
 	}
 	
@@ -114,9 +119,8 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 	
 	public void printCheckoutRecordsByMember(String memberId) {
-		DataAccess dataAccess = da;
-		LibraryMember member = dataAccess.searchMemberById(memberId);
-		CheckoutRecord record = dataAccess.retrieveCheckoutRecordByMemberId(memberId);
+		LibraryMember member = da.searchMemberById(memberId);
+		CheckoutRecord record = da.retrieveCheckoutRecordByMemberId(memberId);
 		if(member != null && record != null) {
 			System.out.println("All checkout entry for the library member: ");
 			System.out.println(member);
@@ -130,12 +134,11 @@ public class SystemController extends BaseController implements ControllerInterf
 	
 	//UseCase 7: (Optional 2)
 	public Book searchOverDueBookByIsbn(String isbn) {
-		DataAccess dataAccess = da;
-		Book book = dataAccess.searchBookByIsbn(isbn);
+		Book book = da.searchBookByIsbn(isbn);
 		//if copy/s unavailable then search into records
 		List<BookCopy> unavaileCopies = book.getUnavailableCopies();
 		//get over due book records 
-		List<CheckoutRecord> recordList = dataAccess.retrieveCheckoutRecordByBookIsbn(isbn);
+		List<CheckoutRecord> recordList = da.retrieveCheckoutRecordByBookIsbn(isbn);
 		for(CheckoutRecord record: recordList) {
 			for(CheckoutEntry entry: record.getCheckoutEntries()) {
 				if(LocalDate.now().isAfter(entry.getDueDate())) {
