@@ -1,5 +1,6 @@
 package librarysystem.controls;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public class G8JPanel extends JPanel {
@@ -14,7 +15,6 @@ public class G8JPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public G8JPanel() {
-
 	}
 	
 	public G8JPanel(String title) {
