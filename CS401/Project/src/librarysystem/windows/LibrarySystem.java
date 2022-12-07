@@ -1,5 +1,6 @@
 package librarysystem.windows;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
@@ -39,6 +40,7 @@ public class LibrarySystem extends G8JFrame {
 		registerPanel(new G8LoginWindow("Login"));
 		registerPanel(new G8LibraryBookOverviewWindow("Books overview"));
 		registerPanel(new G8LibraryBookDetailsWindow("Books Detail"));
+		setStatusMessage("Welcome !!!", Color.DARK_GRAY);
 	}
 	
 	public static void centerFrameOnDesktop(Component f) {

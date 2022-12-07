@@ -7,6 +7,7 @@ import librarysystem.controls.G8Navigatable;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.BoxLayout;
@@ -56,10 +57,9 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					SystemController.getInstance().login(textField.getText(), textField_1.getText());					
-					this.getG8JPanel().getG8JFrame().authorizationChanged();
+					this.getG8JPanel().getG8JFrame().authorizationChanged();					
 				} catch (LoginException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					this.getG8JPanel().getG8JFrame().setStatusMessage(e1.getMessage(), Color.RED);
 				}
 			}
 		});

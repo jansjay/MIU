@@ -3,6 +3,8 @@ package librarysystem.controls;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BoxLayout;
+
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,7 @@ public class G8JFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private G8JPanel contentPane;
 	private G8JPanelCenter JPanelCenter;
-	
+	private G8JPanelTrailing JPanelTrailing;
 
 	/**
 	 * Create the frame.
@@ -40,9 +42,7 @@ public class G8JFrame extends JFrame {
 		JPanelCenter = new G8JPanelCenter();
 		contentPane.add(JPanelCenter);		
 		
-		G8JPanelTrailing JPanelTrailing = new G8JPanelTrailing();
-		FlowLayout fl_JPanelTrailing = (FlowLayout) JPanelTrailing.getLayout();
-		fl_JPanelTrailing.setAlignment(FlowLayout.TRAILING);
+		JPanelTrailing = new G8JPanelTrailing();
 		contentPane.add(JPanelTrailing);
 		
 	}
@@ -53,6 +53,11 @@ public class G8JFrame extends JFrame {
 	
 	public void authorizationChanged() {
 		JPanelCenter.drawNavigator();
+		setStatusMessage("Login succeeded!!!", Color.green);
+	}
+	
+	public void setStatusMessage(String message, Color color) {
+		JPanelTrailing.setMessage(message, color);
 	}
 
 }
