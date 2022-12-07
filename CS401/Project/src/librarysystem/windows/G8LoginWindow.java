@@ -1,6 +1,6 @@
 package librarysystem.windows;
 
-import librarysystem.controls.G8AuthenticateActionListener;
+import librarysystem.controls.G8ActionListener;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
 
@@ -21,6 +21,8 @@ import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 
 public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 
@@ -29,47 +31,51 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 	 */
 	
 	private static final long serialVersionUID = 1L;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField txtUsername;
+	private JTextField txtPassword;
 	
 	public G8LoginWindow() {
-		setLayout(new GridLayout(0, 2, 0, 0));
+		setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblNewLabel = new JLabel("Username");
-		add(lblNewLabel);
+		G8JPanel panel = new G8JPanel();
+		add(panel);
+		panel.setLayout(null);
 		
-		textField = new JTextField();
-		add(textField);
-		textField.setColumns(10);
+		JLabel lblUsername = new JLabel("Username");
+		lblUsername.setBounds(28, 49, 188, 50);
+		panel.add(lblUsername);
 		
-		JLabel lblNewLabel_1 = new JLabel("Password");
-		add(lblNewLabel_1);
+		txtUsername = new JTextField();
+		txtUsername.setBounds(199, 49, 450, 50);
+		panel.add(txtUsername);
+		txtUsername.setColumns(10);
 		
-		textField_1 = new JTextField();
-		add(textField_1);
-		textField_1.setColumns(10);
+		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setBounds(26, 101, 160, 50);
+		panel.add(lblPassword);
+		
+		txtPassword = new JTextField();
+		txtPassword.setBounds(199, 101, 450, 50);
+		panel.add(txtPassword);
+		txtPassword.setColumns(10);
 		
 		JLabel label = new JLabel("");
-		add(label);
+		label.setBounds(0, 200, 450, 50);
+		panel.add(label);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new G8AuthenticateActionListener(this) {
+		JButton btnLogin = new JButton("Login");
+		btnLogin.setBounds(199, 156, 450, 50);
+		btnLogin.addActionListener(new G8ActionListener(this) {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					SystemController.getInstance().login(textField.getText(), textField_1.getText());					
+					SystemController.getInstance().login(txtUsername.getText(), txtPassword.getText());					
 					this.getG8JPanel().getG8JFrame().authorizationChanged();					
 				} catch (LoginException e1) {
 					this.getG8JPanel().getG8JFrame().setStatusMessage(e1.getMessage(), Color.RED);
 				}
 			}
 		});
-		add(btnNewButton);
-		
-		JLabel label_1 = new JLabel("");
-		add(label_1);
-		
-		JLabel label_2 = new JLabel("");
-		add(label_2);
+		panel.add(btnLogin);
 	}
 	
 	/**
