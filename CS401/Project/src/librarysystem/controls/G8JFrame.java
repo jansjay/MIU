@@ -26,6 +26,7 @@ public class G8JFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public G8JFrame() {
+		setTitle("Library System");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new G8JPanel();
@@ -53,7 +54,7 @@ public class G8JFrame extends JFrame {
 	
 	public void authorizationChanged() {
 		JPanelCenter.drawNavigator();
-		setStatusMessage("Login succeeded!!!", Color.green);
+		setStatusMessage("Login succeeded!!!", Color.BLUE);
 	}
 	
 	public void setStatusMessage(String message, Color color) {

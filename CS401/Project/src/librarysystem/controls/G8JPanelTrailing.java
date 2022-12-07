@@ -27,6 +27,7 @@ public class G8JPanelTrailing extends G8JPanel {
 		add(panel);
 		panel.setLayout(new BorderLayout(1, 1));		
 		textArea = new JTextArea();
+		textArea.setEditable(false);
 		textArea.setLineWrap(true);
 		textArea.setForeground(Color.BLUE);
 		JScrollPane scroll = new JScrollPane(textArea);
