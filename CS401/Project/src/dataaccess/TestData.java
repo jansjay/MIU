@@ -1,5 +1,6 @@
 package dataaccess;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +8,9 @@ import java.util.List;
 import business.Address;
 import business.Author;
 import business.Book;
+import business.BookCopy;
+import business.CheckoutEntry;
+import business.CheckoutRecord;
 import business.LibraryMember;
 
 /**
@@ -28,8 +32,24 @@ public class TestData {
 		td.libraryMemberData();
 		td.userData();
 		DataAccess da = new DataAccessFacade();
+		
 		System.out.println(da.readBooksMap());
 		System.out.println(da.readUserMap());
+		
+		td.testAddNewMemberData();
+		
+		td.testAddNewBook();
+		
+		td.testSearchBookByIsbnExistsInList();
+		
+		//test checkout record 
+		
+		td.testSaveCheckoutRecords();
+		
+		td.testExistingCheckoutRecords();
+		
+		
+		
 	}
 	///create books
 	public void bookData() {
@@ -40,6 +60,53 @@ public class TestData {
 		allBooks.get(2).addCopy();
 		allBooks.get(2).addCopy();
 		DataAccessFacade.loadBookMap(allBooks);
+	}
+	
+	public void testAddNewBook() {
+		System.out.println("Test to add new book");
+		Book book = new Book("045-228-2667", "Science of Being and Art of Living", 21, Arrays.asList(allAuthors.get(5)));
+		DataAccess da = new DataAccessFacade();
+		da.saveNewBook(book);
+		System.out.println(da.readBooksMap());
+	}
+	
+	public void testSearchBookByIsbnExistsInList() {
+		System.out.println("Test to search book by isbn");
+		DataAccess da = new DataAccessFacade();
+		Book book = da.searchBookByIsbn("045-228-2667");
+		if(book != null)
+			System.out.println(book);
+		else
+			System.out.println("No book found by isbn: " + "045-228-2667");
+	}
+	
+	public void testSaveCheckoutRecords() {
+		System.out.println("Test to checkout record of member");
+		LibraryMember member = new LibraryMember("1001", "Andy", "Rogers", "641-223-2211", addresses.get(4));
+		CheckoutRecord record = new CheckoutRecord(member, LocalDate.now());
+		DataAccess da = new DataAccessFacade();
+		Book book = da.searchBookByIsbn("045-228-2667");
+		if(book != null)
+			System.out.println(book);
+		else
+			System.out.println("No book found by isbn: " + "045-228-2667");
+		BookCopy bookCopy = book.getNextAvailableCopy();
+		LocalDate checkoutDate = LocalDate.now().plusDays(book.getMaxCheckoutLength());
+		CheckoutEntry entry = new CheckoutEntry(bookCopy, LocalDate.now(), checkoutDate);
+		record.addCheckoutEntry(entry);
+		da.saveCheckoutRecord(record);
+	}
+	
+	public void testExistingCheckoutRecords() { 
+		DataAccess da = new DataAccessFacade();
+		CheckoutRecord record = da.retrieveCheckoutRecordByMemberId("1001");
+		if(record != null) {
+			for(CheckoutEntry ent: record.getCheckoutEntries()) {
+				System.out.println("entry book isbn: " + ent.getBookCopy().getBook().getIsbn());
+			}
+		} else {
+			System.out.println("No checkout record found");
+		}
 	}
 	
 	public void userData() {
@@ -60,6 +127,14 @@ public class TestData {
 		members.add(libraryMember);
 		
 		DataAccessFacade.loadMemberMap(members);	
+	}
+	
+	public void testAddNewMemberData() {
+		System.out.println("Test to add new member");
+		LibraryMember mem = new LibraryMember("1005", "Tomas", "Adison", "641-472-2872", addresses.get(1));
+		DataAccess da = new DataAccessFacade();
+		da.saveNewMember(mem);
+		System.out.println(da.readMemberMap());
 	}
 	
 	///////////// DATA //////////////
@@ -86,6 +161,7 @@ public class TestData {
 			add(new Author("Nirmal", "Pugh", "641-919-3223", addresses.get(1), "Thinker of thoughts."));
 			add(new Author("Andrew", "Cleveland", "976-445-2232", addresses.get(2), "Author of childrens' books."));
 			add(new Author("Sarah", "Connor", "123-422-2663", addresses.get(3), "Known for her clever style."));
+			add(new Author("Maharishi ", "Mahesh Yogi", "045-228-2667", addresses.get(1), "Science of Being and Art of Living"));
 		}
 	};
 	
@@ -107,4 +183,7 @@ public class TestData {
 			add(new User("103", "111", Auth.BOTH));
 		}
 	};
+	
+	
+
 }
