@@ -38,6 +38,7 @@ public class G8LibraryBookDetailsWindow extends G8PanelDetails {
 	}
 	
 	public G8LibraryBookDetailsWindow(String title) {
+		this();
 		setTitle(title);
 	}
 }
