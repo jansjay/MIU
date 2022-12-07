@@ -8,13 +8,19 @@ import java.util.List;
 import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
+import dataaccess.Operation;
 import dataaccess.User;
 
-public class SystemController implements ControllerInterface {
+
+public class SystemController extends BaseController implements ControllerInterface  {
 	public static Auth currentAuth = null;
+	DataAccess da;
+	public SystemController(){
+		da = new DataAccessFacade();
+	}
+
 	//UseCase1: methods 
 	public void login(String id, String password) throws LoginException {
-		DataAccess da = new DataAccessFacade();
 		HashMap<String, User> map = da.readUserMap();
 		if(!map.containsKey(id)) {
 			throw new LoginException("ID " + id + " not found");
@@ -28,7 +34,6 @@ public class SystemController implements ControllerInterface {
 	}
 	@Override
 	public List<String> allMemberIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readMemberMap().keySet());
 		return retval;
@@ -36,22 +41,30 @@ public class SystemController implements ControllerInterface {
 	
 	@Override
 	public List<String> allBookIds() {
-		DataAccess da = new DataAccessFacade();
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
 	}
+
+	@Override
+	public void checkOutBookCopy(String memberId, String isbn) throws LoginException {
+		if(!super.Authorize(Operation.CheckoutBook)) throw new LoginException("UnAuthorized Access");
+		if(!Validator.validateMemberId(memberId)) throw new IllegalArgumentException("Invalid member ID");
+		if(!Validator.validateIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
+		BorrowBook borrowBook = BorrowBook.borrowABook(memberId,isbn,da);
+		da.saveBorrowBook(borrowBook);
+	}
+
+
 	//UseCase2: methods
 	@Override
 	public void saveMember(LibraryMember member) {
-		DataAccess da = new DataAccessFacade();
 		da.saveNewMember(member);
 	}
 	
 	//UseCase3: methods
 	@Override
 	public void saveBook(Book book) {
-		DataAccess da = new DataAccessFacade();
 		da.saveNewBook(book);
 	}
 
@@ -59,21 +72,19 @@ public class SystemController implements ControllerInterface {
 	@Override
 	public void saveBookCopy(Book book) {
 		book.addCopy();
-		DataAccess da = new DataAccessFacade();
 		da.saveBookCopy(book);
 	}
 	
 	//UseCase4 - methods
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException {
 		
-		DataAccess dataAccess = new DataAccessFacade();
-		LibraryMember member = dataAccess.searchMemberById(memberId);
+		LibraryMember member = da.searchMemberById(memberId);
 		
 		if(member == null) {
 			throw new LibrarySystemException("No member is found with Id: " + memberId);
 		}
 		
-		Book book = dataAccess.searchBookByIsbn(isbn);
+		Book book = da.searchBookByIsbn(isbn);
 		if(book == null) {
 			throw new LibrarySystemException("No Book is found with ISBN: " + isbn);
 		}
@@ -86,7 +97,7 @@ public class SystemController implements ControllerInterface {
 		BookCopy bookCopy = book.getNextAvailableCopy();
 		bookCopy.changeAvailability();
 		
-		CheckoutRecord record = dataAccess.retrieveCheckoutRecordByMemberId(memberId);
+		CheckoutRecord record = da.retrieveCheckoutRecordByMemberId(memberId);
 		
 		if(record == null) {
 			record = new CheckoutRecord(member, LocalDate.now());
@@ -96,22 +107,20 @@ public class SystemController implements ControllerInterface {
 		CheckoutEntry entry = new CheckoutEntry(bookCopy, LocalDate.now(), checkoutDate);
 		record.addCheckoutEntry(entry);
 		// save new / updated record and entries 
-		dataAccess.saveCheckoutRecord(record);
+		da.saveCheckoutRecord(record);
 
 	}
 	
 	//UseCase 6: (Optional 1)
 	public LibraryMember searchMember(String memberId) {
-		DataAccess dataAccess = new DataAccessFacade();
-		LibraryMember member = dataAccess.searchMemberById(memberId);
+		LibraryMember member = da.searchMemberById(memberId);
 		//
 		return member;
 	}
 	
 	public void printCheckoutRecordsByMember(String memberId) {
-		DataAccess dataAccess = new DataAccessFacade();
-		LibraryMember member = dataAccess.searchMemberById(memberId);
-		CheckoutRecord record = dataAccess.retrieveCheckoutRecordByMemberId(memberId);
+		LibraryMember member = da.searchMemberById(memberId);
+		CheckoutRecord record = da.retrieveCheckoutRecordByMemberId(memberId);
 		if(member != null && record != null) {
 			System.out.println("All checkout entry for the library member: ");
 			System.out.println(member);
@@ -125,12 +134,11 @@ public class SystemController implements ControllerInterface {
 	
 	//UseCase 7: (Optional 2)
 	public Book searchOverDueBookByIsbn(String isbn) {
-		DataAccess dataAccess = new DataAccessFacade();
-		Book book = dataAccess.searchBookByIsbn(isbn);
+		Book book = da.searchBookByIsbn(isbn);
 		//if copy/s unavailable then search into records
 		List<BookCopy> unavaileCopies = book.getUnavailableCopies();
 		//get over due book records 
-		List<CheckoutRecord> recordList = dataAccess.retrieveCheckoutRecordByBookIsbn(isbn);
+		List<CheckoutRecord> recordList = da.retrieveCheckoutRecordByBookIsbn(isbn);
 		for(CheckoutRecord record: recordList) {
 			for(CheckoutEntry entry: record.getCheckoutEntries()) {
 				if(LocalDate.now().isAfter(entry.getDueDate())) {
@@ -147,5 +155,5 @@ public class SystemController implements ControllerInterface {
 		
 		return book;
 	}
-	
+
 }
