@@ -9,8 +9,10 @@ import javax.swing.JTable;
 import java.awt.BorderLayout;
 import javax.swing.JSplitPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class G8PanelOverview extends G8JPanel {
+public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	/**
 	 * 
 	 */
@@ -32,7 +34,8 @@ public class G8PanelOverview extends G8JPanel {
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		panel.add(splitPane);
 		
-		JButton btnNewButton = new JButton("New button");
+		JButton btnNewButton = new JButton("Load Data");
+		btnNewButton.addActionListener(new G8PopulateEvent(this));
 		splitPane.setLeftComponent(btnNewButton);
 		
 		JPanel panel_2 = new JPanel();
@@ -52,5 +55,9 @@ public class G8PanelOverview extends G8JPanel {
 	}
 
 	protected void fillWindow() {		
+	}
+
+	@Override
+	public void populate() {
 	}
 }

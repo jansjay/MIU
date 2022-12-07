@@ -9,14 +9,15 @@ public class G8NavigatorClickedActionListener implements ActionListener{
 	G8JPanel toBeAddedPanel;
 	G8JFrame parentFrame;
 	JSplitPane splitPane;
-	public G8NavigatorClickedActionListener(JSplitPane splitPane, G8JPanel tobeAddedPanel) {
+	public G8NavigatorClickedActionListener(G8JFrame frame, JSplitPane splitPane, G8JPanel tobeAddedPanel) {
 		this.toBeAddedPanel = tobeAddedPanel;
 		this.splitPane = splitPane;
+		this.parentFrame = frame;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		splitPane.setRightComponent(toBeAddedPanel);
-		
+		parentFrame.setTitle("Library System - " + toBeAddedPanel.getTitle());
 	};
 }
