@@ -51,47 +51,47 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	 */
 	public G8LibraryBookOverviewWindow() {
 		panelDetail.setLayout(null);
-		
+
 		JLabel lblIsbn = new JLabel("ISBN");
 		lblIsbn.setBounds(49, 26, 69, 20);
 		panelDetail.add(lblIsbn);
-		
+
 		textFieldIsbn = new JTextField();
 		textFieldIsbn.setBounds(202, 23, 958, 26);
 		panelDetail.add(textFieldIsbn);
 		textFieldIsbn.setColumns(10);
-		
+
 		JLabel lblTitle = new JLabel("Title");
 		lblTitle.setBounds(49, 57, 69, 20);
 		panelDetail.add(lblTitle);
-		
+
 		textFieldTitle = new JTextField();
 		textFieldTitle.setBounds(202, 54, 958, 26);
 		panelDetail.add(textFieldTitle);
 		textFieldTitle.setColumns(10);
-		
+
 		lblAuthors = new JLabel("Authors");
 		lblAuthors.setBounds(49, 91, 69, 20);
 		panelDetail.add(lblAuthors);
-		
+
 		JLabel lblCopies = new JLabel("Copies");
 		lblCopies.setBounds(49, 192, 69, 20);
 		panelDetail.add(lblCopies);
-		
+
 		textFieldCopies = new JTextField();
 		textFieldCopies.setBounds(202, 186, 958, 26);
 		panelDetail.add(textFieldCopies);
 		textFieldCopies.setColumns(10);
-		
-        listAuthors = new JList();
-        listAuthors.setBorder(new LineBorder(new Color(10, 10, 10)));
+
+		listAuthors = new JList();
+		listAuthors.setBorder(new LineBorder(new Color(10, 10, 10)));
 		listAuthors.setBounds(0, 0, 1, 1);
-		
-		
+
+
 		JScrollPane scrollBar = new JScrollPane(listAuthors);
 		scrollBar.setBounds(202, 92, 958, 78);
 		panelDetail.add(scrollBar);		
-		
+
 		btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -100,17 +100,17 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		});
 		btnSave.setBounds(202, 300, 115, 29);
 		panelDetail.add(btnSave);
-		
+
 		JLabel lblCheckoutLength = new JLabel("Checkout Length (days)");
 		lblCheckoutLength.setBounds(6, 244, 160, 20);
 		panelDetail.add(lblCheckoutLength);
-		
+
 		textFieldCheckoutLength = new JTextField();
 		textFieldCheckoutLength.setColumns(10);
 		textFieldCheckoutLength.setBounds(202, 239, 958, 26);
 		panelDetail.add(textFieldCheckoutLength);
 	}
-	
+
 	public void fillWindow(List<Book> books) {
 		Object[][] rows = new Object[books.size()][5];
 		int i=0;
@@ -125,15 +125,15 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this.table.setModel(new DefaultTableModel(
 				rows,
 				new String[] {
-					"ISBN", "Title", "Authors" , "NumOfCopy", "Checkout Days"
+						"ISBN", "Title", "Authors" , "NumOfCopy", "Checkout Days"
 				}
-			) {
-				private static final long serialVersionUID = 1L;
-				boolean[] columnEditables = new boolean[] {
+				) {
+			private static final long serialVersionUID = 1L;
+			boolean[] columnEditables = new boolean[] {
 					false, false, false, false, false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
 			}
 		});
 		this.table.setShowGrid(true);
@@ -143,19 +143,19 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this();
 		setTitle(title);
 	}
-	
+
 	@Override
 	public boolean isNavigatorItemVisible() {
 		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
 	}
-	
+
 	@Override
 	public void populate() {
 		SystemController sc = new SystemController();		
 		fillWindow(sc.allBooks());
 		setFieldStatus(CrudMode.Read);
 	}
-	
+
 	@Override
 	protected void selectionChanged() {
 		System.out.println("table.getSelectedRow(): " + table.getSelectedRow());
@@ -164,16 +164,17 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 			return;
 		}
 		Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-		
+
 		this.textFieldIsbn.setText(book.getIsbn());
 		this.textFieldTitle.setText(book.getTitle());
 		this.textFieldCopies.setText(book.getCopies().length  + "");
 		this.textFieldCheckoutLength.setText(String.valueOf(book.getMaxCheckoutLength()));
 		DefaultListModel listModel = new DefaultListModel();
 		listModel.addAll(book.getAuthors());
-		listAuthors.setModel(listModel);		
+		listAuthors.setModel(listModel);
+		setFieldStatus(CrudMode.Read);
 	}
-	
+
 	private void setFieldStatus(CrudMode mode) {
 		this.textFieldIsbn.setEditable(mode == CrudMode.Create);
 		this.textFieldTitle.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
@@ -182,29 +183,34 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.textFieldCheckoutLength.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 	}
-	
+
 	@Override
 	protected void deleteClicked() {
 		super.deleteClicked();
 		currentCrudMode = CrudMode.Delete;
 		setFieldStatus(CrudMode.Delete);
-		this.populate();
+		saveToDb();
 	}
 	@Override
 	protected void newClicked() {
 		super.newClicked();
 		currentCrudMode = CrudMode.Create;
 		setFieldStatus(CrudMode.Create);
-		clearBookUIFieldsForNewCreation();
+		clearBookUIFields();
+		populateAuthorsForNewBookCreation();
+	}
+	private void populateAuthorsForNewBookCreation() {
+		DefaultListModel listModel = new DefaultListModel();
+		listModel.addAll(SystemController.getInstance().getAllAuthors());
+		listAuthors.setModel(listModel);
 	}
 	
-	private void clearBookUIFieldsForNewCreation() {
+	private void clearBookUIFields() {
 		this.textFieldIsbn.setText("");
 		this.textFieldTitle.setText("");
 		this.textFieldCopies.setText("");
-		//Object[] authorsObjList = this.listAuthors.getSelectedValues();
+		this.textFieldCheckoutLength.setText("");
 		DefaultListModel listModel = new DefaultListModel();
-		listModel.addAll(SystemController.getInstance().getAllAuthors());
 		listAuthors.setModel(listModel);
 	}
 
@@ -214,50 +220,59 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		currentCrudMode = CrudMode.Update;
 		setFieldStatus(CrudMode.Update);
 	}
-	
+
 	private Book createBookFromUIFields() {
 		String isbn = this.textFieldIsbn.getText();
 		String title = this.textFieldTitle.getText();
 		String numCopies = this.textFieldCopies.getText();
 		String checkoutLength = this.textFieldCheckoutLength.getText();
 		List<Author> authors = new ArrayList<>();
-		
-		if(currentCrudMode == CrudMode.Create) {
-			Object[] authorsObjList = this.listAuthors.getSelectedValues();
-			for(Object obj: authorsObjList) {
-				//Author(String f, String l, String t, Address a, String bio)
-				authors.add((Author)obj);
-			}
-		} else {
-			Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-			authors = book.getAuthors();
+
+		//Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+		//authors = book.getAuthors();
+		Object[] authorsObjList = this.listAuthors.getSelectedValues();
+		System.out.println("selected Auth len: " + authorsObjList.length);
+		for(Object obj: authorsObjList) {
+			System.out.println("author: " + obj);
+			authors.add((Author)obj);
 		}
 
-		Book bk = new Book(isbn, title, 21, authors);
-		
+		Book bk = new Book(isbn, title, Integer.parseInt(checkoutLength), authors);
+		for(int i = 1; i < Integer.parseInt(numCopies); i++) {
+			bk.addCopy();
+		}
+
 		return bk;
 	}
-	
+
 	private void saveToDb() {
 		switch(currentCrudMode) {
 		case Create:
-			Book book = createBookFromUIFields();
-			SystemController.getInstance().saveBook(book);
-			this.clearBookUIFieldsForNewCreation();
-			this.populate();
+			Book newBook = createBookFromUIFields();
+			SystemController.getInstance().saveBook(newBook);
+			this.clearBookUIFields();
 			break;
 		case Delete:
+			if(table.getSelectedRow() < 0) {
+				return;
+			}
+			Book delBook = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+			System.out.println("Delete book isbn: " + delBook.getIsbn());
+			SystemController.getInstance().deleteBook(delBook);
+			this.clearBookUIFields();
 			break;
 		case Update:
+			if(table.getSelectedRow() < 0) {
+				return;
+			}
 			//Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
 			//update and save 
-			Book book1 = createBookFromUIFields();
-			SystemController.getInstance().saveBook(book1);
-			
+			Book updateBook = createBookFromUIFields();
+			SystemController.getInstance().saveBook(updateBook);
 			break;
 		default:
 			break;
-	}
-		
+		}
+		this.populate();
 	}
 }

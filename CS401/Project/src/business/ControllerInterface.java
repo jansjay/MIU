@@ -22,4 +22,5 @@ public interface ControllerInterface {
 	
 	public List<LibraryMember> getLibraryMembers();
 	public List<Author> getAllAuthors();
+	public void deleteBook(Book book);
 }
