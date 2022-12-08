@@ -1,6 +1,5 @@
 package librarysystem.windows;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -18,12 +17,8 @@ import librarysystem.controls.G8Navigatable;
 import librarysystem.controls.G8PanelOverview;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.JList;
 import javax.swing.DefaultListModel;
-import javax.swing.JComboBox;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -41,7 +36,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	private JTextField textFieldTitle;
 	private JLabel lblAuthors;
 	private JTextField textFieldCopies;
-	private JList listAuthors;
+	private JList<Author> listAuthors;
 	private JButton btnSave;
 	private CrudMode currentCrudMode = CrudMode.Read; 
 	private int bookObjTagIndex = 0;
@@ -83,8 +78,9 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		panelDetail.add(textFieldCopies);
 		textFieldCopies.setColumns(10);
 		
-        listAuthors = new JList();
-        listAuthors.setBorder(new LineBorder(new Color(10, 10, 10)));
+
+     listAuthors = new JList<Author>();
+
 		listAuthors.setBounds(0, 0, 1, 1);
 		
 		
@@ -169,7 +165,9 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this.textFieldTitle.setText(book.getTitle());
 		this.textFieldCopies.setText(book.getCopies().length  + "");
 		this.textFieldCheckoutLength.setText(String.valueOf(book.getMaxCheckoutLength()));
-		DefaultListModel listModel = new DefaultListModel();
+
+		DefaultListModel<Author> listModel = new DefaultListModel<>();
+
 		listModel.addAll(book.getAuthors());
 		listAuthors.setModel(listModel);		
 	}

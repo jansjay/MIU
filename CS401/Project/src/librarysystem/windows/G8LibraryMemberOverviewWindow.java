@@ -20,6 +20,7 @@ import librarysystem.controls.G8JFrame;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
 import librarysystem.controls.G8PanelDetails;
+import librarysystem.controls.G8PanelOverview;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -29,10 +30,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
-public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigatable{
+public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8Navigatable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//G8PanelOverview
 	ControllerInterface controller;
-	private JTable tblMember;
+	//private JTable tblMember;
 	private JScrollPane scrollPane;
 	private DefaultTableModel model;
 	private JTextField txtMemberId;
@@ -71,7 +76,7 @@ public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigat
 		this.setTitle(title);
 	}
 	public G8LibraryMemberOverviewWindow() {
-		super("Member Overview Window");
+		//super("Member Overview Window");
 		initialize();
 		controller = new SystemController();
 		DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
@@ -84,10 +89,11 @@ public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigat
 		return Context.isAuth(Auth.LIBRARIAN);
 	}
 	private void initialize() {
-		setBounds(100, 100, 1205, 678);
+		//setBounds(100, 100, 1205, 678);
 		//getContentPane().setForeground(new Color(255, 255, 255));
 		//getContentPane().setLayout(null);
 		
+		panelDetail.setLayout(null);
 		addTextFields();
 		addButtons();
 		addJTable();
@@ -118,7 +124,7 @@ public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigat
 					return;
 				}
 				String[] values = getTextFieldValues();
-				int rowNumber = tblMember.getSelectedRow();
+				int rowNumber = table.getSelectedRow();
 				if(rowNumber<=0) {
 					JOptionPane.showMessageDialog(null, "Please select a row");
 					return;
@@ -132,7 +138,7 @@ public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigat
 		
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowNumber = tblMember.getSelectedRow();
+				int rowNumber = table.getSelectedRow();
 				if(rowNumber<=0) {
 					JOptionPane.showMessageDialog(null, "Please select a row");
 					return;
@@ -147,7 +153,7 @@ public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigat
 			}
 		});
 		
-		tblMember.addMouseListener(new MouseAdapter() {
+		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				setSelectedRowIntoTextFields();
@@ -161,77 +167,113 @@ public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigat
 		String[] columns = getTableColumnNames();
 		model.setColumnIdentifiers(columns);
 		
-		tblMember = new JTable();
-		tblMember.setModel(model);
-		tblMember.setBounds(1137, 283, -1077, 280);
+		//tblMember = new JTable();
+		table.setModel(model);
+		table.setBounds(1137, 283, -1077, 280);
 		
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 274, 1164, 356);
-		scrollPane.setViewportView(tblMember);
-		add(scrollPane);
+		//scrollPane = new JScrollPane();
+		//scrollPane.setBounds(10, 274, 1164, 356);
+		//scrollPane.setViewportView(table);
+		//add(scrollPane);
 	}
 	private void addTextFields() {
 		txtMemberId = new JTextField();
 		txtMemberId.setToolTipText("Member ID");
-		txtMemberId.setBounds(10, 11, 226, 63);
+		txtMemberId.setBounds(251, 11, 628, 31);
 		txtMemberId.setColumns(10);
-		add(txtMemberId);
+		panelDetail.add(txtMemberId);
 		
 		txtFirstName = new JTextField();
 		txtFirstName.setToolTipText("First Name");
 		txtFirstName.setColumns(10);
-		txtFirstName.setBounds(267, 11, 226, 63);
-		add(txtFirstName);
+		txtFirstName.setBounds(251, 53, 628, 31);
+		panelDetail.add(txtFirstName);
 		
 		txtLastName = new JTextField();
 		txtLastName.setToolTipText("Last Name");
 		txtLastName.setColumns(10);
-		txtLastName.setBounds(531, 11, 226, 63);
-		add(txtLastName);
+		txtLastName.setBounds(251, 95, 628, 31);
+		panelDetail.add(txtLastName);
 		
 		txtStreet = new JTextField();
 		txtStreet.setToolTipText("Street");
 		txtStreet.setColumns(10);
-		txtStreet.setBounds(10, 85, 226, 63);
-		add(txtStreet);		
+		txtStreet.setBounds(251, 137, 226, 31);
+		panelDetail.add(txtStreet);		
 		txtCity = new JTextField();
 		txtCity.setToolTipText("City");
 		txtCity.setColumns(10);
-		txtCity.setBounds(267, 85, 226, 63);
-		add(txtCity);
+		txtCity.setBounds(251, 172, 226, 46);
+		panelDetail.add(txtCity);
 		
 		txtState = new JTextField();
 		txtState.setToolTipText("State");
 		txtState.setColumns(10);
-		txtState.setBounds(531, 85, 226, 63);
-		add(txtState);
+		txtState.setBounds(251, 229, 66, 31);
+		panelDetail.add(txtState);
 		
 		txtZip = new JTextField();
 		txtZip.setToolTipText("Zip");
 		txtZip.setColumns(10);
-		txtZip.setBounds(10, 159, 226, 63);
-		add(txtZip);
+		txtZip.setBounds(395, 229, 78, 31);
+		panelDetail.add(txtZip);
 		
 		txtTelephone = new JTextField();
 		txtTelephone.setToolTipText("Telephone");
 		txtTelephone.setColumns(10);
-		txtTelephone.setBounds(267, 159, 226, 63);
-		add(txtTelephone);
+		txtTelephone.setBounds(653, 137, 226, 31);
+		panelDetail.add(txtTelephone);
 	}
 
 	private void addButtons() {
 		
 		btnAdd = new JButton("Add Member");
-		btnAdd.setBounds(990, 19, 139, 46);
-		add(btnAdd);
+		btnAdd.setBounds(547, 198, 124, 31);
+		panelDetail.add(btnAdd);
 		
 		btnUpdate = new JButton("Update Member");
-		btnUpdate.setBounds(990, 104, 139, 46);
-		add(btnUpdate);
+		btnUpdate.setBounds(681, 198, 124, 31);
+		panelDetail.add(btnUpdate);
 		
 		btnDelete = new JButton("Delete Member");
-		btnDelete.setBounds(990, 186, 139, 46);
-		add(btnDelete);
+		btnDelete.setBounds(815, 198, 109, 31);
+		panelDetail.add(btnDelete);
+		
+		JLabel lblMemberId = new JLabel("Member ID");
+		lblMemberId.setBounds(31, 15, 115, 23);
+		panelDetail.add(lblMemberId);
+		
+		JLabel lblFirstName = new JLabel("First Name");
+		lblFirstName.setBounds(30, 61, 100, 14);
+		panelDetail.add(lblFirstName);
+		
+		JLabel lblLastName = new JLabel("Last Name");
+		lblLastName.setBounds(31, 103, 164, 14);
+		panelDetail.add(lblLastName);
+		
+		JLabel lblAddress = new JLabel("Address");
+		lblAddress.setBounds(31, 145, 90, 14);
+		panelDetail.add(lblAddress);
+		
+		JLabel lblCity = new JLabel("City");
+		lblCity.setBounds(146, 188, 49, 14);
+		panelDetail.add(lblCity);
+		
+		JLabel lblNewLabel = new JLabel("State");
+		lblNewLabel.setBounds(146, 237, 49, 14);
+		panelDetail.add(lblNewLabel);
+		
+		JLabel lblZip = new JLabel("ZIP");
+		lblZip.setBounds(367, 237, 18, 14);
+		panelDetail.add(lblZip);
+		
+		JLabel lblStreet = new JLabel("Street");
+		lblStreet.setBounds(146, 145, 49, 14);
+		panelDetail.add(lblStreet);
+		
+		JLabel lblTelephone = new JLabel("TEL");
+		lblTelephone.setBounds(609, 145, 34, 14);
+		panelDetail.add(lblTelephone);
 	}
 	
 	private String[] getTableColumnNames() {
@@ -273,7 +315,7 @@ public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigat
 	
 	private void setSelectedRowIntoTextFields() {
 		
-		int selectedRow = tblMember.getSelectedRow();
+		int selectedRow = table.getSelectedRow();
 		txtMemberId.setText(model.getValueAt(selectedRow, 0).toString());
 		txtFirstName.setText(model.getValueAt(selectedRow, 1).toString());
 		txtLastName.setText(model.getValueAt(selectedRow, 2).toString());
