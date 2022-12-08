@@ -1,6 +1,6 @@
 package librarysystem.controls;
 import javax.swing.JPanel;
-import java.awt.FlowLayout;
+import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -8,9 +8,12 @@ import javax.swing.JTable;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.JSplitPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
@@ -21,6 +24,8 @@ import javax.swing.JLabel;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	/**
@@ -66,13 +71,28 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		panelButtons.add(btnLoadData);
 		
 		JButton btnNew = new JButton("New");
+		btnNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newClicked();
+			}
+		});
 		panelButtons.add(btnNew);
 		
 		JButton btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editClicked();
+			}
+		});
 		btnEdit.setEnabled(false);
 		panelButtons.add(btnEdit);
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteClicked();
+			}
+		});
 		btnDelete.setEnabled(false);
 		panelButtons.add(btnDelete);
 		
@@ -80,7 +100,11 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		panelBottom.add(panelOverviewTable);
 		panelOverviewTable.setLayout(new GridLayout(0, 1, 0, 0));
 		table = new JTable();
-		panelOverviewTable.add(table);
+		table.setSurrendersFocusOnKeystroke(true);
+		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		JScrollPane scrollPane = new JScrollPane(table);
+		
+		panelOverviewTable.add(scrollPane);
 		panelDetail = new JPanel();
 		panelBottom.add(panelDetail);
 		panelDetail.setLayout(new GridLayout(1, 1, 0, 0));
@@ -99,8 +123,16 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	protected void fillWindow() {		
 	}
 	
-	protected void selectionChanged() {
-		
+	protected void selectionChanged() {		
+	}
+	
+	protected void editClicked() {		
+	}
+	
+	protected void newClicked() {		
+	}
+	
+	protected void deleteClicked() {		
 	}
 	
 	@Override
