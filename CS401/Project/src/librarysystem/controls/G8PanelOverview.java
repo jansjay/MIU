@@ -11,6 +11,9 @@ import javax.swing.JSplitPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	/**
@@ -30,23 +33,51 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		flowLayout.setAlignment(FlowLayout.LEADING);
 		add(panel);
 		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(new BorderLayout(0, 0));
+		table = new JTable();	
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		panel_1.add(table, BorderLayout.CENTER);
+		add(panel_1);
+		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		
+		
+		JPanel panelSearch = new JPanel();
+		splitPane.setRightComponent(panelSearch);
+		
+		JPanel panelButtons = new JPanel();
+		splitPane.setLeftComponent(panelButtons);
+		
 		panel.add(splitPane);
 		
-		JButton btnNewButton = new JButton("Load Data");
-		btnNewButton.addActionListener(new G8PopulateEvent(this));
-		splitPane.setLeftComponent(btnNewButton);
+		JButton btnLoadData = new JButton("Load Data");
+		btnLoadData.addActionListener(new G8PopulateEvent(this));
+		panelButtons.setLayout(new BoxLayout(panelButtons, BoxLayout.X_AXIS));
 		
-		JPanel panel_2 = new JPanel();
-		splitPane.setRightComponent(panel_2);
+		panelButtons.add(btnLoadData);
 		
-		JPanel panel_1 = new JPanel();
-		add(panel_1);
-		panel_1.setLayout(new BorderLayout(0, 0));
+		JButton btnNew = new JButton("New");
+		panelButtons.add(btnNew);
 		
-		table = new JTable();		
-		panel_1.add(table, BorderLayout.CENTER);
+		JButton btnEdit = new JButton("Edit");
+		btnEdit.setEnabled(false);
+		panelButtons.add(btnEdit);
+		
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.setEnabled(false);
+		panelButtons.add(btnDelete);
+		
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+		    public void valueChanged(ListSelectionEvent lse) {
+		        if (!lse.getValueIsAdjusting()) {
+		            btnEdit.setEnabled(lse.getFirstIndex() >= 0);
+		            btnDelete.setEnabled(lse.getFirstIndex() >= 0);
+		        }
+		    }
+		});	
 
 	}
 	
