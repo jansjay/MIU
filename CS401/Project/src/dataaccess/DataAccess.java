@@ -3,6 +3,7 @@ package dataaccess;
 import java.util.HashMap;
 import java.util.List;
 
+import business.Author;
 import business.Book;
 import business.BorrowBook;
 import business.CheckoutRecord;
@@ -23,4 +24,5 @@ public interface DataAccess {
 	public CheckoutRecord retrieveCheckoutRecordByMemberId(String memberId);
 	public List<CheckoutRecord> retrieveCheckoutRecordByBookIsbn(String isbn);
 	public void removeMember(String memberId);
+	public List<Author> getAllAuthors();
 }

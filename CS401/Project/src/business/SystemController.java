@@ -185,4 +185,9 @@ public class SystemController extends BaseController implements ControllerInterf
 		//TODO: Have to remove all relevant records from relevant tables
 		da.removeMember(memberId);
 	}
+
+	@Override
+	public List<Author> getAllAuthors() {
+		return da.getAllAuthors();
+	}
 }
