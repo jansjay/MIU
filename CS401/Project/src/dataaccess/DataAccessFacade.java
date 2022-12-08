@@ -52,7 +52,14 @@ public class DataAccessFacade implements DataAccess {
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);	
 	}
-
+	
+	@Override
+	public void removeMember(String memberId) {
+		HashMap<String, LibraryMember> mems = readMemberMap();
+		if(mems == null) return;
+		mems.remove(memberId);
+		saveToStorage(StorageType.MEMBERS, mems);
+	}
 	@Override
 	public void saveBorrowBook(BorrowBook borrowBook) {
 		HashMap<Integer, BorrowBook> borrowedBookMap = readBorrowBookMap();
