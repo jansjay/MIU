@@ -25,4 +25,5 @@ public interface DataAccess {
 	public List<CheckoutRecord> retrieveCheckoutRecordByBookIsbn(String isbn);
 	public void removeMember(String memberId);
 	public List<Author> getAllAuthors();
+	public void deleteBook(Book book);
 }

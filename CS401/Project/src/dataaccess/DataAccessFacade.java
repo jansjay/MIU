@@ -61,6 +61,7 @@ public class DataAccessFacade implements DataAccess {
 		mems.remove(memberId);
 		saveToStorage(StorageType.MEMBERS, mems);
 	}
+	
 	@Override
 	public void saveBorrowBook(BorrowBook borrowBook) {
 		HashMap<Integer, BorrowBook> borrowedBookMap = readBorrowBookMap();
@@ -268,4 +269,10 @@ public class DataAccessFacade implements DataAccess {
 		return new ArrayList<Author>(authorsMap.values());
 	}
 
+	@Override
+	public void deleteBook(Book book) {
+		HashMap<String, Book> books = readBooksMap();
+		books.remove(book.getIsbn());
+		saveToStorage(StorageType.BOOKS, books);
+	}
 }
