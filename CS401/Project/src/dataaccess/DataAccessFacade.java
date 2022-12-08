@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import business.Author;
 import business.Book;
 import business.BorrowBook;
 import business.BookCopy;
@@ -23,16 +24,16 @@ import business.LibraryMember;
 public class DataAccessFacade implements DataAccess {
 	
 	enum StorageType {
-		BOOKS, MEMBERS, USERS, CHECKOUT_RECORDS, BORROWBOOKS;
+		BOOKS, MEMBERS, USERS, CHECKOUT_RECORDS, BORROWBOOKS, AUTHORS;
 	}
 	// Windows user can use
 	
-	public static final String OUTPUT_DIR = System.getProperty("user.dir")
-			+ "\\src\\dataaccess\\storage";
+	//public static final String OUTPUT_DIR = System.getProperty("user.dir")
+	//		+ "\\src\\dataaccess\\storage";
 	
 	// For Mac Users path can use / 
-	//public static final String OUTPUT_DIR = System.getProperty("user.dir")
-			//+ "/src/dataaccess/storage";
+	public static final String OUTPUT_DIR = System.getProperty("user.dir")
+			+ "/src/dataaccess/storage";
 	
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
 	
@@ -188,6 +189,12 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, members);
 	}
 	
+	static void loadAuthors(List<Author> authors) {
+		HashMap<String, Author> authorsMap = new HashMap<>();
+		authors.forEach(auth -> authorsMap.put(auth.toString(), auth));
+		saveToStorage(StorageType.AUTHORS, authorsMap);
+	}
+	
 	static void saveToStorage(StorageType type, Object ob) {
 		ObjectOutputStream out = null;
 		try {
@@ -253,6 +260,12 @@ public class DataAccessFacade implements DataAccess {
 			return "(" + first.toString() + ", " + second.toString() + ")";
 		}
 		private static final long serialVersionUID = 5399827794066637059L;
+	}
+
+	@Override
+	public List<Author> getAllAuthors() {
+		HashMap<String, Author> authorsMap = (HashMap<String, Author>) readFromStorage(StorageType.AUTHORS);
+		return new ArrayList<Author>(authorsMap.values());
 	}
 
 }
