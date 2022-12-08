@@ -22,4 +22,5 @@ public interface DataAccess {
 	public void saveCheckoutRecord(CheckoutRecord record);
 	public CheckoutRecord retrieveCheckoutRecordByMemberId(String memberId);
 	public List<CheckoutRecord> retrieveCheckoutRecordByBookIsbn(String isbn);
+	public void removeMember(String memberId);
 }

@@ -37,7 +37,6 @@ public class SystemController extends BaseController implements ControllerInterf
 			throw new LoginException("Password incorrect");
 		}
 		currentAuth = map.get(id).getAuthorization();
-		Context.createContext(id, currentAuth);
 		
 	}
 	@Override
@@ -171,4 +170,19 @@ public class SystemController extends BaseController implements ControllerInterf
 		return book;
 	}
 
+	@Override
+	public List<LibraryMember> getLibraryMembers(){
+		
+		return da.readMemberMap()
+				.values()
+				.stream()
+				.sorted((m1,m2)->m1.getMemberId().compareTo(m2.getMemberId()))
+				.toList();
+	}
+	
+	@Override
+	public void removeMember(String memberId) {
+		//TODO: Have to remove all relevant records from relevant tables
+		da.removeMember(memberId);
+	}
 }
