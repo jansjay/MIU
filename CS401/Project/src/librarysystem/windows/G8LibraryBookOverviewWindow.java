@@ -2,6 +2,9 @@ package librarysystem.windows;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import javax.swing.table.DefaultTableModel;
 
 import business.Author;
@@ -38,6 +41,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	private JList listAuthors;
 	private JButton btnSave;
 	private CrudMode currentCrudMode = CrudMode.Read; 
+	private int bookObjTagIndex = 0;
 	/**
 	 * Create the panel.
 	 */
@@ -93,27 +97,29 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	}
 	
 	public void fillWindow(List<Book> books) {
-		Object[][] rows = new Object[books.size()][3];
+		Object[][] rows = new Object[books.size()][5];
 		int i=0;
 		for(Book book : books) {
-			rows[i][0] = book.getIsbn();
+			rows[i][0] = book;
 			rows[i][1] = book.getTitle();
-			rows[i][2] = book;
+			rows[i][2] = String.join(", ", book.getAuthors().stream().map(e -> e.toString()).collect(Collectors.toList())); //String.join(", ", book.getAuthors().toArray());
+			rows[i][3] = book.getNumCopies();
+			rows[i][4] = book.getMaxCheckoutLength();
 			i++;
 		}
 		this.table.setModel(new DefaultTableModel(
 				rows,
 				new String[] {
-					"ISBN", "Title", "Object"
+					"ISBN", "Title", "Authors" , "NumOfCopy", "Checkout Days"
 				}
-			){
+			) {
 				private static final long serialVersionUID = 1L;
 				boolean[] columnEditables = new boolean[] {
-					false, false
+					false, false, false, false, false
 				};
 				public boolean isCellEditable(int row, int column) {
 					return columnEditables[column];
-				}
+			}
 		});
 		this.table.setShowGrid(true);
 	}
@@ -137,9 +143,10 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	
 	@Override
 	protected void selectionChanged() {
-		this.textFieldIsbn.setText(this.table.getValueAt(table.getSelectedRow(), 0).toString());
-		this.textFieldTitle.setText(this.table.getValueAt(table.getSelectedRow(), 1).toString());
-		Book book = (Book)this.table.getValueAt(table.getSelectedRow(), 2);
+		Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+		
+		this.textFieldIsbn.setText(book.getIsbn());
+		this.textFieldTitle.setText(book.getTitle());
 		this.textFieldCopies.setText(book.getCopies().length  + "");
 		DefaultListModel listModel = new DefaultListModel();
 		listModel.addAll(book.getAuthors());
@@ -166,6 +173,10 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		super.newClicked();
 		currentCrudMode = CrudMode.Create;
 		setFieldStatus(CrudMode.Create);
+		String isbn = this.textFieldIsbn.getText();
+		String title = this.textFieldTitle.getText();
+		//Book newBook = new Book();
+		
 	}
 	@Override
 	protected void editClicked() {
@@ -181,7 +192,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		case Delete:
 			break;
 		case Update:
-			Book book = (Book)this.table.getValueAt(table.getSelectedRow(), 2);
+			Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
 			//update and save 
 			break;
 		default:
