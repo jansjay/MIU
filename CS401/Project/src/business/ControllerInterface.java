@@ -13,9 +13,12 @@ public interface ControllerInterface {
 	public List<Book> allBooks();
 	public void checkOutBookCopy(String memberId, String isbn) throws LoginException;
 	public void saveMember(LibraryMember member);
+	public void removeMember(String memberId);
 	public void saveBook(Book book);
 	public void saveBookCopy(Book book);
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
 	public LibraryMember searchMember(String memberId);
 	public Book searchOverDueBookByIsbn(String isbn);
+	
+	public List<LibraryMember> getLibraryMembers();
 }
