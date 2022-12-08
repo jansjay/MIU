@@ -38,8 +38,9 @@ public class LibrarySystem extends G8JFrame {
 		setBounds(100, 100, 900, 600);
 		setDefaultCloseOperation(G8JFrame.EXIT_ON_CLOSE);
 		registerPanel(new G8LoginWindow("Login"));
-		registerPanel(new G8LibraryBookOverviewWindow("Books overview"));
-		registerPanel(new G8LibraryBookDetailsWindow("Books Detail"));
+		G8LibraryBookDetailsWindow bookDetails = new G8LibraryBookDetailsWindow("Books Detail");
+		registerPanel(bookDetails);
+		registerPanel(new G8LibraryBookOverviewWindow("Books overview", bookDetails));
 		setStatusMessage("Welcome !!!", Color.DARK_GRAY);
 	}
 	

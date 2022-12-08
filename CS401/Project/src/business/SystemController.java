@@ -53,6 +53,13 @@ public class SystemController extends BaseController implements ControllerInterf
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
 	}
+	
+	@Override
+	public List<Book> allBooks() {
+		List<Book> retval = new ArrayList<>();
+		retval.addAll(da.readBooksMap().values());
+		return retval;
+	}
 
 	@Override
 	public void checkOutBookCopy(String memberId, String isbn) throws LoginException {

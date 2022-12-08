@@ -9,6 +9,7 @@ import business.Context;
 import business.SystemController;
 import dataaccess.Auth;
 import librarysystem.controls.G8Navigatable;
+import librarysystem.controls.G8PanelDetails;
 import librarysystem.controls.G8PanelOverview;
 
 public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Navigatable {
@@ -17,31 +18,33 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private G8LibraryBookDetailsWindow detailsWindow;
 	/**
 	 * Create the panel.
 	 */
 	public G8LibraryBookOverviewWindow() {
 	}
 	
-	public void fillWindow(List<String> bookIds) {
-		String[][] rows = new String[bookIds.size()][2];
+	public void fillWindow(List<Book> books) {
+		String[][] rows = new String[books.size()][2];
 		int i=0;
-		for(String bookId : bookIds) {
-			rows[i][0] = i + "";
-			rows[i][1] = bookId;
+		for(Book book : books) {
+			rows[i][0] = book.getIsbn();
+			rows[i][1] = book.getTitle();			
 			i++;
 		}
 		this.getOverviewTable().setModel(new DefaultTableModel(
 				rows,
 				new String[] {
-					"Index", "Book ID"
+					"ISBN", "Title"
 				}
 			));
+		this.getOverviewTable().setShowGrid(true);
 	}
 
-	public G8LibraryBookOverviewWindow(String title) {
+	public G8LibraryBookOverviewWindow(String title, G8LibraryBookDetailsWindow detailsWindow) {
 		this();
+		this.detailsWindow = detailsWindow;
 		setTitle(title);
 	}
 	
@@ -52,8 +55,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	
 	@Override
 	public void populate() {
-		List<Book> books = new ArrayList<>();
 		SystemController sc = new SystemController();		
-		fillWindow(sc.allBookIds());
+		fillWindow(sc.allBooks());
 	}
 }

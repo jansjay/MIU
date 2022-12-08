@@ -12,28 +12,31 @@ public class G8LibraryBookDetailsWindow extends G8PanelDetails {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField textFieldTitle;
+	private JTextField textFieldIsbn;
 
 	/**
 	 * Create the panel.
 	 */
 	public G8LibraryBookDetailsWindow() {
+		panelDetails.setLayout(null);
 		
-		JLabel lblTitle = new JLabel("Title");
-		add(lblTitle);
+		JLabel lblIsbn = new JLabel("ISBN");
+		lblIsbn.setBounds(76, 38, 69, 20);
+		panelDetails.add(lblIsbn);
 		
-		textFieldTitle = new JTextField();
-		add(textFieldTitle);
-		textFieldTitle.setColumns(10);
+		textFieldIsbn = new JTextField();
+		textFieldIsbn.setBounds(184, 35, 251, 26);
+		panelDetails.add(textFieldIsbn);
+		textFieldIsbn.setColumns(10);
 	}
 
 	public void fillWindow(Book book, CrudMode mode) {
 		super.fillWindow(mode);
 		if(mode == CrudMode.Read || mode == CrudMode.Delete || mode == CrudMode.Update){
-			this.textFieldTitle.setText(book.getTitle());
+			this.textFieldIsbn.setText(book.getIsbn());
 		}
 		else{
-			this.textFieldTitle.setText("");
+			this.textFieldIsbn.setText("");
 		}
 	}
 	
