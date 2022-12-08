@@ -19,8 +19,9 @@ public interface ControllerInterface {
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
 	public LibraryMember searchMember(String memberId);
 	public Book searchOverDueBookByIsbn(String isbn);
-	
+	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle);
 	public List<LibraryMember> getLibraryMembers();
+	public CheckoutRecord getCheckedOutBookByMemberId(String memberId);
 	public List<Author> getAllAuthors();
 	public void deleteBook(Book book);
 }
