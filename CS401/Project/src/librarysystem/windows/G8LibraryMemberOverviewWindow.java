@@ -17,6 +17,7 @@ import business.DataModelMapper;
 import business.SystemController;
 import dataaccess.Auth;
 import librarysystem.controls.G8JFrame;
+import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
 import librarysystem.controls.G8PanelDetails;
 
@@ -28,7 +29,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
-public class G8LibraryMemberOverviewWindow extends JFrame implements G8Navigatable{
+public class G8LibraryMemberOverviewWindow extends G8JPanel implements G8Navigatable{
 	//G8PanelOverview
 	ControllerInterface controller;
 	private JTable tblMember;
@@ -49,7 +50,7 @@ public class G8LibraryMemberOverviewWindow extends JFrame implements G8Navigatab
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -60,11 +61,15 @@ public class G8LibraryMemberOverviewWindow extends JFrame implements G8Navigatab
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
+	public G8LibraryMemberOverviewWindow(String title) {
+		this();
+		this.setTitle(title);
+	}
 	public G8LibraryMemberOverviewWindow() {
 		super("Member Overview Window");
 		initialize();
@@ -80,14 +85,14 @@ public class G8LibraryMemberOverviewWindow extends JFrame implements G8Navigatab
 	}
 	private void initialize() {
 		setBounds(100, 100, 1205, 678);
-		getContentPane().setForeground(new Color(255, 255, 255));
-		getContentPane().setLayout(null);
+		//getContentPane().setForeground(new Color(255, 255, 255));
+		//getContentPane().setLayout(null);
 		
 		addTextFields();
 		addButtons();
 		addJTable();
 		addBtnEvents();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	private void addBtnEvents() {
