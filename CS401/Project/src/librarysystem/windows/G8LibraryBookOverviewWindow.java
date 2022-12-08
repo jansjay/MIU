@@ -9,8 +9,9 @@ import business.Context;
 import business.SystemController;
 import dataaccess.Auth;
 import librarysystem.controls.G8Navigatable;
-import librarysystem.controls.G8PanelDetails;
 import librarysystem.controls.G8PanelOverview;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Navigatable {
 
@@ -18,11 +19,31 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private G8LibraryBookDetailsWindow detailsWindow;
+	private JTextField textFieldIsbn;
+	private JTextField textFieldTitle;
 	/**
 	 * Create the panel.
 	 */
 	public G8LibraryBookOverviewWindow() {
+		panelDetail.setLayout(null);
+		
+		JLabel lblIsbn = new JLabel("ISBN");
+		lblIsbn.setBounds(49, 26, 69, 20);
+		panelDetail.add(lblIsbn);
+		
+		textFieldIsbn = new JTextField();
+		textFieldIsbn.setBounds(202, 23, 233, 26);
+		panelDetail.add(textFieldIsbn);
+		textFieldIsbn.setColumns(10);
+		
+		JLabel lblTitle = new JLabel("Title");
+		lblTitle.setBounds(49, 57, 69, 20);
+		panelDetail.add(lblTitle);
+		
+		textFieldTitle = new JTextField();
+		textFieldTitle.setBounds(202, 52, 233, 26);
+		panelDetail.add(textFieldTitle);
+		textFieldTitle.setColumns(10);
 	}
 	
 	public void fillWindow(List<Book> books) {
@@ -33,18 +54,17 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 			rows[i][1] = book.getTitle();			
 			i++;
 		}
-		this.getOverviewTable().setModel(new DefaultTableModel(
+		this.table.setModel(new DefaultTableModel(
 				rows,
 				new String[] {
 					"ISBN", "Title"
 				}
 			));
-		this.getOverviewTable().setShowGrid(true);
+		this.table.setShowGrid(true);
 	}
 
-	public G8LibraryBookOverviewWindow(String title, G8LibraryBookDetailsWindow detailsWindow) {
+	public G8LibraryBookOverviewWindow(String title) {
 		this();
-		this.detailsWindow = detailsWindow;
 		setTitle(title);
 	}
 	
@@ -57,5 +77,11 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	public void populate() {
 		SystemController sc = new SystemController();		
 		fillWindow(sc.allBooks());
+	}
+	
+	@Override
+	protected void selectionChanged() {
+		this.textFieldIsbn.setText(this.table.getValueAt(table.getSelectedRow(), 0).toString());
+		this.textFieldTitle.setText(this.table.getValueAt(table.getSelectedRow(), 1).toString());
 	}
 }
