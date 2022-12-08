@@ -79,6 +79,11 @@ public class SystemController extends BaseController implements ControllerInterf
 	//UseCase3: methods
 	@Override
 	public void saveBook(Book book) {
+		if(!Validator.validateIsbn(book.getIsbn())) throw new IllegalArgumentException("Invalid ISBN");
+		if(!Validator.validateBookTitle(book.getTitle())) throw new IllegalArgumentException("Invalid Title");
+		if(!Validator.validateBookAuthors(book.getAuthors())) throw new IllegalArgumentException("No Authors");
+		if(!Validator.validateBookCopies(book.getNumCopies())) throw new IllegalArgumentException("Invalid Num of Copies");
+		if(!Validator.validateBookCheckoutLength(book.getMaxCheckoutLength())) throw new IllegalArgumentException("Invalid Checkout length. \nIt should be 7 or 21 days.");
 		da.saveNewBook(book);
 	}
 
