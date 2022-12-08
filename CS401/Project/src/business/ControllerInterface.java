@@ -22,4 +22,6 @@ public interface ControllerInterface {
 	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle);
 	public List<LibraryMember> getLibraryMembers();
 	public CheckoutRecord getCheckedOutBookByMemberId(String memberId);
+	public List<Author> getAllAuthors();
+	public void deleteBook(Book book);
 }

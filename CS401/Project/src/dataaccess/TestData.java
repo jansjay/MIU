@@ -48,9 +48,10 @@ public class TestData {
 		
 		td.testExistingCheckoutRecords();
 		
-		
+		td.testLoadAllAuthors();
 		
 	}
+	
 	///create books
 	public void bookData() {
 		allBooks.get(0).addCopy();
@@ -153,6 +154,13 @@ public class TestData {
 			add(new Address("501 Central", "Mountain View", "CA", "94707"));
 		}
 	};
+	
+	public void testLoadAllAuthors() {
+		System.out.println("Test to load All authors");
+		DataAccess da = new DataAccessFacade();
+		DataAccessFacade.loadAuthors(allAuthors);
+		
+	}
 	@SuppressWarnings("serial")
 	public List<Author> allAuthors = new ArrayList<Author>() {
 		{

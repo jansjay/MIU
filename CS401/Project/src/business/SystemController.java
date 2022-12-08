@@ -205,4 +205,14 @@ public class SystemController extends BaseController implements ControllerInterf
 	public CheckoutRecord getCheckedOutBookByMemberId(String memberId) {
 		return da.retrieveCheckoutRecordByMemberId(memberId);
 	}
+
+	@Override
+	public List<Author> getAllAuthors() {
+		return da.getAllAuthors();
+	}
+
+	@Override
+	public void deleteBook(Book book) {
+		da.deleteBook(book);
+	}
 }

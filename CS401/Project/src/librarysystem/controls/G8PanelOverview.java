@@ -26,6 +26,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Insets;
 
 public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	/**
@@ -47,7 +48,6 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		
 		JPanel panelBottom = new JPanel();
 		add(panelBottom);
-		panelBottom.setLayout(new GridLayout(2, 1, 0, 0));
 		
 		panelTop.setLayout(new BorderLayout(0, 0));
 		
@@ -95,19 +95,27 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		});
 		btnDelete.setEnabled(false);
 		panelButtons.add(btnDelete);
+		GridBagLayout gbl_panelBottom = new GridBagLayout();
+		gbl_panelBottom.columnWidths = new int[]{450, 0};
+		gbl_panelBottom.rowHeights = new int[]{132, 317, 0};
+		gbl_panelBottom.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_panelBottom.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panelBottom.setLayout(gbl_panelBottom);
 		
 		JPanel panelOverviewTable = new JPanel();
-		panelBottom.add(panelOverviewTable);
-		panelOverviewTable.setLayout(new GridLayout(0, 1, 0, 0));
+		GridBagConstraints gbc_panelOverviewTable = new GridBagConstraints();
+		gbc_panelOverviewTable.fill = GridBagConstraints.BOTH;
+		gbc_panelOverviewTable.insets = new Insets(0, 0, 5, 0);
+		gbc_panelOverviewTable.gridx = 0;
+		gbc_panelOverviewTable.gridy = 0;
+		panelBottom.add(panelOverviewTable, gbc_panelOverviewTable);
+		panelOverviewTable.setLayout(new GridLayout(1, 1, 0, 0));
 		table = new JTable();
 		table.setSurrendersFocusOnKeystroke(true);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JScrollPane scrollPane = new JScrollPane(table);
 		
 		panelOverviewTable.add(scrollPane);
-		panelDetail = new JPanel();
-		panelBottom.add(panelDetail);
-		panelDetail.setLayout(new GridLayout(1, 1, 0, 0));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -118,6 +126,13 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	            selectionChanged();	        		        
 		    }
 		});	
+		panelDetail = new JPanel();
+		GridBagConstraints gbc_panelDetail = new GridBagConstraints();
+		gbc_panelDetail.fill = GridBagConstraints.BOTH;
+		gbc_panelDetail.gridx = 0;
+		gbc_panelDetail.gridy = 1;
+		panelBottom.add(panelDetail, gbc_panelDetail);
+		panelDetail.setLayout(new GridLayout(1, 1, 0, 0));
 
 	}
 	protected void fillWindow() {		

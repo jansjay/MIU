@@ -35,7 +35,7 @@ public class LibrarySystem extends G8JFrame {
 	 * Create the frame.
 	 */
 	public LibrarySystem() {
-		setBounds(100, 100, 1500, 1000);
+		setBounds(100, 100, 800, 600);
 		setDefaultCloseOperation(G8JFrame.EXIT_ON_CLOSE);
 		registerPanel(new G8LoginWindow("Login"));
 		G8LibraryBookDetailsWindow bookDetails = new G8LibraryBookDetailsWindow("Books Detail");
@@ -49,6 +49,7 @@ public class LibrarySystem extends G8JFrame {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		int height = toolkit.getScreenSize().height;
 		int width = toolkit.getScreenSize().width;
+		f.setBounds(0, 0, width, height);
 		int frameHeight = f.getSize().height;
 		int frameWidth = f.getSize().width;
 		f.setLocation(((width - frameWidth) / 2), (height - frameHeight) / 3);
