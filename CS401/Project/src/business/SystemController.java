@@ -185,4 +185,24 @@ public class SystemController extends BaseController implements ControllerInterf
 		//TODO: Have to remove all relevant records from relevant tables
 		da.removeMember(memberId);
 	}
+	
+	@Override
+	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle){
+		
+		List<Book> ds= da
+				.readBooksMap()
+				.values()
+				.parallelStream()
+				.filter(
+						bk->bk.getIsbn().equals(isbnOrTitle) 
+						|| bk.getTitle().equals(isbnOrTitle)
+						|| isbnOrTitle.isEmpty())
+				.toList();
+		
+			return ds;
+	}
+	@Override
+	public CheckoutRecord getCheckedOutBookByMemberId(String memberId) {
+		return da.retrieveCheckoutRecordByMemberId(memberId);
+	}
 }

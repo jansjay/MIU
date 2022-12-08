@@ -4,6 +4,7 @@ import javax.swing.table.DefaultTableModel;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 public class DataModelMapper {
 
 	public static void addLibraryMember(LibraryMember member, DefaultTableModel model) {
@@ -45,5 +46,38 @@ public class DataModelMapper {
 		for(int i=0; i<values.length; i++) {
 			model.setValueAt(values[i], rowNumber, i);
 		}
+	}
+	
+	public static void addBooks(List<Book> books, DefaultTableModel model) {
+		books
+		.stream()
+		.forEach(bk->{
+			String[] aRow = {
+					bk.getIsbn(),
+					bk.getTitle(),
+					bk.getAuthors()
+					.stream().map(abk->abk.toString())
+					.collect(Collectors.joining(",")),
+					bk.getNumCopies()+"",
+					bk.getMaxCheckoutLength()+""
+			};
+			model.addRow(aRow);
+		});
+	}
+
+	public static void addCheckoutBook(CheckoutRecord cr, DefaultTableModel checkoutModel) {
+		// TODO Auto-generated method stub
+		cr
+		.getCheckoutEntries()
+		.stream()
+		.forEach(ck->{
+			String[] aRow= {
+				cr.getMember().getMemberId(),
+				ck.getBookCopy().getBook().getIsbn(),
+				ck.getBookCopy().toString(),
+				ck.getDueDate().toString()
+			};
+			checkoutModel.addRow(aRow);
+		});
 	}
 }
