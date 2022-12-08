@@ -21,4 +21,5 @@ public interface ControllerInterface {
 	public Book searchOverDueBookByIsbn(String isbn);
 	
 	public List<LibraryMember> getLibraryMembers();
+	public List<Author> getAllAuthors();
 }
