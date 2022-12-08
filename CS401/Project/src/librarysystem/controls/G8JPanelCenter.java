@@ -13,6 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.JButton;
+import java.awt.GridLayout;
+import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
 
 
 public class G8JPanelCenter extends G8JPanel {
@@ -40,6 +44,7 @@ public class G8JPanelCenter extends G8JPanel {
 		
 		panelLeft = new JPanel();
 		splitPane.setLeftComponent(panelLeft);
+		panelLeft.setLayout(new GridLayout(10, 1, 0, 0));
 		
 		JPanel panel_2 = new JPanel();
 		splitPane.setRightComponent(panel_2);

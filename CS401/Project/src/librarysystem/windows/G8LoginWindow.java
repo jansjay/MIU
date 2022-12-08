@@ -6,6 +6,7 @@ import librarysystem.controls.G8Navigatable;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -32,7 +33,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 	
 	private static final long serialVersionUID = 1L;
 	private JTextField txtUsername;
-	private JTextField txtPassword;
+	private JPasswordField txtPassword;
 	
 	public G8LoginWindow() {
 		setLayout(new GridLayout(0, 1, 0, 0));
@@ -46,6 +47,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		panel.add(lblUsername);
 		
 		txtUsername = new JTextField();
+		txtUsername.setText("101");
 		txtUsername.setBounds(199, 49, 450, 50);
 		panel.add(txtUsername);
 		txtUsername.setColumns(10);
@@ -54,8 +56,10 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		lblPassword.setBounds(26, 101, 160, 50);
 		panel.add(lblPassword);
 		
-		txtPassword = new JTextField();
+		txtPassword = new JPasswordField();
+		txtPassword.setText("xyz");
 		txtPassword.setBounds(199, 101, 450, 50);
+		
 		panel.add(txtPassword);
 		txtPassword.setColumns(10);
 		
@@ -77,10 +81,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		});
 		panel.add(btnLogin);
 	}
-	
-	/**
-	 * Create the panel.
-	 */
+
 	public G8LoginWindow(String title) {
 		this();
 		setTitle(title);		

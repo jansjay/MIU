@@ -1,44 +1,55 @@
 package librarysystem.controls;
 import javax.swing.JPanel;
-import java.awt.FlowLayout;
+import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+
 import javax.swing.JSplitPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.GridLayout;
+import javax.swing.JLabel;
+import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTable table;
+	protected JTable table;
+	protected JPanel panelDetail;
 
 	/**
 	 * Create the panel.
 	 */
 	public G8PanelOverview() {
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEADING);
-		add(panel);
+		JPanel panelTop = new JPanel();
+		panelTop.setMaximumSize(new Dimension(6000, 100));
+		add(panelTop, BorderLayout.NORTH);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(new BorderLayout(0, 0));
-		table = new JTable();	
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		panel_1.add(table, BorderLayout.CENTER);
-		add(panel_1);
+		JPanel panelBottom = new JPanel();
+		add(panelBottom);
+		panelBottom.setLayout(new GridLayout(2, 1, 0, 0));
+		
+		panelTop.setLayout(new BorderLayout(0, 0));
 		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -50,7 +61,8 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		JPanel panelButtons = new JPanel();
 		splitPane.setLeftComponent(panelButtons);
 		
-		panel.add(splitPane);
+		splitPane.setMaximumSize(new Dimension(6000, 100));
+		panelTop.add(splitPane, BorderLayout.NORTH);
 		
 		JButton btnLoadData = new JButton("Load Data");
 		btnLoadData.addActionListener(new G8PopulateEvent(this));
@@ -59,35 +71,70 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		panelButtons.add(btnLoadData);
 		
 		JButton btnNew = new JButton("New");
+		btnNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newClicked();
+			}
+		});
 		panelButtons.add(btnNew);
 		
 		JButton btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editClicked();
+			}
+		});
 		btnEdit.setEnabled(false);
 		panelButtons.add(btnEdit);
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteClicked();
+			}
+		});
 		btnDelete.setEnabled(false);
 		panelButtons.add(btnDelete);
+		
+		JPanel panelOverviewTable = new JPanel();
+		panelBottom.add(panelOverviewTable);
+		panelOverviewTable.setLayout(new GridLayout(0, 1, 0, 0));
+		table = new JTable();
+		table.setSurrendersFocusOnKeystroke(true);
+		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		JScrollPane scrollPane = new JScrollPane(table);
+		
+		panelOverviewTable.add(scrollPane);
+		panelDetail = new JPanel();
+		panelBottom.add(panelDetail);
+		panelDetail.setLayout(new GridLayout(1, 1, 0, 0));
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 		    public void valueChanged(ListSelectionEvent lse) {
-		        if (!lse.getValueIsAdjusting()) {
-		            btnEdit.setEnabled(lse.getFirstIndex() >= 0);
-		            btnDelete.setEnabled(lse.getFirstIndex() >= 0);
-		        }
+	            btnEdit.setEnabled(table.getSelectedRowCount() >= 0);
+	            btnDelete.setEnabled(table.getSelectedRowCount() >= 0);
+	            selectionChanged();	        		        
 		    }
 		});	
 
 	}
-	
-	protected JTable getOverviewTable() {
-		return this.table;
-	}
-
 	protected void fillWindow() {		
 	}
-
+	
+	protected void selectionChanged() {		
+	}
+	
+	protected void editClicked() {		
+	}
+	
+	protected void newClicked() {		
+	}
+	
+	protected void deleteClicked() {		
+	}
+	
 	@Override
 	public void populate() {
 	}
