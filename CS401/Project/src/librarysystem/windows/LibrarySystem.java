@@ -49,6 +49,7 @@ public class LibrarySystem extends G8JFrame {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		int height = toolkit.getScreenSize().height;
 		int width = toolkit.getScreenSize().width;
+		f.setBounds(0, 0, width, height);
 		int frameHeight = f.getSize().height;
 		int frameWidth = f.getSize().width;
 		f.setLocation(((width - frameWidth) / 2), (height - frameHeight) / 3);
