@@ -68,8 +68,16 @@ public class SystemController extends BaseController implements ControllerInterf
 	
 	//UseCase3: methods
 	@Override
-	public void saveBook(Book book) {
-		if(!Validator.validateIsbn(book.getIsbn())) throw new IllegalArgumentException("Invalid ISBN");
+	public void saveBook(Book book, CrudMode mode) {
+		if(mode == CrudMode.Create) {
+			if(Validator.isEmpty(book.getIsbn())) throw new IllegalArgumentException("Empty ISBN");
+			Book existingBook = da.searchBookByIsbn(book.getIsbn());
+			if(existingBook != null && !existingBook.getIsbn().isEmpty())
+				throw new IllegalArgumentException("ISBN Already exists");
+		}
+		else{
+			if(!Validator.validateIsbn(book.getIsbn())) throw new IllegalArgumentException("Invalid ISBN");
+		}
 		if(!Validator.validateBookTitle(book.getTitle())) throw new IllegalArgumentException("Invalid Title");
 		if(!Validator.validateBookAuthors(book.getAuthors())) throw new IllegalArgumentException("No Authors");
 		if(!Validator.validateBookCopies(book.getNumCopies())) throw new IllegalArgumentException("Invalid Num of Copies");

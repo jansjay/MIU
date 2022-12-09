@@ -13,7 +13,7 @@ public interface ControllerInterface {
 	public List<Book> allBooks();
 	public void saveMember(LibraryMember member);
 	public void removeMember(String memberId);
-	public void saveBook(Book book);
+	public void saveBook(Book book, CrudMode mode);
 	public void saveBookCopy(Book book);
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
 	public LibraryMember searchMember(String memberId);
