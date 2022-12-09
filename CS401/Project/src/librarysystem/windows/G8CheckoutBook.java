@@ -13,6 +13,7 @@ import business.ControllerInterface;
 import business.DataModelMapper;
 import business.SystemController;
 import dataaccess.Auth;
+import librarysystem.controls.G8EmptyInputVerifier;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
 import java.awt.event.ActionListener;
@@ -134,16 +135,23 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		btnCheckOut.setBounds(520, 312, 149, 26);
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int selectedIsbn = table.getSelectedRow();
-				int selectedMemId = tblMember.getSelectedRow();
-				if(selectedIsbn < 0 ||  selectedMemId < 0) return;
-				String memberId = tblMember.getValueAt(selectedMemId,0).toString();
-				String isbn = table.getValueAt(selectedIsbn,0).toString();
-				try{controller.checkoutBook(memberId, isbn);}
-				catch(Exception ex) {}
-				checkoutModel.setRowCount(0);
-				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(memberId);
-				DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
+				try{
+					int selectedIsbn = table.getSelectedRow();
+					int selectedMemId = tblMember.getSelectedRow();
+					if(selectedIsbn < 0 ||  selectedMemId < 0) 
+						throw new Exception("Please select the Member and the Book!!!");;
+					String memberId = tblMember.getValueAt(selectedMemId,0).toString();
+					String isbn = table.getValueAt(selectedIsbn,0).toString();
+						controller.checkoutBook(memberId, isbn);
+					checkoutModel.setRowCount(0);
+					List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(memberId);
+					DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
+					getG8JFrame().setSuccessMessage("Checkout operation completed successfully!!!");
+				}
+				catch(Exception ex) {
+					getG8JFrame().setErrorMessage(ex.getMessage());
+				}
+				
 			}
 		});
 		mainPanel.add(btnCheckOut);
@@ -162,12 +170,25 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		JButton btnSearchCheckedOut = new JButton("Search");
 		btnSearchCheckedOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				checkoutModel.setRowCount(0);
-				String value = txtCheckoutSearch.getText();
-				if(value.isEmpty()) return;
-				
-				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
-				DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
+				try{
+					checkoutModel.setRowCount(0);
+					String value = txtCheckoutSearch.getText();
+					if(value.isEmpty()) 
+						throw new Exception("Please select the Member and the Book!!!");;;
+					
+					List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
+					DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
+					if(crs.size() == 0) {
+						getG8JFrame().setWarningMessage("Zero results returned. Enter the complete Member ID or ISBN!!!");
+						
+					}
+					else {
+						getG8JFrame().setSuccessMessage("Search operation completed successfully!!!");
+					}
+				}
+				catch(Exception ex) {
+					getG8JFrame().setErrorMessage(ex.getMessage());
+				}
 			}
 		});
 		btnSearchCheckedOut.setBounds(520, 372, 147, 26);
@@ -175,6 +196,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		
 		txtCheckoutSearch = new JTextField();
 		txtCheckoutSearch.setToolTipText("ISBN Or Member ID");
+		txtCheckoutSearch.setInputVerifier(new G8EmptyInputVerifier("ISBN Or Member ID", false));
 		txtCheckoutSearch.setColumns(20);
 		txtCheckoutSearch.setBounds(279, 375, 224, 20);
 		mainPanel.add(txtCheckoutSearch);

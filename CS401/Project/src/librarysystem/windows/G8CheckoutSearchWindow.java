@@ -89,15 +89,15 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 		txtCheckoutSearch = new JTextField();
 		txtCheckoutSearch.setToolTipText("ISBN Or Member ID");
 		txtCheckoutSearch.setColumns(20);
-		txtCheckoutSearch.setBounds(290, 18, 400, 20);
+		txtCheckoutSearch.setBounds(290, 18, 527, 20);
 		mainPanel.add(txtCheckoutSearch);
 		
 		JLabel lblNewLabel = new JLabel("Search Checkout (Member ID or ISBN)");
 		lblNewLabel.setBounds(26, 21, 241, 14);
 		mainPanel.add(lblNewLabel);
 		
-		chckbxOverdueOnly = new JCheckBox("Search Overdue only");
-		chckbxOverdueOnly.setBounds(696, 18, 147, 23);
+		chckbxOverdueOnly = new JCheckBox("Search for Overdue Items Only");
+		chckbxOverdueOnly.setBounds(290, 50, 292, 23);
 		mainPanel.add(chckbxOverdueOnly);
 		
 		JButton btnPrint = new JButton("Print");
