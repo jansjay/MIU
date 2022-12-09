@@ -49,6 +49,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	 * Create the panel.
 	 */
 	public G8LibraryBookOverviewWindow() {
+		lblSearch.setText("Search Books\r\n(ISBN or Title)");
 		panelDetail.setLayout(null);
 
 		JLabel lblIsbn = new JLabel("ISBN");
@@ -146,14 +147,14 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this();
 		setTitle(title);
 		super.btnLoadData.setText("All Books");
-		super.lblSearch.setText("Search books (isbn or title)");
+		super.lblSearch.setText("Search Books (ISBN or Title)");
 		super.btnAddBookCopy.setVisible(true);
 		//this.populate();
 	}
 
 	@Override
 	public boolean isNavigatorItemVisible() {
-		return Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
+		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.BOTH);
 	}
 
 	@Override
@@ -228,9 +229,6 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	
 	@Override 
 	public void searchClicked() {
-		if(this.textFieldSearch.getText().isEmpty()) {
-			return;
-		}
 		SystemController sc = new SystemController();
 		fillWindow(sc.searchBookByIsbnOrTitle(this.textFieldSearch.getText()));
 		setFieldStatus(CrudMode.Read);
