@@ -190,8 +190,8 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this.textFieldTitle.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.textFieldCopies.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.listAuthors.setEnabled(mode == CrudMode.Create);
-		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.textFieldCheckoutLength.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 	}
 
 	@Override

@@ -80,6 +80,11 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		super.lblSearch.setText("Search member (id or name)");
 	}
 	public G8LibraryMemberOverviewWindow() {
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchClicked();
+			}
+		});
 		//super("Member Overview Window");
 		initialize();
 		controller = new SystemController();
@@ -343,9 +348,9 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	@Override
 	public void populate() {
 		SystemController sc = new SystemController();
-		addJTable(null);
 		setFieldStatus(CrudMode.Read);
 		clearMemberUIFields();
+		addJTable(null);		
 	}
 	
 	@Override
@@ -371,9 +376,6 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	
 	@Override 
 	public void searchClicked() {
-		if(this.textFieldSearch.getText().isEmpty()) {
-			return;
-		}
 		SystemController sc = new SystemController();
 		addJTable(this.textFieldSearch.getText());
 		setFieldStatus(CrudMode.Read);
@@ -394,8 +396,8 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		this.txtCity.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.txtState.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.txtZip.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
-		this.txtTelephone.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);	
-		
+		this.txtTelephone.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update || mode == CrudMode.Create);		
 	}
 	
 	private void saveToDb() {
