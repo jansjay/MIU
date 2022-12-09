@@ -57,8 +57,24 @@ public class G8JFrame extends JFrame {
 		setStatusMessage("Login succeeded!!!", Color.BLUE);
 	}
 	
-	public void setStatusMessage(String message, Color color) {
+	protected void setStatusMessage(String message, Color color) {
 		JPanelTrailing.setMessage(message, color);
+	}
+	
+	public void setSuccessMessage(String message) {
+		setStatusMessage(message, Color.BLUE);
+	}
+	
+	public void setInfoMessage(String message) {
+		setStatusMessage(message, Color.DARK_GRAY);
+	}
+	
+	public void setErrorMessage(String message) {
+		setStatusMessage(message, Color.RED);
+	}
+	
+	public void setWarningMessage(String message) {
+		setStatusMessage(message, Color.ORANGE);
 	}
 
 }

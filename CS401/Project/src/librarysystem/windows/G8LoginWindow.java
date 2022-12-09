@@ -75,7 +75,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 					SystemController.getInstance().login(txtUsername.getText(), txtPassword.getText());					
 					this.getG8JPanel().getG8JFrame().authorizationChanged();					
 				} catch (LoginException e1) {
-					this.getG8JPanel().getG8JFrame().setStatusMessage(e1.getMessage(), Color.RED);
+					this.getG8JPanel().getG8JFrame().setErrorMessage(e1.getMessage());
 				}
 			}
 		});
