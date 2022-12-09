@@ -17,6 +17,7 @@ public interface ControllerInterface {
 	public void saveBookCopy(Book book);
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
 	public LibraryMember searchMember(String memberId);
+	public List<LibraryMember> searchMemberByIdFirstLastNames(String searchValue);
 	public Book searchOverDueBookByIsbn(String isbn);
 	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle);
 	public List<LibraryMember> getLibraryMembers();

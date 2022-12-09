@@ -22,6 +22,7 @@ public interface DataAccess {
 	public CheckoutRecord retrieveCheckoutRecordByMemberId(String memberId);
 	public List<CheckoutRecord> retrieveCheckoutRecordByBookIsbn(String isbn);
 	public List<CheckoutRecord> searchCheckoutRecordByMemberId(String memberId);
+	public List<LibraryMember> searchMemberByMemberIdFirstNameLastName(String memberId);
 	public List<CheckoutRecord> searchCheckoutRecordByBookIsbn(String isbn);	
 	public void removeMember(String memberId);
 	public List<Author> getAllAuthors();
