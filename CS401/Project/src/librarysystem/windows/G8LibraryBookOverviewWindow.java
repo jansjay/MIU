@@ -138,6 +138,10 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	public G8LibraryBookOverviewWindow(String title) {
 		this();
 		setTitle(title);
+		super.btnLoadData.setText("All Books");
+		super.lblSearch.setText("Search books (isbn or title)");
+		super.btnAddBookCopy.setVisible(true);
+		this.populate();
 	}
 
 	@Override
@@ -150,6 +154,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		SystemController sc = new SystemController();		
 		fillWindow(sc.allBooks());
 		setFieldStatus(CrudMode.Read);
+		this.clearBookUIFields();
 	}
 
 	@Override
@@ -197,6 +202,30 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		clearBookUIFields();
 		populateAuthorsForNewBookCreation();
 	}
+	
+	@Override 
+	public void addBookCopyClicked() {
+		System.out.println("addBookCopyClicked");
+		if(table.getSelectedRow() < 0) {
+			return;
+		}
+		
+		Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+		book.addCopy();
+		SystemController.getInstance().saveBook(book);
+		this.populate();
+	}
+	
+	@Override 
+	public void searchClicked() {
+		if(this.textFieldSearch.getText().isEmpty()) {
+			return;
+		}
+		SystemController sc = new SystemController();
+		fillWindow(sc.searchBookByIsbnOrTitle(this.textFieldSearch.getText()));
+		setFieldStatus(CrudMode.Read);
+	}
+	
 	private void populateAuthorsForNewBookCreation() {
 		DefaultListModel listModel = new DefaultListModel();
 		listModel.addAll(SystemController.getInstance().getAllAuthors());
@@ -208,6 +237,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this.textFieldTitle.setText("");
 		this.textFieldCopies.setText("");
 		this.textFieldCheckoutLength.setText("");
+		this.textFieldSearch.setText("");
 		DefaultListModel listModel = new DefaultListModel();
 		listAuthors.setModel(listModel);
 	}

@@ -194,13 +194,13 @@ public class SystemController extends BaseController implements ControllerInterf
 	@Override
 	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle){
 		
-		List<Book> ds= da
+		List<Book> ds = da
 				.readBooksMap()
 				.values()
 				.parallelStream()
 				.filter(
-						bk->bk.getIsbn().equals(isbnOrTitle) 
-						|| bk.getTitle().equals(isbnOrTitle)
+						bk -> bk.getIsbn().contains(isbnOrTitle) 
+						|| bk.getTitle().contains(isbnOrTitle)
 						|| isbnOrTitle.isEmpty())
 				.toList();
 		
