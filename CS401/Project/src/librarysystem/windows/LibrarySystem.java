@@ -37,7 +37,7 @@ public class LibrarySystem extends G8JFrame {
 	 */
 	public LibrarySystem() {
 		setBounds(100, 100, 800, 650);
-		setMinimumSize(new Dimension(800,650));
+		setMinimumSize(new Dimension(1400,800));
 		setDefaultCloseOperation(G8JFrame.EXIT_ON_CLOSE);
 		registerPanel(new G8LoginWindow("Login"));
 		G8LibraryBookDetailsWindow bookDetails = new G8LibraryBookDetailsWindow("Books Detail");

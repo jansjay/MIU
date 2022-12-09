@@ -194,7 +194,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		tblCheckout.setBounds(464, 502, -515, -45);
 		tblCheckout.setBackground(new Color(255, 240, 245));
 		checkoutScrollPane = new JScrollPane();
-		checkoutScrollPane.setBounds(10, 415, 657, 219);
+		checkoutScrollPane.setBounds(10, 415, 657, 152);
 		checkoutScrollPane.setViewportView(tblCheckout);
 		mainPanel.add(checkoutScrollPane);
 		
