@@ -146,7 +146,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 	@Override
 	public boolean isNavigatorItemVisible() {
-		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
+		return Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
 	}
 
 	@Override

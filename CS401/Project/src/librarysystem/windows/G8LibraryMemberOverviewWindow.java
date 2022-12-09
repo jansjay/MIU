@@ -19,7 +19,6 @@ import dataaccess.Auth;
 import librarysystem.controls.G8JFrame;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
-import librarysystem.controls.G8PanelDetails;
 import librarysystem.controls.G8PanelOverview;
 
 import javax.swing.JTextField;
@@ -88,7 +87,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	 * Initialize the contents of the frame.
 	 */
 	public boolean isNavigatorItemVisible() {
-		return Context.isAuth(Auth.LIBRARIAN);
+		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
 	}
 	private void initialize() {
 		//setBounds(100, 100, 1205, 678);

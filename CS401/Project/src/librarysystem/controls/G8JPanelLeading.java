@@ -42,7 +42,7 @@ public class G8JPanelLeading extends G8JPanel {
 		});
 		mnFileMenu.add(mntmFileQuitMenuItem);
 		
-		JMenu mnUserMenu = new JMenu("User");
+		/*JMenu mnUserMenu = new JMenu("User");
 		menuBar.add(mnUserMenu);
 		
 		JMenuItem mntmUserLogoggMenuItem = new JMenuItem("Logoff");
@@ -55,7 +55,7 @@ public class G8JPanelLeading extends G8JPanel {
 				}
 			}
 		});
-		mnUserMenu.add(mntmUserLogoggMenuItem);
+		mnUserMenu.add(mntmUserLogoggMenuItem);*/
 
 	}
 	
