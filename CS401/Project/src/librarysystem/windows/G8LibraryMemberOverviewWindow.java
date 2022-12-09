@@ -13,6 +13,7 @@ import business.SystemController;
 import dataaccess.Auth;
 import librarysystem.controls.G8EmptyInputVerifier;
 import librarysystem.controls.G8Navigatable;
+import librarysystem.controls.G8NumberWithLengthInputVerifier;
 import librarysystem.controls.G8PanelOverview;
 
 import javax.swing.JTextField;
@@ -96,7 +97,12 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		}
 		String[] row = getTextFieldValues();
 		model.addRow(row);
-		controller.saveMember(DataModelMapper.mapLibraryMember(row));
+		try{
+			controller.saveMember(DataModelMapper.mapLibraryMember(row), CrudMode.Create);}
+		catch(Exception e) {
+			model.removeRow(table.getRowCount()-1);
+			throw e;
+		}
 		clearMemberUIFields();
 		getG8JFrame().setSuccessMessage("Member added successfully!!!");
 	}
@@ -110,7 +116,6 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the Member with Member ID: " + model.getValueAt(rowNumber,0).toString() + "?");
 		if(confirmation!=0)return;		
 		controller.removeMember(model.getValueAt(rowNumber,0).toString());
-		model.removeRow(rowNumber);
 		clearMemberUIFields();
 		getG8JFrame().setSuccessMessage("Member deleted successfully!!!");
 		populate();
@@ -128,7 +133,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 			return;
 		}
 		DataModelMapper.UpdateModelRow(model,values,rowNumber);
-		controller.saveMember(DataModelMapper.mapLibraryMember(values));
+		controller.saveMember(DataModelMapper.mapLibraryMember(values), CrudMode.Update);
 		clearMemberUIFields();
 		getG8JFrame().setSuccessMessage("Member updated successfully!!!");
 	}
@@ -195,14 +200,14 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		
 		txtZip = new JTextField();
 		txtZip.setToolTipText("Zip");
-		txtZip.setInputVerifier(new G8EmptyInputVerifier("Zip", false));
+		txtZip.setInputVerifier(new G8NumberWithLengthInputVerifier("Zip", 5, false));
 		txtZip.setColumns(10);
 		txtZip.setBounds(395, 229, 78, 31);
 		panelDetail.add(txtZip);
 		
 		txtTelephone = new JTextField();
 		txtTelephone.setToolTipText("Telephone");
-		txtTelephone.setInputVerifier(new G8EmptyInputVerifier("Telephone", false));
+		txtTelephone.setInputVerifier(new G8NumberWithLengthInputVerifier("Telephone", 10, false));
 		txtTelephone.setColumns(10);
 		txtTelephone.setBounds(653, 137, 226, 31);
 		panelDetail.add(txtTelephone);

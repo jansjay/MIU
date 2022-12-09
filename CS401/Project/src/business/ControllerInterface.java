@@ -11,7 +11,7 @@ public interface ControllerInterface {
 	public List<String> allMemberIds();
 	public List<String> allBookIds();
 	public List<Book> allBooks();
-	public void saveMember(LibraryMember member);
+	public void saveMember(LibraryMember member, CrudMode mode);
 	public void removeMember(String memberId);
 	public void saveBook(Book book, CrudMode mode);
 	public void saveBookCopy(Book book);
