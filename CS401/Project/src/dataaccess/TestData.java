@@ -152,6 +152,8 @@ public class TestData {
 			add(new Address("1435 Channing Ave", "Palo Alto", "CA", "94301"));
 			add(new Address("42 Dogwood Dr.", "Fairfield", "IA", "52556"));
 			add(new Address("501 Central", "Mountain View", "CA", "94707"));
+			add(new Address("503 West", "Window View", "MA", "55707"));
+			add(new Address("601 Street st", "Fountain View", "CA", "93407"));
 		}
 	};
 	
@@ -170,6 +172,8 @@ public class TestData {
 			add(new Author("Andrew", "Cleveland", "976-445-2232", addresses.get(2), "Author of childrens' books."));
 			add(new Author("Sarah", "Connor", "123-422-2663", addresses.get(3), "Known for her clever style."));
 			add(new Author("Maharishi ", "Mahesh Yogi", "045-228-2667", addresses.get(1), "Science of Being and Art of Living"));
+			add(new Author("Andrew", "Simons", "045-238-2567", addresses.get(6), "What goes around comes around"));
+			add(new Author("Ricky", "Ponting", "055-338-3567", addresses.get(7), "Famous personality"));
 		}
 	};
 	
@@ -179,7 +183,9 @@ public class TestData {
 			add(new Book("23-11451", "The Big Fish", 21, Arrays.asList(allAuthors.get(0), allAuthors.get(1))));
 			add(new Book("28-12331", "Antartica", 7, Arrays.asList(allAuthors.get(2))));
 			add(new Book("99-22223", "Thinking Java", 21, Arrays.asList(allAuthors.get(3))));
-			add(new Book("48-56882", "Jimmy's First Day of School", 7, Arrays.asList(allAuthors.get(4))));		
+			add(new Book("48-56882", "Jimmy's First Day of School", 7, Arrays.asList(allAuthors.get(4))));
+			add(new Book("68-56882", "Andrew going Home", 7, Arrays.asList(allAuthors.get(5))));
+			add(new Book("38-56882", "Ha Ha got you!!!", 7, Arrays.asList(allAuthors.get(6))));
 		}
 	};
 	

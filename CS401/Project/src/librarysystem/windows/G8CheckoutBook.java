@@ -174,7 +174,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 					checkoutModel.setRowCount(0);
 					String value = txtCheckoutSearch.getText();
 					if(value.isEmpty()) 
-						throw new Exception("Please select the Member and the Book!!!");;;
+						throw new Exception("Please enter a Member ID or an ISBN!!!");;;
 					
 					List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
 					DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
