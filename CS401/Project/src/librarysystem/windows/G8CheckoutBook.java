@@ -182,7 +182,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				catch(Exception ex) {}
 				checkoutModel.setRowCount(0);
 				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(memberId);
-				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
+				DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
 			}
 		});
 		mainPanel.add(btnCheckOut);
@@ -206,7 +206,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				if(value.isEmpty()) return;
 				
 				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
-				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
+				DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
 			}
 		});
 		btnSearchCheckedOut.setBounds(520, 372, 147, 26);
