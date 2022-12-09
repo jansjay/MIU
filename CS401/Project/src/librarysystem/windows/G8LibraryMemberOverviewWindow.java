@@ -133,7 +133,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		getG8JFrame().setSuccessMessage("Member updated successfully!!!");
 	}
 	
-	private void addJTable(String searchValue) {
+	private void addJTable(String searchValue, boolean initOnly) {
 		model = new DefaultTableModel();
 		String[] columns = getTableColumnNames();
 		model.setColumnIdentifiers(columns);
@@ -142,10 +142,12 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		table.setBounds(1137, 283, -1077, 280);
 		table.setShowGrid(true);
 
-		if(searchValue == null || searchValue.isBlank())
-			DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
-		else
-			DataModelMapper.addAllLibraryMember(controller.searchMemberByIdFirstLastNames(searchValue), model);
+		if(!initOnly) {
+			if(searchValue == null || searchValue.isBlank())
+				DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
+			else
+				DataModelMapper.addAllLibraryMember(controller.searchMemberByIdFirstLastNames(searchValue), model);
+		}
 	}
 	
 	
@@ -315,7 +317,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	public void populate() {
 		setFieldStatus(CrudMode.Read);
 		clearMemberUIFields();
-		addJTable(null);		
+		addJTable(null, false);		
 	}
 	
 	@Override
@@ -341,7 +343,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	
 	@Override 
 	public void searchClicked() {
-		addJTable(this.textFieldSearch.getText());
+		addJTable(this.textFieldSearch.getText(), false);
 		setFieldStatus(CrudMode.Read);
 	}
 	
