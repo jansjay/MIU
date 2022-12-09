@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
+import javax.swing.JSeparator;
 
 public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 
@@ -98,11 +99,11 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		
 		txtBookSearchField = new JTextField();
 		txtBookSearchField.setToolTipText("Search Book by ISBN or Title");
-		txtBookSearchField.setBounds(10, 11, 352, 32);
+		txtBookSearchField.setBounds(224, 17, 279, 20);
 		mainPanel.add(txtBookSearchField);
 		txtBookSearchField.setColumns(20);
 		
-		btnBookSearch = new JButton("Search Book");
+		btnBookSearch = new JButton("Search");
 		btnBookSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String isbn = txtBookSearchField.getText();
@@ -111,7 +112,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				.addBooks(controller.searchBookByIsbnOrTitle(isbn), bookModel);
 			}
 		});
-		btnBookSearch.setBounds(405, 11, 262, 32);
+		btnBookSearch.setBounds(520, 14, 147, 26);
 		mainPanel.add(btnBookSearch);
 		
 		String[] bookColumns = getBookModelColumns();
@@ -131,10 +132,10 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		txtMemberSearchField = new JTextField();
 		txtMemberSearchField.setToolTipText("Search Libarary Member by Member ID");
 		txtMemberSearchField.setColumns(20);
-		txtMemberSearchField.setBounds(10, 156, 352, 32);
+		txtMemberSearchField.setBounds(224, 162, 279, 20);
 		mainPanel.add(txtMemberSearchField);
 		
-		btnSearchMember = new JButton("Search Member");
+		btnSearchMember = new JButton("Search");
 		btnSearchMember.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String member = txtMemberSearchField.getText();
@@ -151,7 +152,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				}
 			}
 		});
-		btnSearchMember.setBounds(405, 156, 262, 32);
+		btnSearchMember.setBounds(520, 159, 147, 26);
 		mainPanel.add(btnSearchMember);
 		
 		memberModel = new DefaultTableModel();
@@ -169,7 +170,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		mainPanel.add(memberScrollPane);
 		
 		btnCheckOut = new JButton("Check Out");
-		btnCheckOut.setBounds(10, 333, 200, 32);
+		btnCheckOut.setBounds(520, 312, 149, 26);
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIsbn = table.getSelectedRow();
@@ -193,11 +194,11 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		tblCheckout.setBounds(464, 502, -515, -45);
 		tblCheckout.setBackground(new Color(255, 240, 245));
 		checkoutScrollPane = new JScrollPane();
-		checkoutScrollPane.setBounds(10, 376, 657, 219);
+		checkoutScrollPane.setBounds(10, 415, 657, 219);
 		checkoutScrollPane.setViewportView(tblCheckout);
 		mainPanel.add(checkoutScrollPane);
 		
-		JButton btnSearchCheckedOut = new JButton("Search Checked Out");
+		JButton btnSearchCheckedOut = new JButton("Search");
 		btnSearchCheckedOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				checkoutModel.setRowCount(0);
@@ -208,14 +209,30 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
 			}
 		});
-		btnSearchCheckedOut.setBounds(439, 333, 200, 32);
+		btnSearchCheckedOut.setBounds(520, 372, 147, 26);
 		mainPanel.add(btnSearchCheckedOut);
 		
 		txtCheckoutSearch = new JTextField();
 		txtCheckoutSearch.setToolTipText("ISBN Or Member ID");
 		txtCheckoutSearch.setColumns(20);
-		txtCheckoutSearch.setBounds(230, 333, 186, 32);
+		txtCheckoutSearch.setBounds(224, 375, 279, 20);
 		mainPanel.add(txtCheckoutSearch);
+		
+		JLabel lblSearchBook = new JLabel("Search Books (ISBN or Title)");
+		lblSearchBook.setBounds(28, 20, 186, 14);
+		mainPanel.add(lblSearchBook);
+		
+		JLabel lblMemberID = new JLabel("Search Members (Member ID)");
+		lblMemberID.setBounds(28, 165, 186, 14);
+		mainPanel.add(lblMemberID);
+		
+		JLabel lblNewLabel = new JLabel("Search Checkout");
+		lblNewLabel.setBounds(28, 378, 186, 14);
+		mainPanel.add(lblNewLabel);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 358, 657, 9);
+		mainPanel.add(separator);
 		
 	}
 

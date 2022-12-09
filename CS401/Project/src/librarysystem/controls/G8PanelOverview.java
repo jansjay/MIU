@@ -53,7 +53,7 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		add(panelTop, BorderLayout.NORTH);
 		
 		JPanel panelBottom = new JPanel();
-		add(panelBottom);
+		add(panelBottom, BorderLayout.CENTER);
 		
 		panelTop.setLayout(new BorderLayout(0, 0));
 		
@@ -132,12 +132,13 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		gbl_panelBottom.columnWidths = new int[]{450, 0};
 		gbl_panelBottom.rowHeights = new int[]{132, 365, 0};
 		gbl_panelBottom.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panelBottom.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelBottom.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panelBottom.setLayout(gbl_panelBottom);
 		
 		JPanel panelOverviewTable = new JPanel();
 		GridBagConstraints gbc_panelOverviewTable = new GridBagConstraints();
-		gbc_panelOverviewTable.fill = GridBagConstraints.BOTH;
+		gbc_panelOverviewTable.anchor = GridBagConstraints.NORTHWEST;
+		gbc_panelOverviewTable.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelOverviewTable.insets = new Insets(0, 0, 5, 0);
 		gbc_panelOverviewTable.gridx = 0;
 		gbc_panelOverviewTable.gridy = 0;
