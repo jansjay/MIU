@@ -249,4 +249,9 @@ public class SystemController extends BaseController implements ControllerInterf
 	public void deleteBook(Book book) {
 		da.deleteBook(book);
 	}
+
+	@Override
+	public List<LibraryMember> searchMemberByIdFirstLastNames(String searchValue) {
+		return da.searchMemberByMemberIdFirstNameLastName(searchValue);
+	}
 }

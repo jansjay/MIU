@@ -11,8 +11,11 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import business.Author;
+import business.Book;
 import business.Context;
 import business.ControllerInterface;
+import business.CrudMode;
 import business.DataModelMapper;
 import business.SystemController;
 import dataaccess.Auth;
@@ -22,6 +25,7 @@ import librarysystem.controls.G8Navigatable;
 import librarysystem.controls.G8PanelOverview;
 
 import javax.swing.JTextField;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -47,10 +51,10 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	private JTextField txtState;
 	private JTextField txtZip;
 	private JTextField txtTelephone;
-	JButton btnAdd;
-	JButton btnUpdate;
-	JButton btnDelete;
+	JButton btnSave;
 	JPanel panel;
+	private CrudMode currentCrudMode = CrudMode.Read; 
+	
 	/**
 	 * Launch the application.
 	 */
@@ -76,11 +80,14 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		super.lblSearch.setText("Search member (id or name)");
 	}
 	public G8LibraryMemberOverviewWindow() {
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchClicked();
+			}
+		});
 		//super("Member Overview Window");
 		initialize();
 		controller = new SystemController();
-		DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
-		
 	}
 
 	/**
@@ -89,6 +96,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	public boolean isNavigatorItemVisible() {
 		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
 	}
+		
 	private void initialize() {
 		//setBounds(100, 100, 1205, 678);
 		//getContentPane().setForeground(new Color(255, 255, 255));
@@ -97,60 +105,16 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		panelDetail.setLayout(null);
 		addTextFields();
 		addButtons();
-		addJTable();
+		//addJTable();
 		addBtnEvents();
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	private void addBtnEvents() {
 		
-		btnAdd.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!validateFields()) {
-					JOptionPane.showMessageDialog(null, "Please insert the values");
-					return;
-				}
-				String[] row = getTextFieldValues();
-				model.addRow(row);
-				controller.saveMember(DataModelMapper.mapLibraryMember(row));
-				emptyTextFields();
-				JOptionPane.showMessageDialog(null, "Added Successfully");
-			}
-		});
-		
-		btnUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(!validateFields()) {
-					JOptionPane.showMessageDialog(null, "Please insert the values");
-					return;
-				}
-				String[] values = getTextFieldValues();
-				int rowNumber = table.getSelectedRow();
-				if(rowNumber<=0) {
-					JOptionPane.showMessageDialog(null, "Please select a row");
-					return;
-				}
-				DataModelMapper.UpdateModelRow(model,values,rowNumber);
-				controller.saveMember(DataModelMapper.mapLibraryMember(values));
-				emptyTextFields();
-				JOptionPane.showMessageDialog(null, "Updated Successfully");
-			}
-		});
-		
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int rowNumber = table.getSelectedRow();
-				if(rowNumber<=0) {
-					JOptionPane.showMessageDialog(null, "Please select a row");
-					return;
-				}
-				int confirmation = JOptionPane.showConfirmDialog(null, "Confirm to delete?");
-				if(confirmation!=0)return;
-				
-				controller.removeMember(model.getValueAt(rowNumber,0).toString());
-				model.removeRow(rowNumber);
-				emptyTextFields();
-				JOptionPane.showMessageDialog(null, "Deleted Successfully");
+				saveToDb();
 			}
 		});
 		
@@ -163,7 +127,51 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		});
 	}
 	
-	private void addJTable() {
+	private void performAddAction() {
+		if(!validateFields()) {
+			JOptionPane.showMessageDialog(null, "Please insert the values");
+			return;
+		}
+		String[] row = getTextFieldValues();
+		model.addRow(row);
+		controller.saveMember(DataModelMapper.mapLibraryMember(row));
+		clearMemberUIFields();
+		getG8JFrame().setSuccessMessage("Member added successfully!!!");
+	}
+	
+	private void performDeleteAction() {
+		int rowNumber = table.getSelectedRow();
+		if(rowNumber < 0) {
+			JOptionPane.showMessageDialog(null, "Please select a row");
+			return;
+		}
+		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the Member with Member ID: " + model.getValueAt(rowNumber,0).toString() + "?");
+		if(confirmation!=0)return;		
+		controller.removeMember(model.getValueAt(rowNumber,0).toString());
+		model.removeRow(rowNumber);
+		clearMemberUIFields();
+		getG8JFrame().setSuccessMessage("Member deleted successfully!!!");
+		populate();
+	}
+	
+	private void performModifyAction() {
+		if(!validateFields()) {
+			JOptionPane.showMessageDialog(null, "Please insert the values");
+			return;
+		}
+		String[] values = getTextFieldValues();
+		int rowNumber = table.getSelectedRow();
+		if(rowNumber < 0) {
+			JOptionPane.showMessageDialog(null, "Please select a row");
+			return;
+		}
+		DataModelMapper.UpdateModelRow(model,values,rowNumber);
+		controller.saveMember(DataModelMapper.mapLibraryMember(values));
+		clearMemberUIFields();
+		getG8JFrame().setSuccessMessage("Member updated successfully!!!");
+	}
+	
+	private void addJTable(String searchValue) {
 		model = new DefaultTableModel();
 		String[] columns = getTableColumnNames();
 		model.setColumnIdentifiers(columns);
@@ -171,12 +179,18 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		//tblMember = new JTable();
 		table.setModel(model);
 		table.setBounds(1137, 283, -1077, 280);
-		
+		table.setShowGrid(true);
 		//scrollPane = new JScrollPane();
 		//scrollPane.setBounds(10, 274, 1164, 356);
 		//scrollPane.setViewportView(table);
 		//add(scrollPane);
+		if(searchValue == null || searchValue.isBlank())
+			DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
+		else
+			DataModelMapper.addAllLibraryMember(controller.searchMemberByIdFirstLastNames(searchValue), model);
 	}
+	
+	
 	private void addTextFields() {
 		txtMemberId = new JTextField();
 		txtMemberId.setToolTipText("Member ID");
@@ -228,17 +242,9 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 
 	private void addButtons() {
 		
-		btnAdd = new JButton("Add Member");
-		btnAdd.setBounds(547, 198, 124, 31);
-		panelDetail.add(btnAdd);
-		
-		btnUpdate = new JButton("Update Member");
-		btnUpdate.setBounds(681, 198, 124, 31);
-		panelDetail.add(btnUpdate);
-		
-		btnDelete = new JButton("Delete Member");
-		btnDelete.setBounds(815, 198, 109, 31);
-		panelDetail.add(btnDelete);
+		btnSave = new JButton("Save");
+		btnSave.setBounds(251, 297, 124, 31);
+		panelDetail.add(btnSave);
 		
 		JLabel lblMemberId = new JLabel("Member ID");
 		lblMemberId.setBounds(31, 15, 115, 23);
@@ -290,7 +296,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		};
 	}
 	
-	private void emptyTextFields(){
+	private void clearMemberUIFields(){
 		txtMemberId.setText("");
 		txtFirstName.setText("");
 		txtLastName.setText("");
@@ -338,4 +344,81 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		if(txtTelephone.getText().isEmpty()) return false;
 		return true;
 	}
+	
+	@Override
+	public void populate() {
+		SystemController sc = new SystemController();
+		setFieldStatus(CrudMode.Read);
+		clearMemberUIFields();
+		addJTable(null);		
+	}
+	
+	@Override
+	protected void selectionChanged() {
+		setSelectedRowIntoTextFields();
+		setFieldStatus(CrudMode.Read);
+	}
+	
+	@Override
+	protected void deleteClicked() {
+		super.deleteClicked();
+		currentCrudMode = CrudMode.Delete;
+		setFieldStatus(CrudMode.Delete);
+		performDeleteAction();
+	}
+	@Override
+	protected void newClicked() {
+		super.newClicked();
+		currentCrudMode = CrudMode.Create;
+		setFieldStatus(CrudMode.Create);
+		clearMemberUIFields();
+	}
+	
+	@Override 
+	public void searchClicked() {
+		SystemController sc = new SystemController();
+		addJTable(this.textFieldSearch.getText());
+		setFieldStatus(CrudMode.Read);
+	}
+	
+	@Override
+	protected void editClicked() {
+		super.editClicked();
+		currentCrudMode = CrudMode.Update;
+		setFieldStatus(CrudMode.Update);
+	}
+	
+	private void setFieldStatus(CrudMode mode) {
+		this.txtMemberId.setEditable(mode == CrudMode.Create);
+		this.txtFirstName.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.txtLastName.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.txtStreet.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.txtCity.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.txtState.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.txtZip.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.txtTelephone.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update || mode == CrudMode.Create);		
+	}
+	
+	private void saveToDb() {
+		try {
+		switch(currentCrudMode) {
+		case Create:
+			performAddAction();			
+			break;
+		case Delete:
+			performDeleteAction();
+			break;
+		case Update:
+			performModifyAction();	
+			break;
+		default:
+			break;
+		}
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
+	}
+	
 }

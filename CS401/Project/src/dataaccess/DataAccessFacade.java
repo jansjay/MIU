@@ -282,4 +282,12 @@ public class DataAccessFacade implements DataAccess {
 		books.remove(book.getIsbn());
 		saveToStorage(StorageType.BOOKS, books);
 	}
+
+	@Override
+	public List<LibraryMember> searchMemberByMemberIdFirstNameLastName(String searchValue) {
+		HashMap<String, LibraryMember> recordsMap = readMemberMap();
+		return recordsMap.values().stream().filter(m-> m.getMemberId().toLowerCase().contains(searchValue.toLowerCase()) || 
+												m.getFirstName().toLowerCase().contains(searchValue.toLowerCase()) ||
+												m.getLastName().toLowerCase().contains(searchValue.toLowerCase())).toList();
+	}
 }
