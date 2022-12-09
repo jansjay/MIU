@@ -148,7 +148,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		super.btnLoadData.setText("All Books");
 		super.lblSearch.setText("Search books (isbn or title)");
 		super.btnAddBookCopy.setVisible(true);
-		this.populate();
+		//this.populate();
 	}
 
 	@Override
