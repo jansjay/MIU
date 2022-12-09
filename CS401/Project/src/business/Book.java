@@ -83,6 +83,11 @@ final public class Book implements Serializable {
 	public String getTitle() {
 		return title;
 	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
 	public BookCopy[] getCopies() {
 		return copies;
 	}
@@ -119,9 +124,9 @@ final public class Book implements Serializable {
 	public int getMaxCheckoutLength() {
 		return maxCheckoutLength;
 	}
-
 	
-	
-	
+	public void setMaxCheckoutLength(int maxCheckoutLength) {
+		this.maxCheckoutLength = maxCheckoutLength;
+	}
 	
 }

@@ -21,6 +21,7 @@ import librarysystem.controls.G8PanelOverview;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
@@ -188,7 +189,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this.textFieldIsbn.setEditable(mode == CrudMode.Create);
 		this.textFieldTitle.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.textFieldCopies.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
-		this.listAuthors.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.listAuthors.setEnabled(mode == CrudMode.Create);
 		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.textFieldCheckoutLength.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 	}
@@ -217,8 +218,11 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		}
 		
 		Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to create a copy of the book with ISBN: " + book.getIsbn() + "?");
+		if(confirmation!=0) return;
 		book.addCopy();
-		SystemController.getInstance().saveBook(book);
+		SystemController.getInstance().saveBook(book, CrudMode.Update);
+		getG8JFrame().setSuccessMessage("A copy of the Book added successfully!!!");			
 		this.populate();
 	}
 	
@@ -280,33 +284,44 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	}
 
 	private void saveToDb() {
+		try {
 		switch(currentCrudMode) {
 		case Create:
 			Book newBook = createBookFromUIFields();
-			SystemController.getInstance().saveBook(newBook);
+			SystemController.getInstance().saveBook(newBook, currentCrudMode);
 			this.clearBookUIFields();
+			getG8JFrame().setSuccessMessage("Book created successfully!!!");
+			
 			break;
 		case Delete:
 			if(table.getSelectedRow() < 0) {
 				return;
 			}
 			Book delBook = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+			int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the book with ISBN: " + delBook.getIsbn() + "?");
+			if(confirmation!=0) return;
 			System.out.println("Delete book isbn: " + delBook.getIsbn());
 			SystemController.getInstance().deleteBook(delBook);
+			getG8JFrame().setSuccessMessage("Book deleted successfully!!!");			
 			this.clearBookUIFields();
 			break;
 		case Update:
 			if(table.getSelectedRow() < 0) {
 				return;
 			}
-			//Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-			//update and save 
-			Book updateBook = createBookFromUIFields();
-			SystemController.getInstance().saveBook(updateBook);
+			Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+			book.setTitle(textFieldTitle.getText());
+			book.setMaxCheckoutLength(Integer.parseInt(textFieldCheckoutLength.getText()));
+			SystemController.getInstance().saveBook(book, currentCrudMode);
+			getG8JFrame().setSuccessMessage("Book saved successfully!!!");			
 			break;
 		default:
 			break;
 		}
 		this.populate();
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 }

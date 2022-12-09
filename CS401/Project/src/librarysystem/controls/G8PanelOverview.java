@@ -130,7 +130,7 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		panelButtons.add(btnAddBookCopy);
 		GridBagLayout gbl_panelBottom = new GridBagLayout();
 		gbl_panelBottom.columnWidths = new int[]{450, 0};
-		gbl_panelBottom.rowHeights = new int[]{132, 229, 0};
+		gbl_panelBottom.rowHeights = new int[]{303, 424, 0};
 		gbl_panelBottom.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_panelBottom.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		panelBottom.setLayout(gbl_panelBottom);
