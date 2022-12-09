@@ -215,6 +215,16 @@ public class SystemController extends BaseController implements ControllerInterf
 		if(isbnCr !=null) crs.addAll(isbnCr);
 		return crs;
 	}
+	
+	@Override
+	public List<CheckoutRecord> searchCheckedOutBookByMemberIdOrIsbn(String value) {
+		List<CheckoutRecord> crs = new ArrayList<>();	
+		List<CheckoutRecord> memCr=	da.searchCheckoutRecordByMemberId(value);
+		if(memCr !=null) crs.addAll(memCr);
+		List<CheckoutRecord> isbnCr = da.searchCheckoutRecordByBookIsbn(value);
+		if(isbnCr !=null) crs.addAll(isbnCr);
+		return crs;
+	}
 
 	@Override
 	public List<Author> getAllAuthors() {

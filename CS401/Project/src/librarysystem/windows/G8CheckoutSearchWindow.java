@@ -30,6 +30,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
 import javax.swing.JSeparator;
+import javax.swing.JCheckBox;
 
 public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 
@@ -46,6 +47,7 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 	private DefaultTableModel bookModel;
 	private DefaultTableModel checkoutModel;
 	private JTextField txtCheckoutSearch;
+	private JCheckBox chckbxOverdueOnly;
 	/**
 	 * Launch the application.
 	 */
@@ -102,7 +104,7 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 		tblCheckout.setBounds(464, 502, -515, -45);
 		tblCheckout.setBackground(new Color(255, 240, 245));
 		checkoutScrollPane = new JScrollPane();
-		checkoutScrollPane.setBounds(26, 52, 668, 152);
+		checkoutScrollPane.setBounds(26, 85, 791, 152);
 		checkoutScrollPane.setViewportView(tblCheckout);
 		mainPanel.add(checkoutScrollPane);
 		
@@ -111,24 +113,28 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 			public void actionPerformed(ActionEvent e) {
 				checkoutModel.setRowCount(0);
 				String value = txtCheckoutSearch.getText();
-				if(value.isEmpty()) return;
+				//if(value.isEmpty()) return;
 				
-				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
-				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
+				List<business.CheckoutRecord> crs = controller.searchCheckedOutBookByMemberIdOrIsbn(value);
+				DataModelMapper.addAllCheckoutBook(crs,checkoutModel, chckbxOverdueOnly.isSelected());
 			}
 		});
-		btnSearchCheckedOut.setBounds(547, 15, 147, 26);
+		btnSearchCheckedOut.setBounds(670, 48, 147, 26);
 		mainPanel.add(btnSearchCheckedOut);
 		
 		txtCheckoutSearch = new JTextField();
 		txtCheckoutSearch.setToolTipText("ISBN Or Member ID");
 		txtCheckoutSearch.setColumns(20);
-		txtCheckoutSearch.setBounds(313, 18, 224, 20);
+		txtCheckoutSearch.setBounds(290, 18, 400, 20);
 		mainPanel.add(txtCheckoutSearch);
 		
 		JLabel lblNewLabel = new JLabel("Search Checkout (Member ID or ISBN)");
 		lblNewLabel.setBounds(26, 21, 241, 14);
 		mainPanel.add(lblNewLabel);
+		
+		chckbxOverdueOnly = new JCheckBox("Search Overdue only");
+		chckbxOverdueOnly.setBounds(696, 18, 147, 23);
+		mainPanel.add(chckbxOverdueOnly);
 		
 	}
 
