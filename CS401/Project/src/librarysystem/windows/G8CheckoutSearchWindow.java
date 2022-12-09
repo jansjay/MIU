@@ -1,19 +1,13 @@
 package librarysystem.windows;
 
-import java.awt.EventQueue;
 import java.awt.GridLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JTextField;
-import java.awt.BorderLayout;
 import java.awt.Color;
-
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-
 import business.Context;
 import business.ControllerInterface;
 import business.DataModelMapper;
@@ -21,18 +15,11 @@ import business.SystemController;
 import dataaccess.Auth;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
-
-import javax.swing.JList;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.awt.event.ActionEvent;
-import javax.swing.border.BevelBorder;
-import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
-import javax.swing.JFormattedTextField;
 import java.awt.Font;
 
 public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
@@ -41,7 +28,6 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	// JFrame frame;
 	G8JPanel mainPanel;
 	private JTable tblCheckout;
 	private JScrollPane checkoutScrollPane;
@@ -52,25 +38,7 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 	private JTextField txtCheckoutSearch;
 	private JCheckBox chckbxOverdueOnly;
 	private JTextArea textArea;
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					G8CheckoutBook window = new G8CheckoutBook();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
-	/**
-	 * Create the application.
-	 */
 	public G8CheckoutSearchWindow() {
 		initialize();
 		controller = new SystemController();
@@ -81,13 +49,7 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 		setTitle(title);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
-		/*frame = new JFrame();
-		frame.setBounds(100, 100, 691, 643);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
 		setLayout(new GridLayout(0, 1, 0, 0));
 		
 		mainPanel = new G8JPanel();
@@ -117,8 +79,6 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 			public void actionPerformed(ActionEvent e) {
 				checkoutModel.setRowCount(0);
 				String value = txtCheckoutSearch.getText();
-				//if(value.isEmpty()) return;
-				
 				List<business.CheckoutRecord> crs = controller.searchCheckedOutBookByMemberIdOrIsbn(value);
 				DataModelMapper.addAllCheckoutBook(crs,checkoutModel, chckbxOverdueOnly.isSelected());
 			}

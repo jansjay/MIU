@@ -1,47 +1,33 @@
 package librarysystem.windows;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import business.Author;
-import business.Book;
 import business.Context;
 import business.ControllerInterface;
 import business.CrudMode;
 import business.DataModelMapper;
 import business.SystemController;
 import dataaccess.Auth;
-import librarysystem.controls.G8JFrame;
-import librarysystem.controls.G8JPanel;
+import librarysystem.controls.G8EmptyInputVerifier;
 import librarysystem.controls.G8Navigatable;
 import librarysystem.controls.G8PanelOverview;
 
 import javax.swing.JTextField;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
 
 public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8Navigatable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	//G8PanelOverview
 	ControllerInterface controller;
-	//private JTable tblMember;
-	private JScrollPane scrollPane;
 	private DefaultTableModel model;
 	private JTextField txtMemberId;
 	private JTextField txtFirstName;
@@ -53,27 +39,8 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	private JTextField txtTelephone;
 	JButton btnSave;
 	JPanel panel;
-	private CrudMode currentCrudMode = CrudMode.Read; 
+	private CrudMode currentCrudMode = CrudMode.Read;	
 	
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					G8LibraryMemberOverviewWindow window = new G8LibraryMemberOverviewWindow();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
-	 * Create the application.
-	 */
 	public G8LibraryMemberOverviewWindow(String title) {
 		this();
 		this.setTitle(title);
@@ -86,7 +53,6 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 				searchClicked();
 			}
 		});
-		//super("Member Overview Window");
 		initialize();
 		controller = new SystemController();
 	}
@@ -99,16 +65,11 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	}
 		
 	private void initialize() {
-		//setBounds(100, 100, 1205, 678);
-		//getContentPane().setForeground(new Color(255, 255, 255));
-		//getContentPane().setLayout(null);
 		super.btnLoadData.setText("All Members");
 		panelDetail.setLayout(null);
 		addTextFields();
 		addButtons();
-		//addJTable();
 		addBtnEvents();
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	private void addBtnEvents() {
@@ -177,14 +138,10 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		String[] columns = getTableColumnNames();
 		model.setColumnIdentifiers(columns);
 		
-		//tblMember = new JTable();
 		table.setModel(model);
 		table.setBounds(1137, 283, -1077, 280);
 		table.setShowGrid(true);
-		//scrollPane = new JScrollPane();
-		//scrollPane.setBounds(10, 274, 1164, 356);
-		//scrollPane.setViewportView(table);
-		//add(scrollPane);
+
 		if(searchValue == null || searchValue.isBlank())
 			DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
 		else
@@ -194,48 +151,56 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	
 	private void addTextFields() {
 		txtMemberId = new JTextField();
-		txtMemberId.setToolTipText("Member ID");
+		txtMemberId.setToolTipText("Member ID");		
+		txtMemberId.setInputVerifier(new G8EmptyInputVerifier("Member ID", false));
 		txtMemberId.setBounds(251, 11, 628, 31);
 		txtMemberId.setColumns(10);
 		panelDetail.add(txtMemberId);
 		
 		txtFirstName = new JTextField();
 		txtFirstName.setToolTipText("First Name");
+		txtFirstName.setInputVerifier(new G8EmptyInputVerifier("First Name", false));
 		txtFirstName.setColumns(10);
 		txtFirstName.setBounds(251, 53, 628, 31);
 		panelDetail.add(txtFirstName);
 		
 		txtLastName = new JTextField();
 		txtLastName.setToolTipText("Last Name");
+		txtLastName.setInputVerifier(new G8EmptyInputVerifier("Last Name", false));
 		txtLastName.setColumns(10);
 		txtLastName.setBounds(251, 95, 628, 31);
 		panelDetail.add(txtLastName);
 		
 		txtStreet = new JTextField();
 		txtStreet.setToolTipText("Street");
+		txtStreet.setInputVerifier(new G8EmptyInputVerifier("Street", false));
 		txtStreet.setColumns(10);
 		txtStreet.setBounds(251, 137, 226, 31);
 		panelDetail.add(txtStreet);		
 		txtCity = new JTextField();
 		txtCity.setToolTipText("City");
+		txtCity.setInputVerifier(new G8EmptyInputVerifier("City", false));
 		txtCity.setColumns(10);
 		txtCity.setBounds(251, 172, 226, 46);
 		panelDetail.add(txtCity);
 		
 		txtState = new JTextField();
 		txtState.setToolTipText("State");
+		txtState.setInputVerifier(new G8EmptyInputVerifier("State", false));
 		txtState.setColumns(10);
 		txtState.setBounds(251, 229, 66, 31);
 		panelDetail.add(txtState);
 		
 		txtZip = new JTextField();
 		txtZip.setToolTipText("Zip");
+		txtZip.setInputVerifier(new G8EmptyInputVerifier("Zip", false));
 		txtZip.setColumns(10);
 		txtZip.setBounds(395, 229, 78, 31);
 		panelDetail.add(txtZip);
 		
 		txtTelephone = new JTextField();
 		txtTelephone.setToolTipText("Telephone");
+		txtTelephone.setInputVerifier(new G8EmptyInputVerifier("Telephone", false));
 		txtTelephone.setColumns(10);
 		txtTelephone.setBounds(653, 137, 226, 31);
 		panelDetail.add(txtTelephone);
@@ -348,7 +313,6 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	
 	@Override
 	public void populate() {
-		SystemController sc = new SystemController();
 		setFieldStatus(CrudMode.Read);
 		clearMemberUIFields();
 		addJTable(null);		
@@ -377,7 +341,6 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	
 	@Override 
 	public void searchClicked() {
-		SystemController sc = new SystemController();
 		addJTable(this.textFieldSearch.getText());
 		setFieldStatus(CrudMode.Read);
 	}
@@ -403,19 +366,19 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	
 	private void saveToDb() {
 		try {
-		switch(currentCrudMode) {
-		case Create:
-			performAddAction();			
-			break;
-		case Delete:
-			performDeleteAction();
-			break;
-		case Update:
-			performModifyAction();	
-			break;
-		default:
-			break;
-		}
+			switch(currentCrudMode) {
+				case Create:
+					performAddAction();			
+					break;
+				case Delete:
+					performDeleteAction();
+					break;
+				case Update:
+					performModifyAction();	
+					break;
+				default:
+					break;
+			}
 		}
 		catch(Exception ex) {
 			getG8JFrame().setErrorMessage(ex.getMessage());
