@@ -1,6 +1,7 @@
 package librarysystem.windows;
 
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -13,9 +14,13 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import business.Context;
 import business.ControllerInterface;
 import business.DataModelMapper;
 import business.SystemController;
+import dataaccess.Auth;
+import librarysystem.controls.G8JPanel;
+import librarysystem.controls.G8Navigatable;
 
 import javax.swing.JList;
 import java.awt.event.ActionListener;
@@ -25,11 +30,16 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
 
-public class G8CheckoutBook {
+public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 
-	 JFrame frame;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	// JFrame frame;
+	G8JPanel mainPanel;
 	private JTextField txtBookSearchField;
-	private JTable tblBook;
+	private JTable table;
 	private JTextField txtMemberSearchField;
 	private JButton btnSearchMember;
 	private JScrollPane memberScrollPane;
@@ -47,7 +57,7 @@ public class G8CheckoutBook {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -58,7 +68,7 @@ public class G8CheckoutBook {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
@@ -67,20 +77,29 @@ public class G8CheckoutBook {
 		initialize();
 		controller = new SystemController();
 	}
+	
+	public G8CheckoutBook(String title) {
+		this();
+		setTitle(title);
+	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		/*frame = new JFrame();
 		frame.setBounds(100, 100, 691, 643);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
+		setLayout(new GridLayout(0, 1, 0, 0));
+		
+		mainPanel = new G8JPanel();
+		add(mainPanel);
+		mainPanel.setLayout(null);
 		
 		txtBookSearchField = new JTextField();
 		txtBookSearchField.setToolTipText("Search Book by ISBN or Title");
 		txtBookSearchField.setBounds(10, 11, 352, 32);
-		frame.getContentPane().add(txtBookSearchField);
+		mainPanel.add(txtBookSearchField);
 		txtBookSearchField.setColumns(20);
 		
 		btnBookSearch = new JButton("Search Book");
@@ -93,27 +112,27 @@ public class G8CheckoutBook {
 			}
 		});
 		btnBookSearch.setBounds(405, 11, 262, 32);
-		frame.getContentPane().add(btnBookSearch);
+		mainPanel.add(btnBookSearch);
 		
 		String[] bookColumns = getBookModelColumns();
 		bookModel = new DefaultTableModel();
 		bookModel.setColumnIdentifiers(bookColumns);
 		
-		tblBook = new JTable();
-		tblBook.setModel(bookModel);
-		tblBook.setBackground(new Color(255, 240, 245));
-		tblBook.setBounds(597, 90, -533, -45);
+		table = new JTable();
+		table.setModel(bookModel);
+		table.setBackground(new Color(255, 240, 245));
+		table.setBounds(597, 90, -533, -45);
 		
 		bookScrollPane = new JScrollPane();
 		bookScrollPane.setBounds(6, 54, 661, 84);
-		bookScrollPane.setViewportView(tblBook);
-		frame.getContentPane().add(bookScrollPane);
+		bookScrollPane.setViewportView(table);
+		mainPanel.add(bookScrollPane);
 		
 		txtMemberSearchField = new JTextField();
 		txtMemberSearchField.setToolTipText("Search Libarary Member by Member ID");
 		txtMemberSearchField.setColumns(20);
 		txtMemberSearchField.setBounds(10, 156, 352, 32);
-		frame.getContentPane().add(txtMemberSearchField);
+		mainPanel.add(txtMemberSearchField);
 		
 		btnSearchMember = new JButton("Search Member");
 		btnSearchMember.addActionListener(new ActionListener() {
@@ -133,7 +152,7 @@ public class G8CheckoutBook {
 			}
 		});
 		btnSearchMember.setBounds(405, 156, 262, 32);
-		frame.getContentPane().add(btnSearchMember);
+		mainPanel.add(btnSearchMember);
 		
 		memberModel = new DefaultTableModel();
 		memberModel.setColumnIdentifiers(getMemberModelColumns());
@@ -147,17 +166,17 @@ public class G8CheckoutBook {
 		memberScrollPane = new JScrollPane();
 		memberScrollPane.setBounds(10, 199, 657, 102);
 		memberScrollPane.setViewportView(tblMember);
-		frame.getContentPane().add(memberScrollPane);
+		mainPanel.add(memberScrollPane);
 		
 		btnCheckOut = new JButton("Check Out");
 		btnCheckOut.setBounds(10, 333, 200, 32);
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int selectedIsbn = tblBook.getSelectedRow();
+				int selectedIsbn = table.getSelectedRow();
 				int selectedMemId = tblMember.getSelectedRow();
 				if(selectedIsbn < 0 ||  selectedMemId < 0) return;
 				String memberId = tblMember.getValueAt(selectedMemId,0).toString();
-				String isbn = tblBook.getValueAt(selectedIsbn,0).toString();
+				String isbn = table.getValueAt(selectedIsbn,0).toString();
 				try{controller.checkoutBook(memberId, isbn);}
 				catch(Exception ex) {}
 				checkoutModel.setRowCount(0);
@@ -165,7 +184,7 @@ public class G8CheckoutBook {
 				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
 			}
 		});
-		frame.getContentPane().add(btnCheckOut);
+		mainPanel.add(btnCheckOut);
 		
 		checkoutModel = new DefaultTableModel();
 		checkoutModel.setColumnIdentifiers(getCheckoutModelColumns());
@@ -176,7 +195,7 @@ public class G8CheckoutBook {
 		checkoutScrollPane = new JScrollPane();
 		checkoutScrollPane.setBounds(10, 376, 657, 219);
 		checkoutScrollPane.setViewportView(tblCheckout);
-		frame.getContentPane().add(checkoutScrollPane);
+		mainPanel.add(checkoutScrollPane);
 		
 		JButton btnSearchCheckedOut = new JButton("Search Checked Out");
 		btnSearchCheckedOut.addActionListener(new ActionListener() {
@@ -190,13 +209,13 @@ public class G8CheckoutBook {
 			}
 		});
 		btnSearchCheckedOut.setBounds(439, 333, 200, 32);
-		frame.getContentPane().add(btnSearchCheckedOut);
+		mainPanel.add(btnSearchCheckedOut);
 		
 		txtCheckoutSearch = new JTextField();
 		txtCheckoutSearch.setToolTipText("ISBN Or Member ID");
 		txtCheckoutSearch.setColumns(20);
 		txtCheckoutSearch.setBounds(230, 333, 186, 32);
-		frame.getContentPane().add(txtCheckoutSearch);
+		mainPanel.add(txtCheckoutSearch);
 		
 	}
 
@@ -234,5 +253,10 @@ public class G8CheckoutBook {
 			"Member Name",
 			"Status"
 		};
+	}
+
+	@Override
+	public boolean isNavigatorItemVisible() {
+		return Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);		
 	}
 }
