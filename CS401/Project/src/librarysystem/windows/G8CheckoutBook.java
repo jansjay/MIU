@@ -241,8 +241,8 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				"ISBN",
 				"Title",
 				"Authors",
-				"Max Checkout Length",
-				"No Of Copies"
+				"No Of Copies",
+				"Max Checkout Length"
 		};
 	}
 	
@@ -263,9 +263,9 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		return new String[] {
 			"Title",
 			"ISBN",
+			"Copy Number",
 			"Checked Out Date",
-			"Return Date",
-			
+			"Return Date",			
 			"Member Id",
 			"Member Name",
 			"Status"

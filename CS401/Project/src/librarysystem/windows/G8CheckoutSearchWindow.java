@@ -215,9 +215,9 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 		return new String[] {
 			"Title",
 			"ISBN",
+			"Copy Number",
 			"Checked Out Date",
-			"Return Date",
-			
+			"Return Date",			
 			"Member Id",
 			"Member Name",
 			"Status"

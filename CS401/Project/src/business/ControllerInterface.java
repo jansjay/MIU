@@ -11,7 +11,6 @@ public interface ControllerInterface {
 	public List<String> allMemberIds();
 	public List<String> allBookIds();
 	public List<Book> allBooks();
-	public void checkOutBookCopy(String memberId, String isbn) throws LoginException;
 	public void saveMember(LibraryMember member);
 	public void removeMember(String memberId);
 	public void saveBook(Book book);
