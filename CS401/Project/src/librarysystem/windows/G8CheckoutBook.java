@@ -43,6 +43,7 @@ public class G8CheckoutBook {
 	private DefaultTableModel checkoutModel;
 	private JScrollPane bookScrollPane;
 	private JButton btnBookSearch;
+	private JTextField txtCheckoutSearch;
 	/**
 	 * Launch the application.
 	 */
@@ -121,9 +122,7 @@ public class G8CheckoutBook {
 			public void actionPerformed(ActionEvent e) {
 				String member = txtMemberSearchField.getText();
 				
-				for(int i=0; i< memberModel.getRowCount();i++) {
-					memberModel.removeRow(i);
-				}
+				checkoutModel.setRowCount(0);
 				if(member.isEmpty()) {
 					DataModelMapper
 					.addAllLibraryMember(controller.getLibraryMembers(), memberModel);
@@ -135,7 +134,7 @@ public class G8CheckoutBook {
 				}
 			}
 		});
-		btnSearchMember.setBounds(415, 156, 262, 32);
+		btnSearchMember.setBounds(405, 156, 262, 32);
 		frame.getContentPane().add(btnSearchMember);
 		
 		memberModel = new DefaultTableModel();
@@ -153,7 +152,7 @@ public class G8CheckoutBook {
 		frame.getContentPane().add(memberScrollPane);
 		
 		btnCheckOut = new JButton("Check Out");
-		btnCheckOut.setBounds(10, 333, 262, 51);
+		btnCheckOut.setBounds(10, 333, 200, 32);
 		btnCheckOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIsbn = tblBook.getSelectedRow();
@@ -163,11 +162,9 @@ public class G8CheckoutBook {
 				String isbn = tblBook.getValueAt(selectedIsbn,0).toString();
 				try{controller.checkoutBook(memberId, isbn);}
 				catch(Exception ex) {}
-				for(int i =0; i< checkoutModel.getRowCount();i++) {
-					checkoutModel.removeRow(i);
-				}
-				business.CheckoutRecord cr = controller.getCheckedOutBookByMemberId(memberId);
-				DataModelMapper.addCheckoutBook(cr,checkoutModel);
+				checkoutModel.setRowCount(0);
+				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(memberId);
+				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
 			}
 		});
 		frame.getContentPane().add(btnCheckOut);
@@ -179,9 +176,28 @@ public class G8CheckoutBook {
 		tblCheckout.setBounds(464, 502, -515, -45);
 		tblCheckout.setBackground(new Color(255, 240, 245));
 		checkoutScrollPane = new JScrollPane();
-		checkoutScrollPane.setBounds(10, 419, 657, 151);
+		checkoutScrollPane.setBounds(10, 376, 657, 219);
 		checkoutScrollPane.setViewportView(tblCheckout);
 		frame.getContentPane().add(checkoutScrollPane);
+		
+		JButton btnSearchCheckedOut = new JButton("Search Checked Out");
+		btnSearchCheckedOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String value = txtCheckoutSearch.getText();
+				if(value.isEmpty()) return;
+				checkoutModel.setRowCount(0);
+				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
+				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
+			}
+		});
+		btnSearchCheckedOut.setBounds(439, 333, 200, 32);
+		frame.getContentPane().add(btnSearchCheckedOut);
+		
+		txtCheckoutSearch = new JTextField();
+		txtCheckoutSearch.setToolTipText("ISBN Or Member ID");
+		txtCheckoutSearch.setColumns(20);
+		txtCheckoutSearch.setBounds(230, 333, 186, 32);
+		frame.getContentPane().add(txtCheckoutSearch);
 		
 	}
 
@@ -210,10 +226,14 @@ public class G8CheckoutBook {
 	
 	private String[] getCheckoutModelColumns() {
 		return new String[] {
-			"Member ID",
+			"Title",
 			"ISBN",
 			"Checked Out Date",
-			"Return Date"
+			"Return Date",
+			
+			"Member Id",
+			"Member Name",
+			"Status"
 		};
 	}
 }
