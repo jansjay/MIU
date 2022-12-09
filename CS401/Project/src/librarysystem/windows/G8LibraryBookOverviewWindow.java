@@ -2,12 +2,8 @@ package librarysystem.windows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
 import javax.swing.table.DefaultTableModel;
-
-import business.Address;
 import business.Author;
 import business.Book;
 import business.Context;
@@ -27,8 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 
 public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Navigatable {
 
@@ -149,7 +143,6 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		super.btnLoadData.setText("All Books");
 		super.lblSearch.setText("Search Books (ISBN or Title)");
 		super.btnAddBookCopy.setVisible(true);
-		//this.populate();
 	}
 
 	@Override
@@ -263,9 +256,6 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		String numCopies = this.textFieldCopies.getText();
 		String checkoutLength = this.textFieldCheckoutLength.getText();
 		List<Author> authors = new ArrayList<>();
-
-		//Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-		//authors = book.getAuthors();
 		Object[] authorsObjList = this.listAuthors.getSelectedValues();
 		System.out.println("selected Auth len: " + authorsObjList.length);
 		for(Object obj: authorsObjList) {
@@ -283,40 +273,40 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 	private void saveToDb() {
 		try {
-		switch(currentCrudMode) {
-		case Create:
-			Book newBook = createBookFromUIFields();
-			SystemController.getInstance().saveBook(newBook, currentCrudMode);
-			this.clearBookUIFields();
-			getG8JFrame().setSuccessMessage("Book created successfully!!!");
-			
-			break;
-		case Delete:
-			if(table.getSelectedRow() < 0) {
-				return;
+			switch(currentCrudMode) {
+				case Create:
+					Book newBook = createBookFromUIFields();
+					SystemController.getInstance().saveBook(newBook, currentCrudMode);
+					this.clearBookUIFields();
+					getG8JFrame().setSuccessMessage("Book created successfully!!!");
+					
+					break;
+				case Delete:
+					if(table.getSelectedRow() < 0) {
+						return;
+					}
+					Book delBook = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+					int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the book with ISBN: " + delBook.getIsbn() + "?");
+					if(confirmation!=0) return;
+					System.out.println("Delete book isbn: " + delBook.getIsbn());
+					SystemController.getInstance().deleteBook(delBook);
+					getG8JFrame().setSuccessMessage("Book deleted successfully!!!");			
+					this.clearBookUIFields();
+					break;
+				case Update:
+					if(table.getSelectedRow() < 0) {
+						return;
+					}
+					Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+					book.setTitle(textFieldTitle.getText());
+					book.setMaxCheckoutLength(Integer.parseInt(textFieldCheckoutLength.getText()));
+					SystemController.getInstance().saveBook(book, currentCrudMode);
+					getG8JFrame().setSuccessMessage("Book saved successfully!!!");			
+					break;
+				default:
+					break;
 			}
-			Book delBook = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-			int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the book with ISBN: " + delBook.getIsbn() + "?");
-			if(confirmation!=0) return;
-			System.out.println("Delete book isbn: " + delBook.getIsbn());
-			SystemController.getInstance().deleteBook(delBook);
-			getG8JFrame().setSuccessMessage("Book deleted successfully!!!");			
-			this.clearBookUIFields();
-			break;
-		case Update:
-			if(table.getSelectedRow() < 0) {
-				return;
-			}
-			Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-			book.setTitle(textFieldTitle.getText());
-			book.setMaxCheckoutLength(Integer.parseInt(textFieldCheckoutLength.getText()));
-			SystemController.getInstance().saveBook(book, currentCrudMode);
-			getG8JFrame().setSuccessMessage("Book saved successfully!!!");			
-			break;
-		default:
-			break;
-		}
-		this.populate();
+			this.populate();
 		}
 		catch(Exception ex) {
 			getG8JFrame().setErrorMessage(ex.getMessage());

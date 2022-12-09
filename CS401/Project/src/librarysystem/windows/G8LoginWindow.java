@@ -3,27 +3,15 @@ package librarysystem.windows;
 import librarysystem.controls.G8ActionListener;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
-
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-
-import java.awt.Color;
-import java.awt.FlowLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JTextField;
-
 import business.Context;
 import business.LoginException;
 import business.SystemController;
-
 import javax.swing.JButton;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 
 public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 
