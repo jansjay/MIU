@@ -45,6 +45,7 @@ public class LibrarySystem extends G8JFrame {
 		registerPanel(new G8LibraryBookOverviewWindow("Books overview"));
 		registerPanel(new G8LibraryMemberOverviewWindow("Member Overview"));
 		registerPanel(new G8CheckoutBook("Checkout"));
+		registerPanel(new G8CheckoutSearchWindow("Checkout Search"));
 		setStatusMessage("Welcome !!!", Color.DARK_GRAY);
 	}
 	
