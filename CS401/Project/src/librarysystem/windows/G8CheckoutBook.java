@@ -87,9 +87,7 @@ public class G8CheckoutBook {
 		btnBookSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String isbn = txtBookSearchField.getText();
-				for(int i=0; i< bookModel.getRowCount();i++) {
-					bookModel.removeRow(i);
-				}
+				bookModel.setRowCount(0);
 				DataModelMapper
 				.addBooks(controller.searchBookByIsbnOrTitle(isbn), bookModel);
 			}
@@ -122,7 +120,7 @@ public class G8CheckoutBook {
 			public void actionPerformed(ActionEvent e) {
 				String member = txtMemberSearchField.getText();
 				
-				checkoutModel.setRowCount(0);
+				memberModel.setRowCount(0);
 				if(member.isEmpty()) {
 					DataModelMapper
 					.addAllLibraryMember(controller.getLibraryMembers(), memberModel);
@@ -183,9 +181,10 @@ public class G8CheckoutBook {
 		JButton btnSearchCheckedOut = new JButton("Search Checked Out");
 		btnSearchCheckedOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				checkoutModel.setRowCount(0);
 				String value = txtCheckoutSearch.getText();
 				if(value.isEmpty()) return;
-				checkoutModel.setRowCount(0);
+				
 				List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
 				DataModelMapper.addAllCheckoutBook(crs,checkoutModel);
 			}
