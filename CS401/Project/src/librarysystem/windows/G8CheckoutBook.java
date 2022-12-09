@@ -99,7 +99,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		
 		txtBookSearchField = new JTextField();
 		txtBookSearchField.setToolTipText("Search Book by ISBN or Title");
-		txtBookSearchField.setBounds(224, 17, 279, 20);
+		txtBookSearchField.setBounds(279, 17, 224, 20);
 		mainPanel.add(txtBookSearchField);
 		txtBookSearchField.setColumns(20);
 		
@@ -132,7 +132,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		txtMemberSearchField = new JTextField();
 		txtMemberSearchField.setToolTipText("Search Libarary Member by Member ID");
 		txtMemberSearchField.setColumns(20);
-		txtMemberSearchField.setBounds(224, 162, 279, 20);
+		txtMemberSearchField.setBounds(279, 162, 224, 20);
 		mainPanel.add(txtMemberSearchField);
 		
 		btnSearchMember = new JButton("Search");
@@ -215,19 +215,19 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		txtCheckoutSearch = new JTextField();
 		txtCheckoutSearch.setToolTipText("ISBN Or Member ID");
 		txtCheckoutSearch.setColumns(20);
-		txtCheckoutSearch.setBounds(224, 375, 279, 20);
+		txtCheckoutSearch.setBounds(279, 375, 224, 20);
 		mainPanel.add(txtCheckoutSearch);
 		
 		JLabel lblSearchBook = new JLabel("Search Books (ISBN or Title)");
-		lblSearchBook.setBounds(28, 20, 186, 14);
+		lblSearchBook.setBounds(28, 20, 241, 14);
 		mainPanel.add(lblSearchBook);
 		
 		JLabel lblMemberID = new JLabel("Search Members (Member ID)");
-		lblMemberID.setBounds(28, 165, 186, 14);
+		lblMemberID.setBounds(28, 165, 241, 14);
 		mainPanel.add(lblMemberID);
 		
-		JLabel lblNewLabel = new JLabel("Search Checkout");
-		lblNewLabel.setBounds(28, 378, 186, 14);
+		JLabel lblNewLabel = new JLabel("Search Checkout (Member ID or ISBN)");
+		lblNewLabel.setBounds(28, 378, 241, 14);
 		mainPanel.add(lblNewLabel);
 		
 		JSeparator separator = new JSeparator();
