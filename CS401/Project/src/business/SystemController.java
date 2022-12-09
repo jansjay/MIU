@@ -79,6 +79,11 @@ public class SystemController extends BaseController implements ControllerInterf
 	//UseCase3: methods
 	@Override
 	public void saveBook(Book book) {
+		if(!Validator.validateIsbn(book.getIsbn())) throw new IllegalArgumentException("Invalid ISBN");
+		if(!Validator.validateBookTitle(book.getTitle())) throw new IllegalArgumentException("Invalid Title");
+		if(!Validator.validateBookAuthors(book.getAuthors())) throw new IllegalArgumentException("No Authors");
+		if(!Validator.validateBookCopies(book.getNumCopies())) throw new IllegalArgumentException("Invalid Num of Copies");
+		if(!Validator.validateBookCheckoutLength(book.getMaxCheckoutLength())) throw new IllegalArgumentException("Invalid Checkout length. \nIt should be 7 or 21 days.");
 		da.saveNewBook(book);
 	}
 
@@ -184,6 +189,26 @@ public class SystemController extends BaseController implements ControllerInterf
 	public void removeMember(String memberId) {
 		//TODO: Have to remove all relevant records from relevant tables
 		da.removeMember(memberId);
+	}
+	
+	@Override
+	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle){
+		
+		List<Book> ds = da
+				.readBooksMap()
+				.values()
+				.parallelStream()
+				.filter(
+						bk -> bk.getIsbn().contains(isbnOrTitle) 
+						|| bk.getTitle().contains(isbnOrTitle)
+						|| isbnOrTitle.isEmpty())
+				.toList();
+		
+			return ds;
+	}
+	@Override
+	public CheckoutRecord getCheckedOutBookByMemberId(String memberId) {
+		return da.retrieveCheckoutRecordByMemberId(memberId);
 	}
 
 	@Override

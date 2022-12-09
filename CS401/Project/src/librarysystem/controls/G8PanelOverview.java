@@ -27,6 +27,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Insets;
+import javax.swing.JTextField;
 
 public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	/**
@@ -35,6 +36,11 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	private static final long serialVersionUID = 1L;
 	protected JTable table;
 	protected JPanel panelDetail;
+	protected JButton btnAddBookCopy;
+	protected JButton btnSearch;
+	protected JTextField textFieldSearch;
+	protected JLabel lblSearch;
+	protected JButton btnLoadData;
 
 	/**
 	 * Create the panel.
@@ -54,17 +60,33 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		
-		
+
 		JPanel panelSearch = new JPanel();
 		splitPane.setRightComponent(panelSearch);
 		
+		lblSearch = new JLabel("Search books\n(isbn or title)");
+		panelSearch.add(lblSearch);
+		
+		textFieldSearch = new JTextField();
+		textFieldSearch.setToolTipText("Search by isbn or title");
+		panelSearch.add(textFieldSearch);
+		textFieldSearch.setColumns(10);
+		btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchClicked();
+			}
+		});
+		panelSearch.add(btnSearch);
+		
+	
 		JPanel panelButtons = new JPanel();
 		splitPane.setLeftComponent(panelButtons);
 		
 		splitPane.setMaximumSize(new Dimension(6000, 100));
 		panelTop.add(splitPane, BorderLayout.NORTH);
 		
-		JButton btnLoadData = new JButton("Load Data");
+		btnLoadData = new JButton("Load Data");
 		btnLoadData.addActionListener(new G8PopulateEvent(this));
 		panelButtons.setLayout(new BoxLayout(panelButtons, BoxLayout.X_AXIS));
 		
@@ -95,6 +117,17 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		});
 		btnDelete.setEnabled(false);
 		panelButtons.add(btnDelete);
+		
+		btnAddBookCopy = new JButton("Add Book Copy");
+		btnAddBookCopy.setEnabled(false);
+		btnAddBookCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addBookCopyClicked();
+			}
+		});
+		btnAddBookCopy.setVisible(false);
+		
+		panelButtons.add(btnAddBookCopy);
 		GridBagLayout gbl_panelBottom = new GridBagLayout();
 		gbl_panelBottom.columnWidths = new int[]{450, 0};
 		gbl_panelBottom.rowHeights = new int[]{132, 365, 0};
@@ -123,6 +156,7 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 		    public void valueChanged(ListSelectionEvent lse) {
 	            btnEdit.setEnabled(table.getSelectedRowCount() >= 0);
 	            btnDelete.setEnabled(table.getSelectedRowCount() >= 0);
+	            btnAddBookCopy.setEnabled(table.getSelectedRowCount() >= 0);
 	            selectionChanged();	        		        
 		    }
 		});	
@@ -152,5 +186,13 @@ public class G8PanelOverview extends G8JPanel implements G8Populatable{
 	
 	@Override
 	public void populate() {
+	}
+	
+	protected void addBookCopyClicked() {
+		//System.out.println("super - addBookCopyClicked");
+	}
+	
+	protected void searchClicked() {
+		
 	}
 }
