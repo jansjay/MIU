@@ -2,30 +2,27 @@ package librarysystem.windows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
 import javax.swing.table.DefaultTableModel;
-
-import business.Address;
 import business.Author;
 import business.Book;
 import business.Context;
 import business.CrudMode;
 import business.SystemController;
 import dataaccess.Auth;
+import librarysystem.controls.G8EmptyInputVerifier;
 import librarysystem.controls.G8Navigatable;
+import librarysystem.controls.G8NumberInputVerifier;
 import librarysystem.controls.G8PanelOverview;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 
 public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Navigatable {
 
@@ -46,6 +43,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	 * Create the panel.
 	 */
 	public G8LibraryBookOverviewWindow() {
+		lblSearch.setText("Search Books\r\n(ISBN or Title)");
 		panelDetail.setLayout(null);
 
 		JLabel lblIsbn = new JLabel("ISBN");
@@ -54,6 +52,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 		textFieldIsbn = new JTextField();
 		textFieldIsbn.setBounds(202, 23, 958, 26);
+		textFieldIsbn.setInputVerifier(new G8EmptyInputVerifier("ISBN", false));
 		panelDetail.add(textFieldIsbn);
 		textFieldIsbn.setColumns(10);
 
@@ -63,6 +62,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 		textFieldTitle = new JTextField();
 		textFieldTitle.setBounds(202, 54, 958, 26);
+		textFieldTitle.setInputVerifier(new G8EmptyInputVerifier("Title", false));
 		panelDetail.add(textFieldTitle);
 		textFieldTitle.setColumns(10);
 
@@ -76,6 +76,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 		textFieldCopies = new JTextField();
 		textFieldCopies.setBounds(202, 186, 958, 26);
+		textFieldCopies.setInputVerifier(new G8NumberInputVerifier("No of Copies", false));
 		panelDetail.add(textFieldCopies);
 		textFieldCopies.setColumns(10);
 		
@@ -104,6 +105,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		textFieldCheckoutLength = new JTextField();
 		textFieldCheckoutLength.setColumns(10);
 		textFieldCheckoutLength.setBounds(202, 239, 958, 26);
+		textFieldCheckoutLength.setInputVerifier(new G8NumberInputVerifier("Checkout Length", false));
 		panelDetail.add(textFieldCheckoutLength);
 	}
 
@@ -139,14 +141,13 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this();
 		setTitle(title);
 		super.btnLoadData.setText("All Books");
-		super.lblSearch.setText("Search books (isbn or title)");
+		super.lblSearch.setText("Search Books (ISBN or Title)");
 		super.btnAddBookCopy.setVisible(true);
-		this.populate();
 	}
 
 	@Override
 	public boolean isNavigatorItemVisible() {
-		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
+		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.BOTH);
 	}
 
 	@Override
@@ -182,9 +183,9 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		this.textFieldIsbn.setEditable(mode == CrudMode.Create);
 		this.textFieldTitle.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
 		this.textFieldCopies.setEditable(mode == CrudMode.Create || mode == CrudMode.Update);
-		this.listAuthors.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
-		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.listAuthors.setEnabled(mode == CrudMode.Create);
 		this.textFieldCheckoutLength.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
+		this.btnSave.setEnabled(mode == CrudMode.Create || mode == CrudMode.Update);
 	}
 
 	@Override
@@ -211,16 +212,16 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		}
 		
 		Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to create a copy of the book with ISBN: " + book.getIsbn() + "?");
+		if(confirmation!=0) return;
 		book.addCopy();
-		SystemController.getInstance().saveBook(book);
+		SystemController.getInstance().saveBook(book, CrudMode.Update);
+		getG8JFrame().setSuccessMessage("A copy of the Book added successfully!!!");			
 		this.populate();
 	}
 	
 	@Override 
 	public void searchClicked() {
-		if(this.textFieldSearch.getText().isEmpty()) {
-			return;
-		}
 		SystemController sc = new SystemController();
 		fillWindow(sc.searchBookByIsbnOrTitle(this.textFieldSearch.getText()));
 		setFieldStatus(CrudMode.Read);
@@ -255,9 +256,6 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		String numCopies = this.textFieldCopies.getText();
 		String checkoutLength = this.textFieldCheckoutLength.getText();
 		List<Author> authors = new ArrayList<>();
-
-		//Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-		//authors = book.getAuthors();
 		Object[] authorsObjList = this.listAuthors.getSelectedValues();
 		System.out.println("selected Auth len: " + authorsObjList.length);
 		for(Object obj: authorsObjList) {
@@ -274,33 +272,44 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	}
 
 	private void saveToDb() {
-		switch(currentCrudMode) {
-		case Create:
-			Book newBook = createBookFromUIFields();
-			SystemController.getInstance().saveBook(newBook);
-			this.clearBookUIFields();
-			break;
-		case Delete:
-			if(table.getSelectedRow() < 0) {
-				return;
+		try {
+			switch(currentCrudMode) {
+				case Create:
+					Book newBook = createBookFromUIFields();
+					SystemController.getInstance().saveBook(newBook, currentCrudMode);
+					this.clearBookUIFields();
+					getG8JFrame().setSuccessMessage("Book created successfully!!!");
+					
+					break;
+				case Delete:
+					if(table.getSelectedRow() < 0) {
+						return;
+					}
+					Book delBook = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+					int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the book with ISBN: " + delBook.getIsbn() + "?");
+					if(confirmation!=0) return;
+					System.out.println("Delete book isbn: " + delBook.getIsbn());
+					SystemController.getInstance().deleteBook(delBook);
+					getG8JFrame().setSuccessMessage("Book deleted successfully!!!");			
+					this.clearBookUIFields();
+					break;
+				case Update:
+					if(table.getSelectedRow() < 0) {
+						return;
+					}
+					Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+					book.setTitle(textFieldTitle.getText());
+					book.setMaxCheckoutLength(Integer.parseInt(textFieldCheckoutLength.getText()));
+					SystemController.getInstance().saveBook(book, currentCrudMode);
+					getG8JFrame().setSuccessMessage("Book saved successfully!!!");			
+					break;
+				default:
+					break;
 			}
-			Book delBook = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-			System.out.println("Delete book isbn: " + delBook.getIsbn());
-			SystemController.getInstance().deleteBook(delBook);
-			this.clearBookUIFields();
-			break;
-		case Update:
-			if(table.getSelectedRow() < 0) {
-				return;
-			}
-			//Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
-			//update and save 
-			Book updateBook = createBookFromUIFields();
-			SystemController.getInstance().saveBook(updateBook);
-			break;
-		default:
-			break;
+			this.populate();
 		}
-		this.populate();
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 }

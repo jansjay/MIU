@@ -9,12 +9,12 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import business.Author;
 import business.Book;
-import business.BorrowBook;
 import business.BookCopy;
 import business.CheckoutEntry;
 import business.CheckoutRecord;
@@ -62,20 +62,6 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, mems);
 	}
 	
-	@Override
-	public void saveBorrowBook(BorrowBook borrowBook) {
-		HashMap<Integer, BorrowBook> borrowedBookMap = readBorrowBookMap();
-		if(borrowedBookMap == null) borrowedBookMap = new HashMap<>();
-		int borrowedId = borrowBook.getBorrowedId();
-		borrowedBookMap.put(borrowedId, borrowBook);
-		saveToStorage(StorageType.BORROWBOOKS, borrowedBookMap);
-	}
-
-	public HashMap<Integer, BorrowBook> readBorrowBookMap() {
-		return (HashMap<Integer, BorrowBook>) readFromStorage(StorageType.BORROWBOOKS);
-	}
-
-
 	//UseCase3 - save book by admin 
 	@Override
 	public void saveNewBook(Book book) {
@@ -159,6 +145,28 @@ public class DataAccessFacade implements DataAccess {
 			CheckoutRecord rd = recordsMap.get(key);
 			for(CheckoutEntry entry: rd.getCheckoutEntries()) {
 				if(entry.getBookCopy().getBook().getIsbn().equalsIgnoreCase(isbn)) {
+					recordList.add(rd);
+				}
+			} 		
+		}
+	
+		return recordList;
+	}
+	
+	@Override
+	public List<CheckoutRecord> searchCheckoutRecordByMemberId(String memberId) {
+		Collection<CheckoutRecord> recordsMap = readCheckoutRecordsMap().values();
+		return recordsMap.stream().filter( m -> m.getMember().getMemberId().toLowerCase().contains(memberId.toLowerCase())).toList();
+	}
+	@Override
+	public List<CheckoutRecord> searchCheckoutRecordByBookIsbn(String isbn) {
+		HashMap<String, CheckoutRecord> recordsMap = readCheckoutRecordsMap();
+		
+		List<CheckoutRecord> recordList = new ArrayList<>();
+		for(String key: recordsMap.keySet()) {
+			CheckoutRecord rd = recordsMap.get(key);
+			for(CheckoutEntry entry: rd.getCheckoutEntries()) {
+				if(entry.getBookCopy().getBook().getIsbn().toLowerCase().contains(isbn.toLowerCase())) {
 					recordList.add(rd);
 				}
 			} 		
@@ -273,5 +281,13 @@ public class DataAccessFacade implements DataAccess {
 		HashMap<String, Book> books = readBooksMap();
 		books.remove(book.getIsbn());
 		saveToStorage(StorageType.BOOKS, books);
+	}
+
+	@Override
+	public List<LibraryMember> searchMemberByMemberIdFirstNameLastName(String searchValue) {
+		HashMap<String, LibraryMember> recordsMap = readMemberMap();
+		return recordsMap.values().stream().filter(m-> m.getMemberId().toLowerCase().contains(searchValue.toLowerCase()) || 
+												m.getFirstName().toLowerCase().contains(searchValue.toLowerCase()) ||
+												m.getLastName().toLowerCase().contains(searchValue.toLowerCase())).toList();
 	}
 }

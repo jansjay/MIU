@@ -66,28 +66,31 @@ public class DataModelMapper {
 		});
 	}
 
-	public static void addCheckoutBook(CheckoutRecord cr, DefaultTableModel checkoutModel) {
+	public static void addCheckoutBook(CheckoutRecord cr, DefaultTableModel checkoutModel, boolean overdueOnly) {
 		// TODO Auto-generated method stub
 		cr
 		.getCheckoutEntries()
 		.stream()
 		.forEach(ck->{
-			String overDueStatus = ck.getDueDate().isBefore(LocalDate.now())? "OverDue" : "Not Overdue";
+			String overDueStatus = ck.getDueDate().isBefore(LocalDate.now())? "Overdue" : "Not Overdue";
 			String[] aRow= {
 				ck.getBookCopy().getBook().getTitle(),
 				ck.getBookCopy().getBook().getIsbn(),
-				ck.getBookCopy().toString(),
+				ck.getBookCopy().getCopyNum() + "",
+				ck.getCheckoutDate().toString(),
 				ck.getDueDate().toString(),
 				cr.getMember().getMemberId(),
 				cr.getMember().getFirstName(),
 				overDueStatus
 			};
+			if(overdueOnly && !"Overdue".equals(aRow[6]))
+				return;
 			checkoutModel.addRow(aRow);
 		});
 	}
-	public static void addAllCheckoutBook(List<CheckoutRecord> cr, DefaultTableModel checkoutModel) {
+	public static void addAllCheckoutBook(List<CheckoutRecord> cr, DefaultTableModel checkoutModel, boolean overdueOnly) {
 		cr.stream().forEach(c->{
-			addCheckoutBook(c,checkoutModel);
+			addCheckoutBook(c,checkoutModel, overdueOnly);
 		});
-	}
+	}	
 }

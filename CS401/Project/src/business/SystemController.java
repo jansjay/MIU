@@ -60,26 +60,33 @@ public class SystemController extends BaseController implements ControllerInterf
 		return retval;
 	}
 
-	@Override
-	public void checkOutBookCopy(String memberId, String isbn) throws LoginException {
-		if(!super.Authorize(Operation.CheckoutBook)) throw new LoginException("UnAuthorized Access");
-		if(!Validator.validateMemberId(memberId)) throw new IllegalArgumentException("Invalid member ID");
-		if(!Validator.validateIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
-		BorrowBook borrowBook = BorrowBook.borrowABook(memberId,isbn,da);
-		da.saveBorrowBook(borrowBook);
-	}
-
-
 	//UseCase2: methods
 	@Override
-	public void saveMember(LibraryMember member) {
+	public void saveMember(LibraryMember member, CrudMode mode) {
+		if(mode == CrudMode.Create) {
+			if(Validator.isEmpty(member.getMemberId())) throw new IllegalArgumentException("Empty Member ID");
+			LibraryMember existingMember = da.searchMemberById(member.getMemberId());
+			if(existingMember != null && !existingMember.getMemberId().isEmpty())
+				throw new IllegalArgumentException("Member ID Already exists");
+		}
+		else{
+			if(!Validator.validateMemberId(member.getMemberId())) throw new IllegalArgumentException("Invalid Member ID");
+		}
 		da.saveNewMember(member);
 	}
 	
 	//UseCase3: methods
 	@Override
-	public void saveBook(Book book) {
-		if(!Validator.validateIsbn(book.getIsbn())) throw new IllegalArgumentException("Invalid ISBN");
+	public void saveBook(Book book, CrudMode mode) {
+		if(mode == CrudMode.Create) {
+			if(Validator.isEmpty(book.getIsbn())) throw new IllegalArgumentException("Empty ISBN");
+			Book existingBook = da.searchBookByIsbn(book.getIsbn());
+			if(existingBook != null && !existingBook.getIsbn().isEmpty())
+				throw new IllegalArgumentException("ISBN Already exists");
+		}
+		else{
+			if(!Validator.validateIsbn(book.getIsbn())) throw new IllegalArgumentException("Invalid ISBN");
+		}
 		if(!Validator.validateBookTitle(book.getTitle())) throw new IllegalArgumentException("Invalid Title");
 		if(!Validator.validateBookAuthors(book.getAuthors())) throw new IllegalArgumentException("No Authors");
 		if(!Validator.validateBookCopies(book.getNumCopies())) throw new IllegalArgumentException("Invalid Num of Copies");
@@ -212,7 +219,33 @@ public class SystemController extends BaseController implements ControllerInterf
 		CheckoutRecord memCr=	da.retrieveCheckoutRecordByMemberId(value);
 		if(memCr !=null) crs.add(memCr);
 		List<CheckoutRecord> isbnCr = da.retrieveCheckoutRecordByBookIsbn(value);
-		if(isbnCr !=null) crs.addAll(isbnCr);
+		if(isbnCr !=null) 
+			for(CheckoutRecord rec: isbnCr)
+				if(!crs.contains(rec))
+					crs.add(rec);
+		return crs;
+	}
+	
+	@Override
+	public List<CheckoutRecord> searchCheckedOutBookByMemberIdOrIsbn(String value) {
+		List<CheckoutRecord> crs = new ArrayList<>();	
+		List<CheckoutRecord> memCr=	da.searchCheckoutRecordByMemberId(value);
+		if(memCr !=null) crs.addAll(memCr);
+		List<CheckoutRecord> isbnCr = da.searchCheckoutRecordByBookIsbn(value);
+		if(isbnCr !=null) {
+			for(CheckoutRecord rec : isbnCr) {
+				List<CheckoutEntry> toRemove = new ArrayList<>();
+				if(!crs.contains(rec)) {
+					for(CheckoutEntry entry: rec.getCheckoutEntries())
+						if(!entry.getBookCopy().getBook().getIsbn().toLowerCase().equals(value.toLowerCase()))
+						{
+							toRemove.add(entry);
+						}
+					rec.getCheckoutEntries().removeAll(toRemove);
+					crs.add(rec);
+				}
+			}
+		}
 		return crs;
 	}
 
@@ -224,5 +257,10 @@ public class SystemController extends BaseController implements ControllerInterf
 	@Override
 	public void deleteBook(Book book) {
 		da.deleteBook(book);
+	}
+
+	@Override
+	public List<LibraryMember> searchMemberByIdFirstLastNames(String searchValue) {
+		return da.searchMemberByMemberIdFirstNameLastName(searchValue);
 	}
 }

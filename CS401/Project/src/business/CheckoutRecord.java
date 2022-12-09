@@ -31,4 +31,11 @@ public class CheckoutRecord implements Serializable {
 	public void setMember(LibraryMember member) {
 		this.member = member;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof CheckoutRecord)) return false;
+		CheckoutRecord other = (CheckoutRecord)obj;
+		return member.getMemberId().equals(other.member.getMemberId());
+	}
 }

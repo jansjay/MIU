@@ -1,29 +1,18 @@
 package librarysystem.windows;
 
 import librarysystem.controls.G8ActionListener;
+import librarysystem.controls.G8EmptyInputVerifier;
 import librarysystem.controls.G8JPanel;
 import librarysystem.controls.G8Navigatable;
-
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-
-import java.awt.Color;
-import java.awt.FlowLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JTextField;
-
 import business.Context;
 import business.LoginException;
 import business.SystemController;
-
 import javax.swing.JButton;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 
 public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 
@@ -48,6 +37,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		
 		txtUsername = new JTextField();
 		txtUsername.setText("101");
+		txtUsername.setInputVerifier(new G8EmptyInputVerifier("Username", false));
 		txtUsername.setBounds(199, 49, 450, 50);
 		panel.add(txtUsername);
 		txtUsername.setColumns(10);
@@ -58,6 +48,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		
 		txtPassword = new JPasswordField();
 		txtPassword.setText("xyz");
+		txtPassword.setInputVerifier(new G8EmptyInputVerifier("Password", false));
 		txtPassword.setBounds(199, 101, 450, 50);
 		
 		panel.add(txtPassword);
@@ -75,7 +66,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 					SystemController.getInstance().login(txtUsername.getText(), txtPassword.getText());					
 					this.getG8JPanel().getG8JFrame().authorizationChanged();					
 				} catch (LoginException e1) {
-					this.getG8JPanel().getG8JFrame().setStatusMessage(e1.getMessage(), Color.RED);
+					this.getG8JPanel().getG8JFrame().setErrorMessage(e1.getMessage());
 				}
 			}
 		});
