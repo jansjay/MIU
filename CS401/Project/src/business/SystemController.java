@@ -207,8 +207,13 @@ public class SystemController extends BaseController implements ControllerInterf
 			return ds;
 	}
 	@Override
-	public CheckoutRecord getCheckedOutBookByMemberId(String memberId) {
-		return da.retrieveCheckoutRecordByMemberId(memberId);
+	public List<CheckoutRecord> getCheckedOutBookByMemberIdOrIsbn(String value) {
+		List<CheckoutRecord> crs = new ArrayList<>();	
+		CheckoutRecord memCr=	da.retrieveCheckoutRecordByMemberId(value);
+		if(memCr !=null) crs.add(memCr);
+		List<CheckoutRecord> isbnCr = da.retrieveCheckoutRecordByBookIsbn(value);
+		if(isbnCr !=null) crs.addAll(isbnCr);
+		return crs;
 	}
 
 	@Override

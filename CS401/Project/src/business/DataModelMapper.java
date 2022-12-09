@@ -2,6 +2,7 @@ package business;
 
 import javax.swing.table.DefaultTableModel;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,13 +72,22 @@ public class DataModelMapper {
 		.getCheckoutEntries()
 		.stream()
 		.forEach(ck->{
+			String overDueStatus = ck.getDueDate().isBefore(LocalDate.now())? "OverDue" : "Not Overdue";
 			String[] aRow= {
-				cr.getMember().getMemberId(),
+				ck.getBookCopy().getBook().getTitle(),
 				ck.getBookCopy().getBook().getIsbn(),
 				ck.getBookCopy().toString(),
-				ck.getDueDate().toString()
+				ck.getDueDate().toString(),
+				cr.getMember().getMemberId(),
+				cr.getMember().getFirstName(),
+				overDueStatus
 			};
 			checkoutModel.addRow(aRow);
+		});
+	}
+	public static void addAllCheckoutBook(List<CheckoutRecord> cr, DefaultTableModel checkoutModel) {
+		cr.stream().forEach(c->{
+			addCheckoutBook(c,checkoutModel);
 		});
 	}
 }
