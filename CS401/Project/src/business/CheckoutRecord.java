@@ -13,7 +13,6 @@ public class CheckoutRecord implements Serializable {
 	
 	public CheckoutRecord(LibraryMember member, LocalDate recordDate) {
 		this.member = member;
-		this.recordDate = recordDate;
 		checkoutEntries = new ArrayList<CheckoutEntry>(); 
 	}
 	
