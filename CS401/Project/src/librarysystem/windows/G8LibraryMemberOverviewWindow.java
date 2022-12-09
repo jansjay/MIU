@@ -74,12 +74,14 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	public G8LibraryMemberOverviewWindow(String title) {
 		this();
 		this.setTitle(title);
+		super.lblSearch.setText("Search member (id or name)");
 	}
 	public G8LibraryMemberOverviewWindow() {
 		//super("Member Overview Window");
 		initialize();
 		controller = new SystemController();
 		DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
+		
 	}
 
 	/**
@@ -92,7 +94,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		//setBounds(100, 100, 1205, 678);
 		//getContentPane().setForeground(new Color(255, 255, 255));
 		//getContentPane().setLayout(null);
-		
+		super.btnLoadData.setText("All Members");
 		panelDetail.setLayout(null);
 		addTextFields();
 		addButtons();
