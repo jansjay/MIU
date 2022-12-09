@@ -222,7 +222,11 @@ public class SystemController extends BaseController implements ControllerInterf
 		List<CheckoutRecord> memCr=	da.searchCheckoutRecordByMemberId(value);
 		if(memCr !=null) crs.addAll(memCr);
 		List<CheckoutRecord> isbnCr = da.searchCheckoutRecordByBookIsbn(value);
-		if(isbnCr !=null) crs.addAll(isbnCr);
+		if(isbnCr !=null) {
+			for(CheckoutRecord rec : isbnCr) {
+				if(!crs.contains(rec))crs.add(rec);
+			}
+		}
 		return crs;
 	}
 
