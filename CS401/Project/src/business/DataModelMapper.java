@@ -76,7 +76,7 @@ public class DataModelMapper {
 			String[] aRow= {
 				ck.getBookCopy().getBook().getTitle(),
 				ck.getBookCopy().getBook().getIsbn(),
-				ck.getBookCopy().toString(),
+				ck.getCheckoutDate().toString(),
 				ck.getDueDate().toString(),
 				cr.getMember().getMemberId(),
 				cr.getMember().getFirstName(),
