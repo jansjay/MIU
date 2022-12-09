@@ -33,6 +33,7 @@ import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 import javax.swing.JFormattedTextField;
+import java.awt.Font;
 
 public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 
@@ -168,8 +169,15 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 		mainPanel.add(btnPrint);
 		
 		textArea = new JTextArea();
+		textArea.setFont(new Font("Lucida Console", Font.PLAIN, 13));
 		textArea.setBounds(26, 321, 791, 308);
-		mainPanel.add(textArea);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(26, 311, 791, 233);
+		scrollPane.setViewportView(textArea);
+		
+		
+		mainPanel.add(scrollPane);
 	}
 
 	private String rightPad(String value, int padLength, String character) {
