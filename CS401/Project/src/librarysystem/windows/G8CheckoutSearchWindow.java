@@ -31,6 +31,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
 import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
+import javax.swing.JTextArea;
+import javax.swing.JFormattedTextField;
 
 public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 
@@ -48,6 +50,7 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 	private DefaultTableModel checkoutModel;
 	private JTextField txtCheckoutSearch;
 	private JCheckBox chckbxOverdueOnly;
+	private JTextArea textArea;
 	/**
 	 * Launch the application.
 	 */
@@ -136,8 +139,47 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 		chckbxOverdueOnly.setBounds(696, 18, 147, 23);
 		mainPanel.add(chckbxOverdueOnly);
 		
+		JButton btnPrint = new JButton("Print");
+		btnPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StringBuffer buffer = new StringBuffer();
+				String topOrBottom = "";
+				for (int col = 0; col < tblCheckout.getColumnCount(); col++) {
+					topOrBottom += "|" + rightPad("=", 50, "=") + "|";					
+			    	buffer.append("|" + rightPad(tblCheckout.getColumnName(col), 50, " ") + "|");
+				}
+				buffer.append("\n");
+				buffer.append(topOrBottom);
+				buffer.append("\n");
+				for (int row = 0; row < tblCheckout.getRowCount(); row++) {
+				    for (int col = 0; col < tblCheckout.getColumnCount(); col++) {
+				    	buffer.append("|" + rightPad(tblCheckout.getValueAt(row, col).toString(), 50, " ") + "|");
+				    }
+				    buffer.append("\n");
+				}
+				buffer.append(topOrBottom);
+				buffer.insert(0, "\n");
+				buffer.insert(0, topOrBottom);
+				textArea.setText(buffer.toString());
+				System.out.println(buffer.toString());
+			}
+		});
+		btnPrint.setBounds(702, 266, 115, 29);
+		mainPanel.add(btnPrint);
+		
+		textArea = new JTextArea();
+		textArea.setBounds(26, 321, 791, 308);
+		mainPanel.add(textArea);
 	}
 
+	private String rightPad(String value, int padLength, String character) {
+		if(value.length() > padLength)
+			return value.substring(0, padLength);
+		for(int i = value.length(); i < padLength; i++)
+			value += character;
+		return value;
+	}
+	
 	private String[] getBookModelColumns() {
 		return new String[] {
 				"ISBN",
