@@ -224,7 +224,9 @@ public class SystemController extends BaseController implements ControllerInterf
 		List<CheckoutRecord> isbnCr = da.searchCheckoutRecordByBookIsbn(value);
 		if(isbnCr !=null) {
 			for(CheckoutRecord rec : isbnCr) {
-				if(!crs.contains(rec))crs.add(rec);
+				if(!crs.contains(rec)) {
+					crs.add(rec);
+				}
 			}
 		}
 		return crs;

@@ -36,7 +36,6 @@ public class CheckoutRecord implements Serializable {
 	public boolean equals(Object obj) {
 		if(!(obj instanceof CheckoutRecord)) return false;
 		CheckoutRecord other = (CheckoutRecord)obj;
-		return super.equals(obj) && 
-				member.getMemberId().equals(other.member.getMemberId());
+		return member.getMemberId().equals(other.member.getMemberId());
 	}
 }
