@@ -158,8 +158,7 @@ public class DataAccessFacade implements DataAccess {
 		for(String key: recordsMap.keySet()) {
 			CheckoutRecord rd = recordsMap.get(key);
 			for(CheckoutEntry entry: rd.getCheckoutEntries()) {
-				if(entry.getBookCopy().getBook().getIsbn().equalsIgnoreCase(isbn)
-						&& LocalDate.now().isAfter(entry.getDueDate())) {
+				if(entry.getBookCopy().getBook().getIsbn().equalsIgnoreCase(isbn)) {
 					recordList.add(rd);
 				}
 			} 		
