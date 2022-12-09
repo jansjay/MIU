@@ -15,7 +15,6 @@ import java.util.List;
 
 import business.Author;
 import business.Book;
-import business.BorrowBook;
 import business.BookCopy;
 import business.CheckoutEntry;
 import business.CheckoutRecord;
@@ -63,20 +62,6 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, mems);
 	}
 	
-	@Override
-	public void saveBorrowBook(BorrowBook borrowBook) {
-		HashMap<Integer, BorrowBook> borrowedBookMap = readBorrowBookMap();
-		if(borrowedBookMap == null) borrowedBookMap = new HashMap<>();
-		int borrowedId = borrowBook.getBorrowedId();
-		borrowedBookMap.put(borrowedId, borrowBook);
-		saveToStorage(StorageType.BORROWBOOKS, borrowedBookMap);
-	}
-
-	public HashMap<Integer, BorrowBook> readBorrowBookMap() {
-		return (HashMap<Integer, BorrowBook>) readFromStorage(StorageType.BORROWBOOKS);
-	}
-
-
 	//UseCase3 - save book by admin 
 	@Override
 	public void saveNewBook(Book book) {

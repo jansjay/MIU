@@ -60,16 +60,6 @@ public class SystemController extends BaseController implements ControllerInterf
 		return retval;
 	}
 
-	@Override
-	public void checkOutBookCopy(String memberId, String isbn) throws LoginException {
-		if(!super.Authorize(Operation.CheckoutBook)) throw new LoginException("UnAuthorized Access");
-		if(!Validator.validateMemberId(memberId)) throw new IllegalArgumentException("Invalid member ID");
-		if(!Validator.validateIsbn(isbn)) throw new IllegalArgumentException("Invalid ISBN");
-		BorrowBook borrowBook = BorrowBook.borrowABook(memberId,isbn,da);
-		da.saveBorrowBook(borrowBook);
-	}
-
-
 	//UseCase2: methods
 	@Override
 	public void saveMember(LibraryMember member) {
@@ -212,7 +202,10 @@ public class SystemController extends BaseController implements ControllerInterf
 		CheckoutRecord memCr=	da.retrieveCheckoutRecordByMemberId(value);
 		if(memCr !=null) crs.add(memCr);
 		List<CheckoutRecord> isbnCr = da.retrieveCheckoutRecordByBookIsbn(value);
-		if(isbnCr !=null) crs.addAll(isbnCr);
+		if(isbnCr !=null) 
+			for(CheckoutRecord rec: isbnCr)
+				if(!crs.contains(rec))
+					crs.add(rec);
 		return crs;
 	}
 	
@@ -224,7 +217,14 @@ public class SystemController extends BaseController implements ControllerInterf
 		List<CheckoutRecord> isbnCr = da.searchCheckoutRecordByBookIsbn(value);
 		if(isbnCr !=null) {
 			for(CheckoutRecord rec : isbnCr) {
+				List<CheckoutEntry> toRemove = new ArrayList<>();
 				if(!crs.contains(rec)) {
+					for(CheckoutEntry entry: rec.getCheckoutEntries())
+						if(!entry.getBookCopy().getBook().getIsbn().toLowerCase().equals(value.toLowerCase()))
+						{
+							toRemove.add(entry);
+						}
+					rec.getCheckoutEntries().removeAll(toRemove);
 					crs.add(rec);
 				}
 			}
