@@ -51,5 +51,17 @@ public class Validator {
     	return true;
     }
     
+    public static boolean isValidIntegerWithLength(String text, int length) {
+    	try {
+    		int value = Integer.parseInt(text);
+    		if((value + "").length() != length)
+    			return false;
+    	}
+    	catch(NumberFormatException e) {
+    		return false;
+    	}
+    	return true;
+    }
+    
     
 }

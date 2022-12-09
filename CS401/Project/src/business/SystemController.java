@@ -62,7 +62,16 @@ public class SystemController extends BaseController implements ControllerInterf
 
 	//UseCase2: methods
 	@Override
-	public void saveMember(LibraryMember member) {
+	public void saveMember(LibraryMember member, CrudMode mode) {
+		if(mode == CrudMode.Create) {
+			if(Validator.isEmpty(member.getMemberId())) throw new IllegalArgumentException("Empty Member ID");
+			LibraryMember existingMember = da.searchMemberById(member.getMemberId());
+			if(existingMember != null && !existingMember.getMemberId().isEmpty())
+				throw new IllegalArgumentException("Member ID Already exists");
+		}
+		else{
+			if(!Validator.validateMemberId(member.getMemberId())) throw new IllegalArgumentException("Invalid Member ID");
+		}
 		da.saveNewMember(member);
 	}
 	
