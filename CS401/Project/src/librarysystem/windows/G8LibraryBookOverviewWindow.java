@@ -218,8 +218,11 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		}
 		
 		Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
+		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to create a copy of the book with ISBN: " + book.getIsbn() + "?");
+		if(confirmation!=0) return;
 		book.addCopy();
 		SystemController.getInstance().saveBook(book, CrudMode.Update);
+		getG8JFrame().setSuccessMessage("A copy of the Book added successfully!!!");			
 		this.populate();
 	}
 	
