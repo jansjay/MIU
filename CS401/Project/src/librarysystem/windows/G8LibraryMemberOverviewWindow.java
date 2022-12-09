@@ -77,9 +77,10 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	public G8LibraryMemberOverviewWindow(String title) {
 		this();
 		this.setTitle(title);
-		super.lblSearch.setText("Search member (id or name)");
+		super.lblSearch.setText("Search Members (MemberID, First Name or Last Name)");
 	}
 	public G8LibraryMemberOverviewWindow() {
+		lblSearch.setText("Search Members\r\n(MemberID, First Name or Last Name)");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				searchClicked();
@@ -94,7 +95,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	 * Initialize the contents of the frame.
 	 */
 	public boolean isNavigatorItemVisible() {
-		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.LIBRARIAN) || Context.isAuth(Auth.BOTH);
+		return Context.isAuth(Auth.ADMIN) || Context.isAuth(Auth.BOTH);
 	}
 		
 	private void initialize() {
