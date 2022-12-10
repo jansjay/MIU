@@ -90,7 +90,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		});
 	}
 	
-	private void performAddAction() {
+	private void performAddAction() throws Exception{
 		if(!validateFields()) {
 			JOptionPane.showMessageDialog(null, "Please insert the values");
 			return;
@@ -115,10 +115,16 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		}
 		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the Member with Member ID: " + model.getValueAt(rowNumber,0).toString() + "?");
 		if(confirmation!=0)return;		
-		controller.removeMember(model.getValueAt(rowNumber,0).toString());
-		clearMemberUIFields();
-		getG8JFrame().setSuccessMessage("Member deleted successfully!!!");
-		populate();
+		try{
+			controller.removeMember(model.getValueAt(rowNumber,0).toString());
+		
+			clearMemberUIFields();
+			getG8JFrame().setSuccessMessage("Member deleted successfully!!!");
+			populate();
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 	
 	private void performModifyAction() {
@@ -133,9 +139,15 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 			return;
 		}
 		DataModelMapper.UpdateModelRow(model,values,rowNumber);
-		controller.saveMember(DataModelMapper.mapLibraryMember(values), CrudMode.Update);
-		clearMemberUIFields();
-		getG8JFrame().setSuccessMessage("Member updated successfully!!!");
+		try{
+			controller.saveMember(DataModelMapper.mapLibraryMember(values), CrudMode.Update);
+		
+			clearMemberUIFields();
+			getG8JFrame().setSuccessMessage("Member updated successfully!!!");
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 	
 	private void addJTable(String searchValue, boolean initOnly) {
@@ -146,12 +158,16 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		table.setModel(model);
 		table.setBounds(1137, 283, -1077, 280);
 		table.setShowGrid(true);
-
-		if(!initOnly) {
-			if(searchValue == null || searchValue.isBlank())
-				DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
-			else
-				DataModelMapper.addAllLibraryMember(controller.searchMemberByIdFirstLastNames(searchValue), model);
+		try {
+			if(!initOnly) {
+				if(searchValue == null || searchValue.isBlank())
+					DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
+				else
+					DataModelMapper.addAllLibraryMember(controller.searchMemberByIdFirstLastNames(searchValue), model);
+			}
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
 		}
 	}
 	
@@ -159,55 +175,55 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	private void addTextFields() {
 		txtMemberId = new JTextField();
 		txtMemberId.setToolTipText("Member ID");		
-		txtMemberId.setInputVerifier(new G8EmptyInputVerifier("Member ID", false));
+		txtMemberId.setInputVerifier(new G8EmptyInputVerifier("Member ID", true));
 		txtMemberId.setBounds(251, 11, 628, 31);
 		txtMemberId.setColumns(10);
 		panelDetail.add(txtMemberId);
 		
 		txtFirstName = new JTextField();
 		txtFirstName.setToolTipText("First Name");
-		txtFirstName.setInputVerifier(new G8EmptyInputVerifier("First Name", false));
+		txtFirstName.setInputVerifier(new G8EmptyInputVerifier("First Name", true));
 		txtFirstName.setColumns(10);
 		txtFirstName.setBounds(251, 53, 628, 31);
 		panelDetail.add(txtFirstName);
 		
 		txtLastName = new JTextField();
 		txtLastName.setToolTipText("Last Name");
-		txtLastName.setInputVerifier(new G8EmptyInputVerifier("Last Name", false));
+		txtLastName.setInputVerifier(new G8EmptyInputVerifier("Last Name", true));
 		txtLastName.setColumns(10);
 		txtLastName.setBounds(251, 95, 628, 31);
 		panelDetail.add(txtLastName);
 		
 		txtStreet = new JTextField();
 		txtStreet.setToolTipText("Street");
-		txtStreet.setInputVerifier(new G8EmptyInputVerifier("Street", false));
+		txtStreet.setInputVerifier(new G8EmptyInputVerifier("Street", true));
 		txtStreet.setColumns(10);
 		txtStreet.setBounds(251, 137, 226, 31);
 		panelDetail.add(txtStreet);		
 		txtCity = new JTextField();
 		txtCity.setToolTipText("City");
-		txtCity.setInputVerifier(new G8EmptyInputVerifier("City", false));
+		txtCity.setInputVerifier(new G8EmptyInputVerifier("City", true));
 		txtCity.setColumns(10);
 		txtCity.setBounds(251, 172, 226, 46);
 		panelDetail.add(txtCity);
 		
 		txtState = new JTextField();
 		txtState.setToolTipText("State");
-		txtState.setInputVerifier(new G8EmptyInputVerifier("State", false));
+		txtState.setInputVerifier(new G8EmptyInputVerifier("State", true));
 		txtState.setColumns(10);
 		txtState.setBounds(251, 229, 66, 31);
 		panelDetail.add(txtState);
 		
 		txtZip = new JTextField();
 		txtZip.setToolTipText("Zip");
-		txtZip.setInputVerifier(new G8NumberWithLengthInputVerifier("Zip", 5, false));
+		txtZip.setInputVerifier(new G8NumberWithLengthInputVerifier("Zip", 5, true));
 		txtZip.setColumns(10);
 		txtZip.setBounds(395, 229, 78, 31);
 		panelDetail.add(txtZip);
 		
 		txtTelephone = new JTextField();
 		txtTelephone.setToolTipText("Telephone");
-		txtTelephone.setInputVerifier(new G8NumberWithLengthInputVerifier("Telephone", 10, false));
+		txtTelephone.setInputVerifier(new G8NumberWithLengthInputVerifier("Telephone", 10, true));
 		txtTelephone.setColumns(10);
 		txtTelephone.setBounds(653, 137, 226, 31);
 		panelDetail.add(txtTelephone);
@@ -296,6 +312,8 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	private void setSelectedRowIntoTextFields() {
 		
 		int selectedRow = table.getSelectedRow();
+		if(selectedRow < 0)
+			return;
 		txtMemberId.setText(model.getValueAt(selectedRow, 0).toString());
 		txtFirstName.setText(model.getValueAt(selectedRow, 1).toString());
 		txtLastName.setText(model.getValueAt(selectedRow, 2).toString());

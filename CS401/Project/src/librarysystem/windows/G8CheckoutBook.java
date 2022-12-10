@@ -68,10 +68,16 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		btnBookSearch = new JButton("Search");
 		btnBookSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String isbn = txtBookSearchField.getText();
-				bookModel.setRowCount(0);
-				DataModelMapper
-				.addBooks(controller.searchBookByIsbnOrTitle(isbn), bookModel);
+				try{
+					String isbn = txtBookSearchField.getText();
+					
+					bookModel.setRowCount(0);
+					DataModelMapper
+					.addBooks(controller.searchBookByIsbnOrTitle(isbn), bookModel);
+				}
+				catch(Exception ex) {
+					getG8JFrame().setErrorMessage(ex.getMessage());
+				}
 			}
 		});
 		btnBookSearch.setBounds(520, 14, 147, 26);
@@ -100,17 +106,23 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 		btnSearchMember = new JButton("Search");
 		btnSearchMember.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String member = txtMemberSearchField.getText();
+				try{
+					String member = txtMemberSearchField.getText();
 				
-				memberModel.setRowCount(0);
-				if(member.isEmpty()) {
-					DataModelMapper
-					.addAllLibraryMember(controller.getLibraryMembers(), memberModel);
-		
+				
+					memberModel.setRowCount(0);
+					if(member.isEmpty()) {
+						DataModelMapper
+						.addAllLibraryMember(controller.getLibraryMembers(), memberModel);
+			
+					}
+					else {
+						DataModelMapper
+						.addLibraryMember(controller.searchMember(member), memberModel);
+					}
 				}
-				else {
-					DataModelMapper
-					.addLibraryMember(controller.searchMember(member), memberModel);
+				catch(Exception ex) {
+					getG8JFrame().setErrorMessage(ex.getMessage());
 				}
 			}
 		});
@@ -174,7 +186,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 					checkoutModel.setRowCount(0);
 					String value = txtCheckoutSearch.getText();
 					if(value.isEmpty()) 
-						throw new Exception("Please select the Member and the Book!!!");;;
+						throw new Exception("Please enter a Member ID or an ISBN!!!");;;
 					
 					List<business.CheckoutRecord> crs = controller.getCheckedOutBookByMemberIdOrIsbn(value);
 					DataModelMapper.addAllCheckoutBook(crs,checkoutModel, false);
@@ -225,6 +237,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				"Title",
 				"Authors",
 				"No Of Copies",
+				"No Of Available Copies",
 				"Max Checkout Length"
 		};
 	}

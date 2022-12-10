@@ -60,6 +60,7 @@ public class DataModelMapper {
 					.stream().map(abk->abk.toString())
 					.collect(Collectors.joining(",")),
 					bk.getNumCopies()+"",
+					bk.getAvailableCount() + "",
 					bk.getMaxCheckoutLength()+""
 			};
 			model.addRow(aRow);
@@ -83,7 +84,7 @@ public class DataModelMapper {
 				cr.getMember().getFirstName(),
 				overDueStatus
 			};
-			if(overdueOnly && !"Overdue".equals(aRow[6]))
+			if(overdueOnly && !"Overdue".equals(aRow[7]))
 				return;
 			checkoutModel.addRow(aRow);
 		});

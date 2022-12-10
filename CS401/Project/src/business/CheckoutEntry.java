@@ -36,6 +36,7 @@ public class CheckoutEntry  implements Serializable{
 		this.bookCopy = bookCopy;
 		this.checkoutDate = checkoutDate;
 		this.dueDate = dueDate;
+		
 	}
 
 

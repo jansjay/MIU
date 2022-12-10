@@ -52,7 +52,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 		textFieldIsbn = new JTextField();
 		textFieldIsbn.setBounds(202, 23, 958, 26);
-		textFieldIsbn.setInputVerifier(new G8EmptyInputVerifier("ISBN", false));
+		textFieldIsbn.setInputVerifier(new G8EmptyInputVerifier("ISBN", true));
 		panelDetail.add(textFieldIsbn);
 		textFieldIsbn.setColumns(10);
 
@@ -62,7 +62,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 		textFieldTitle = new JTextField();
 		textFieldTitle.setBounds(202, 54, 958, 26);
-		textFieldTitle.setInputVerifier(new G8EmptyInputVerifier("Title", false));
+		textFieldTitle.setInputVerifier(new G8EmptyInputVerifier("Title", true));
 		panelDetail.add(textFieldTitle);
 		textFieldTitle.setColumns(10);
 
@@ -76,7 +76,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 
 		textFieldCopies = new JTextField();
 		textFieldCopies.setBounds(202, 186, 958, 26);
-		textFieldCopies.setInputVerifier(new G8NumberInputVerifier("No of Copies", false));
+		textFieldCopies.setInputVerifier(new G8NumberInputVerifier("No of Copies", true));
 		panelDetail.add(textFieldCopies);
 		textFieldCopies.setColumns(10);
 		
@@ -105,7 +105,7 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		textFieldCheckoutLength = new JTextField();
 		textFieldCheckoutLength.setColumns(10);
 		textFieldCheckoutLength.setBounds(202, 239, 958, 26);
-		textFieldCheckoutLength.setInputVerifier(new G8NumberInputVerifier("Checkout Length", false));
+		textFieldCheckoutLength.setInputVerifier(new G8NumberInputVerifier("Checkout Length", true));
 		panelDetail.add(textFieldCheckoutLength);
 	}
 
@@ -153,7 +153,12 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	@Override
 	public void populate() {
 		SystemController sc = new SystemController();		
-		fillWindow(sc.allBooks());
+		try{
+			fillWindow(sc.allBooks());
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 		setFieldStatus(CrudMode.Read);
 		this.clearBookUIFields();
 	}
@@ -215,7 +220,12 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to create a copy of the book with ISBN: " + book.getIsbn() + "?");
 		if(confirmation!=0) return;
 		book.addCopy();
-		SystemController.getInstance().saveBook(book, CrudMode.Update);
+		try{
+			SystemController.getInstance().saveBook(book, CrudMode.Update);
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 		getG8JFrame().setSuccessMessage("A copy of the Book added successfully!!!");			
 		this.populate();
 	}
@@ -223,14 +233,25 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	@Override 
 	public void searchClicked() {
 		SystemController sc = new SystemController();
-		fillWindow(sc.searchBookByIsbnOrTitle(this.textFieldSearch.getText()));
+		try{
+			fillWindow(sc.searchBookByIsbnOrTitle(this.textFieldSearch.getText()));
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 		setFieldStatus(CrudMode.Read);
 	}
 	
 	private void populateAuthorsForNewBookCreation() {
 		DefaultListModel listModel = new DefaultListModel();
-		listModel.addAll(SystemController.getInstance().getAllAuthors());
-		listAuthors.setModel(listModel);
+		try{
+			listModel.addAll(SystemController.getInstance().getAllAuthors());
+		
+			listAuthors.setModel(listModel);
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 	
 	private void clearBookUIFields() {
