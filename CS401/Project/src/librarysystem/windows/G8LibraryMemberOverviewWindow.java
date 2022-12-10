@@ -175,55 +175,55 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	private void addTextFields() {
 		txtMemberId = new JTextField();
 		txtMemberId.setToolTipText("Member ID");		
-		txtMemberId.setInputVerifier(new G8EmptyInputVerifier("Member ID", false));
+		txtMemberId.setInputVerifier(new G8EmptyInputVerifier("Member ID", true));
 		txtMemberId.setBounds(251, 11, 628, 31);
 		txtMemberId.setColumns(10);
 		panelDetail.add(txtMemberId);
 		
 		txtFirstName = new JTextField();
 		txtFirstName.setToolTipText("First Name");
-		txtFirstName.setInputVerifier(new G8EmptyInputVerifier("First Name", false));
+		txtFirstName.setInputVerifier(new G8EmptyInputVerifier("First Name", true));
 		txtFirstName.setColumns(10);
 		txtFirstName.setBounds(251, 53, 628, 31);
 		panelDetail.add(txtFirstName);
 		
 		txtLastName = new JTextField();
 		txtLastName.setToolTipText("Last Name");
-		txtLastName.setInputVerifier(new G8EmptyInputVerifier("Last Name", false));
+		txtLastName.setInputVerifier(new G8EmptyInputVerifier("Last Name", true));
 		txtLastName.setColumns(10);
 		txtLastName.setBounds(251, 95, 628, 31);
 		panelDetail.add(txtLastName);
 		
 		txtStreet = new JTextField();
 		txtStreet.setToolTipText("Street");
-		txtStreet.setInputVerifier(new G8EmptyInputVerifier("Street", false));
+		txtStreet.setInputVerifier(new G8EmptyInputVerifier("Street", true));
 		txtStreet.setColumns(10);
 		txtStreet.setBounds(251, 137, 226, 31);
 		panelDetail.add(txtStreet);		
 		txtCity = new JTextField();
 		txtCity.setToolTipText("City");
-		txtCity.setInputVerifier(new G8EmptyInputVerifier("City", false));
+		txtCity.setInputVerifier(new G8EmptyInputVerifier("City", true));
 		txtCity.setColumns(10);
 		txtCity.setBounds(251, 172, 226, 46);
 		panelDetail.add(txtCity);
 		
 		txtState = new JTextField();
 		txtState.setToolTipText("State");
-		txtState.setInputVerifier(new G8EmptyInputVerifier("State", false));
+		txtState.setInputVerifier(new G8EmptyInputVerifier("State", true));
 		txtState.setColumns(10);
 		txtState.setBounds(251, 229, 66, 31);
 		panelDetail.add(txtState);
 		
 		txtZip = new JTextField();
 		txtZip.setToolTipText("Zip");
-		txtZip.setInputVerifier(new G8NumberWithLengthInputVerifier("Zip", 5, false));
+		txtZip.setInputVerifier(new G8NumberWithLengthInputVerifier("Zip", 5, true));
 		txtZip.setColumns(10);
 		txtZip.setBounds(395, 229, 78, 31);
 		panelDetail.add(txtZip);
 		
 		txtTelephone = new JTextField();
 		txtTelephone.setToolTipText("Telephone");
-		txtTelephone.setInputVerifier(new G8NumberWithLengthInputVerifier("Telephone", 10, false));
+		txtTelephone.setInputVerifier(new G8NumberWithLengthInputVerifier("Telephone", 10, true));
 		txtTelephone.setColumns(10);
 		txtTelephone.setBounds(653, 137, 226, 31);
 		panelDetail.add(txtTelephone);

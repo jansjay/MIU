@@ -223,8 +223,8 @@ public class SystemController extends BaseController implements ControllerInterf
 				.values()
 				.parallelStream()
 				.filter(
-						bk -> bk.getIsbn().contains(isbnOrTitle) 
-						|| bk.getTitle().contains(isbnOrTitle)
+						bk -> bk.getIsbn().toLowerCase().contains(isbnOrTitle.toLowerCase()) 
+						|| bk.getTitle().toLowerCase().contains(isbnOrTitle.toLowerCase())
 						|| isbnOrTitle.isEmpty())
 				.toList();
 		
