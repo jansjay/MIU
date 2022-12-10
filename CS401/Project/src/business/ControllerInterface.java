@@ -8,21 +8,21 @@ import dataaccess.DataAccessFacade;
 
 public interface ControllerInterface {
 	public void login(String id, String password) throws LoginException;
-	public List<String> allMemberIds();
-	public List<String> allBookIds();
-	public List<Book> allBooks();
-	public void saveMember(LibraryMember member, CrudMode mode);
-	public void removeMember(String memberId);
-	public void saveBook(Book book, CrudMode mode);
-	public void saveBookCopy(Book book);
+	public List<String> allMemberIds()  throws LibrarySystemException;
+	public List<String> allBookIds()  throws LibrarySystemException;
+	public List<Book> allBooks()  throws LibrarySystemException;
+	public void saveMember(LibraryMember member, CrudMode mode)  throws LibrarySystemException;
+	public void removeMember(String memberId)  throws LibrarySystemException;
+	public void saveBook(Book book, CrudMode mode)  throws LibrarySystemException;
+	public void saveBookCopy(Book book)  throws LibrarySystemException;
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
-	public LibraryMember searchMember(String memberId);
-	public List<LibraryMember> searchMemberByIdFirstLastNames(String searchValue);
-	public Book searchOverDueBookByIsbn(String isbn);
-	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle);
-	public List<LibraryMember> getLibraryMembers();
-	public List<CheckoutRecord> getCheckedOutBookByMemberIdOrIsbn(String value);
-	public List<CheckoutRecord> searchCheckedOutBookByMemberIdOrIsbn(String value);
-	public List<Author> getAllAuthors();
-	public void deleteBook(Book book);
+	public LibraryMember searchMember(String memberId) throws LibrarySystemException;
+	public List<LibraryMember> searchMemberByIdFirstLastNames(String searchValue) throws LibrarySystemException;
+	public Book searchOverDueBookByIsbn(String isbn) throws LibrarySystemException;
+	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle) throws LibrarySystemException;
+	public List<LibraryMember> getLibraryMembers() throws LibrarySystemException;
+	public List<CheckoutRecord> getCheckedOutBookByMemberIdOrIsbn(String value) throws LibrarySystemException;
+	public List<CheckoutRecord> searchCheckedOutBookByMemberIdOrIsbn(String value) throws LibrarySystemException;
+	public List<Author> getAllAuthors() throws LibrarySystemException;
+	public void deleteBook(Book book) throws LibrarySystemException;
 }
