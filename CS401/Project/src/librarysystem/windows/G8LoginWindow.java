@@ -36,7 +36,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		panel.add(lblUsername);
 		
 		txtUsername = new JTextField();
-		txtUsername.setText("101");
+		//txtUsername.setText("101");
 		txtUsername.setInputVerifier(new G8EmptyInputVerifier("Username", false));
 		txtUsername.setBounds(199, 49, 450, 50);
 		panel.add(txtUsername);
@@ -47,7 +47,7 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 		panel.add(lblPassword);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setText("xyz");
+		//txtPassword.setText("xyz");
 		txtPassword.setInputVerifier(new G8EmptyInputVerifier("Password", false));
 		txtPassword.setBounds(199, 101, 450, 50);
 		
@@ -64,7 +64,8 @@ public class G8LoginWindow extends G8JPanel  implements G8Navigatable{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					SystemController.getInstance().login(txtUsername.getText(), txtPassword.getText());					
-					this.getG8JPanel().getG8JFrame().authorizationChanged();					
+					this.getG8JPanel().getG8JFrame().authorizationChanged();
+					txtPassword.setText("");
 				} catch (LoginException e1) {
 					this.getG8JPanel().getG8JFrame().setErrorMessage(e1.getMessage());
 				}

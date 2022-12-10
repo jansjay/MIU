@@ -40,6 +40,9 @@ public class SystemController extends BaseController implements ControllerInterf
 		currentAuth = map.get(id).getAuthorization();
 		Context.createContext(id, currentAuth);
 	}
+	public void logout() throws LoginException {
+		Context.clearContext();
+	}
 	@Override
 	public List<String> allMemberIds()  throws LibrarySystemException {
 		checkAuthorized(Operation.AllMemberIds);

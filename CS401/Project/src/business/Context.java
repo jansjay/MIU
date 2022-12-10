@@ -22,7 +22,7 @@ public final class Context {
         }
         return context;
     }
-
+    
     /**
      * Call to set a context after logged in.
      * @return
@@ -36,8 +36,8 @@ public final class Context {
     /**
      * Clear to context after logged out.
      */
-    public void clearContext(){
-        this.context = null;
+    public static void clearContext(){
+        context = null;
     }
     
     public static boolean isAuth(Auth auth) {
