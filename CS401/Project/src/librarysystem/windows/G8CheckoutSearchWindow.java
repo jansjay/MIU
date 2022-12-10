@@ -154,7 +154,8 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 				"Title",
 				"Authors",
 				"Max Checkout Length",
-				"No Of Copies"
+				"No Of Copies",
+				"No of Available Copies"
 		};
 	}
 	
