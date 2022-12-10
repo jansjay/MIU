@@ -42,20 +42,21 @@ public class G8JPanelLeading extends G8JPanel {
 		});
 		mnFileMenu.add(mntmFileQuitMenuItem);
 		
-		/*JMenu mnUserMenu = new JMenu("User");
+		JMenu mnUserMenu = new JMenu("User");
 		menuBar.add(mnUserMenu);
 		
 		JMenuItem mntmUserLogoggMenuItem = new JMenuItem("Logoff");
 		mntmUserLogoggMenuItem.addActionListener(new G8ActionListener(this) {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					this.getG8JPanel().getG8JFrame().dispatchEvent(new WindowEvent(this.getG8JPanel().getG8JFrame(), WindowEvent.WINDOW_CLOSING));					
+					SystemController.getInstance().logout();					
+					this.getG8JPanel().getG8JFrame().authorizationChanged();					
 				} catch (Exception e1) {
 					this.getG8JPanel().getG8JFrame().setStatusMessage(e1.getMessage(), Color.RED);
 				}
 			}
 		});
-		mnUserMenu.add(mntmUserLogoggMenuItem);*/
+		mnUserMenu.add(mntmUserLogoggMenuItem);
 
 	}
 	
