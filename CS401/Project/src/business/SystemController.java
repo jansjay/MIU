@@ -134,7 +134,7 @@ public class SystemController extends BaseController implements ControllerInterf
 		record.addCheckoutEntry(entry);
 		// save new / updated record and entries 
 		da.saveCheckoutRecord(record);
-
+		saveBook(book, CrudMode.Update);
 	}
 	
 	//UseCase 6: (Optional 1)

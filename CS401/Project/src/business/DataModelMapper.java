@@ -60,6 +60,7 @@ public class DataModelMapper {
 					.stream().map(abk->abk.toString())
 					.collect(Collectors.joining(",")),
 					bk.getNumCopies()+"",
+					bk.getAvailableCount() + "",
 					bk.getMaxCheckoutLength()+""
 			};
 			model.addRow(aRow);

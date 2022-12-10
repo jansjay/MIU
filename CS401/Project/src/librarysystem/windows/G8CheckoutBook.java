@@ -225,6 +225,7 @@ public class G8CheckoutBook extends G8JPanel implements G8Navigatable {
 				"Title",
 				"Authors",
 				"No Of Copies",
+				"No Of Available Copies",
 				"Max Checkout Length"
 		};
 	}
