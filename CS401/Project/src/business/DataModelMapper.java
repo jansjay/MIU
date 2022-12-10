@@ -83,7 +83,7 @@ public class DataModelMapper {
 				cr.getMember().getFirstName(),
 				overDueStatus
 			};
-			if(overdueOnly && !"Overdue".equals(aRow[6]))
+			if(overdueOnly && !"Overdue".equals(aRow[7]))
 				return;
 			checkoutModel.addRow(aRow);
 		});
