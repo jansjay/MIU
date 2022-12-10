@@ -284,11 +284,12 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 	
 	private void checkAuthorized(Operation operation) throws LibrarySystemException {
-    	try{Auth role = Permission.getOperationMap().get(operation);
-    	Auth currentRole = Context.getContext().getAuth();
-    	if(currentRole != null && role == currentRole || role == Auth.BOTH) {
-    		return;
-    	}
+    	try{
+    		Auth role = Permission.getOperationMap().get(operation);
+    		Auth currentRole = Context.getContext().getAuth();
+    		if(currentRole != null && (role == currentRole || role == Auth.BOTH || currentRole == Auth.BOTH)) {
+    			return;
+    		}
     	}
     	catch(LoginException ex)
     	{

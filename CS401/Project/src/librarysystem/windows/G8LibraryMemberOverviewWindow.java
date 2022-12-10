@@ -312,6 +312,8 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 	private void setSelectedRowIntoTextFields() {
 		
 		int selectedRow = table.getSelectedRow();
+		if(selectedRow < 0)
+			return;
 		txtMemberId.setText(model.getValueAt(selectedRow, 0).toString());
 		txtFirstName.setText(model.getValueAt(selectedRow, 1).toString());
 		txtLastName.setText(model.getValueAt(selectedRow, 2).toString());
