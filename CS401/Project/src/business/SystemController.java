@@ -237,7 +237,7 @@ public class SystemController extends BaseController implements ControllerInterf
 				List<CheckoutEntry> toRemove = new ArrayList<>();
 				if(!crs.contains(rec)) {
 					for(CheckoutEntry entry: rec.getCheckoutEntries())
-						if(!entry.getBookCopy().getBook().getIsbn().toLowerCase().equals(value.toLowerCase()))
+						if(!entry.getBookCopy().getBook().getIsbn().toLowerCase().contains(value.toLowerCase()))
 						{
 							toRemove.add(entry);
 						}
