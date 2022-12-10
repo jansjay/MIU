@@ -22,10 +22,10 @@ public class Permission {
         operationMap.put(Operation.AllMemberIds,Auth.BOTH);
         operationMap.put(Operation.AllBookIds, Auth.BOTH);
         operationMap.put(Operation.AllBooks, Auth.BOTH);
-        operationMap.put(Operation.SaveMember, Auth.ADMIN);
+        operationMap.put(Operation.SaveMember, Auth.BOTH);
         operationMap.put(Operation.RemoveMember,Auth.ADMIN);
-        operationMap.put(Operation.SaveBook, Auth.ADMIN);
-        operationMap.put(Operation.SaveBookCopy, Auth.ADMIN);
+        operationMap.put(Operation.SaveBook, Auth.BOTH);
+        operationMap.put(Operation.SaveBookCopy, Auth.BOTH);
         operationMap.put(Operation.SearchMember, Auth.BOTH);
         operationMap.put(Operation.SearchMemberByIdFirstLastNames, Auth.BOTH);
         operationMap.put(Operation.SearchOverDueBookByIsbn, Auth.BOTH);
@@ -33,7 +33,7 @@ public class Permission {
         operationMap.put(Operation.GetLibraryMembers, Auth.BOTH);
         operationMap.put(Operation.GetCheckedOutBookByMemberIdOrIsbn, Auth.LIBRARIAN);
         operationMap.put(Operation.SearchCheckedOutBookByMemberIdOrIsbn, Auth.LIBRARIAN);
-        operationMap.put(Operation.GetAllAuthors, Auth.LIBRARIAN);
+        operationMap.put(Operation.GetAllAuthors, Auth.BOTH);
         operationMap.put(Operation.DeleteBook, Auth.ADMIN);
         operationMap.put(Operation.PrintCheckoutRecordsByMember, Auth.BOTH);
     }
