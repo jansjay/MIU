@@ -321,6 +321,17 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 					Book book = (Book)this.table.getValueAt(table.getSelectedRow(), this.bookObjTagIndex);
 					book.setTitle(textFieldTitle.getText());
 					book.setMaxCheckoutLength(Integer.parseInt(textFieldCheckoutLength.getText()));
+					if(!textFieldCopies.getText().isBlank())
+					{
+						int noOfCopiesNew = Integer.parseInt(textFieldCopies.getText());
+						if(book.getCopies().length > noOfCopiesNew) {
+							throw new Exception("No of copies should be greater than already defined number.");
+						}
+						for(int i = book.getCopies().length -1; i<noOfCopiesNew -1;i++) {
+							book.addCopy();
+						} 
+					}
+					
 					SystemController.getInstance().saveBook(book, currentCrudMode);
 					getG8JFrame().setSuccessMessage("Book saved successfully!!!");			
 					break;
