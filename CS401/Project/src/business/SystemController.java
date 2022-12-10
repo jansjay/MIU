@@ -9,6 +9,7 @@ import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.Operation;
+import dataaccess.Permission;
 import dataaccess.User;
 
 
@@ -40,21 +41,24 @@ public class SystemController extends BaseController implements ControllerInterf
 		Context.createContext(id, currentAuth);
 	}
 	@Override
-	public List<String> allMemberIds() {
+	public List<String> allMemberIds()  throws LibrarySystemException {
+		checkAuthorized(Operation.AllMemberIds);
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readMemberMap().keySet());
 		return retval;
 	}
 	
 	@Override
-	public List<String> allBookIds() {
+	public List<String> allBookIds()  throws LibrarySystemException {
+		checkAuthorized(Operation.AllBookIds);
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
 	}
 	
 	@Override
-	public List<Book> allBooks() {
+	public List<Book> allBooks()  throws LibrarySystemException {
+		checkAuthorized(Operation.AllBooks);
 		List<Book> retval = new ArrayList<>();
 		retval.addAll(da.readBooksMap().values());
 		return retval;
@@ -62,7 +66,8 @@ public class SystemController extends BaseController implements ControllerInterf
 
 	//UseCase2: methods
 	@Override
-	public void saveMember(LibraryMember member, CrudMode mode) {
+	public void saveMember(LibraryMember member, CrudMode mode)  throws LibrarySystemException {
+		checkAuthorized(Operation.SaveMember);
 		if(mode == CrudMode.Create) {
 			if(Validator.isEmpty(member.getMemberId())) throw new IllegalArgumentException("Empty Member ID");
 			LibraryMember existingMember = da.searchMemberById(member.getMemberId());
@@ -77,7 +82,8 @@ public class SystemController extends BaseController implements ControllerInterf
 	
 	//UseCase3: methods
 	@Override
-	public void saveBook(Book book, CrudMode mode) {
+	public void saveBook(Book book, CrudMode mode)  throws LibrarySystemException {
+		checkAuthorized(Operation.SaveBook);
 		if(mode == CrudMode.Create) {
 			if(Validator.isEmpty(book.getIsbn())) throw new IllegalArgumentException("Empty ISBN");
 			Book existingBook = da.searchBookByIsbn(book.getIsbn());
@@ -96,7 +102,8 @@ public class SystemController extends BaseController implements ControllerInterf
 
 	//UseCase5
 	@Override
-	public void saveBookCopy(Book book) {
+	public void saveBookCopy(Book book)  throws LibrarySystemException {
+		checkAuthorized(Operation.SaveBookCopy);
 		book.addCopy();
 		da.saveBookCopy(book);
 	}
@@ -104,6 +111,7 @@ public class SystemController extends BaseController implements ControllerInterf
 	//UseCase4 - methods
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException {
 		
+		checkAuthorized(Operation.CheckoutBook);
 		LibraryMember member = da.searchMemberById(memberId);
 		
 		if(member == null) {
@@ -138,13 +146,15 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 	
 	//UseCase 6: (Optional 1)
-	public LibraryMember searchMember(String memberId) {
+	public LibraryMember searchMember(String memberId)  throws LibrarySystemException {
+		checkAuthorized(Operation.SearchMember);
 		LibraryMember member = da.searchMemberById(memberId);
 		//
 		return member;
 	}
 	
-	public void printCheckoutRecordsByMember(String memberId) {
+	public void printCheckoutRecordsByMember(String memberId)  throws LibrarySystemException {
+		checkAuthorized(Operation.PrintCheckoutRecordsByMember);
 		LibraryMember member = da.searchMemberById(memberId);
 		CheckoutRecord record = da.retrieveCheckoutRecordByMemberId(memberId);
 		if(member != null && record != null) {
@@ -159,7 +169,8 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 	
 	//UseCase 7: (Optional 2)
-	public Book searchOverDueBookByIsbn(String isbn) {
+	public Book searchOverDueBookByIsbn(String isbn)  throws LibrarySystemException {
+		checkAuthorized(Operation.SearchOverDueBookByIsbn);
 		Book book = da.searchBookByIsbn(isbn);
 		//if copy/s unavailable then search into records
 		List<BookCopy> unavaileCopies = book.getUnavailableCopies();
@@ -183,7 +194,8 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 
 	@Override
-	public List<LibraryMember> getLibraryMembers(){
+	public List<LibraryMember> getLibraryMembers() throws LibrarySystemException {
+		checkAuthorized(Operation.GetLibraryMembers);
 		
 		return da.readMemberMap()
 				.values()
@@ -193,13 +205,15 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 	
 	@Override
-	public void removeMember(String memberId) {
+	public void removeMember(String memberId) throws LibrarySystemException  {
+		checkAuthorized(Operation.RemoveMember);
 		//TODO: Have to remove all relevant records from relevant tables
 		da.removeMember(memberId);
 	}
 	
 	@Override
-	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle){
+	public List<Book> searchBookByIsbnOrTitle(String isbnOrTitle) throws LibrarySystemException {
+		checkAuthorized(Operation.SearchBookByIsbnOrTitle);
 		
 		List<Book> ds = da
 				.readBooksMap()
@@ -214,7 +228,8 @@ public class SystemController extends BaseController implements ControllerInterf
 			return ds;
 	}
 	@Override
-	public List<CheckoutRecord> getCheckedOutBookByMemberIdOrIsbn(String value) {
+	public List<CheckoutRecord> getCheckedOutBookByMemberIdOrIsbn(String value)  throws LibrarySystemException {
+		checkAuthorized(Operation.GetCheckedOutBookByMemberIdOrIsbn);
 		List<CheckoutRecord> crs = new ArrayList<>();	
 		CheckoutRecord memCr=	da.retrieveCheckoutRecordByMemberId(value);
 		if(memCr !=null) crs.add(memCr);
@@ -227,7 +242,8 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 	
 	@Override
-	public List<CheckoutRecord> searchCheckedOutBookByMemberIdOrIsbn(String value) {
+	public List<CheckoutRecord> searchCheckedOutBookByMemberIdOrIsbn(String value)  throws LibrarySystemException {
+		checkAuthorized(Operation.SearchCheckedOutBookByMemberIdOrIsbn);
 		List<CheckoutRecord> crs = new ArrayList<>();	
 		List<CheckoutRecord> memCr=	da.searchCheckoutRecordByMemberId(value);
 		if(memCr !=null) crs.addAll(memCr);
@@ -250,17 +266,34 @@ public class SystemController extends BaseController implements ControllerInterf
 	}
 
 	@Override
-	public List<Author> getAllAuthors() {
+	public List<Author> getAllAuthors()  throws LibrarySystemException {
+		checkAuthorized(Operation.GetAllAuthors);
 		return da.getAllAuthors();
 	}
 
 	@Override
-	public void deleteBook(Book book) {
+	public void deleteBook(Book book)  throws LibrarySystemException {
+		checkAuthorized(Operation.DeleteBook);
 		da.deleteBook(book);
 	}
 
 	@Override
-	public List<LibraryMember> searchMemberByIdFirstLastNames(String searchValue) {
+	public List<LibraryMember> searchMemberByIdFirstLastNames(String searchValue)  throws LibrarySystemException {
+		checkAuthorized(Operation.SearchMemberByIdFirstLastNames);
 		return da.searchMemberByMemberIdFirstNameLastName(searchValue);
 	}
+	
+	private void checkAuthorized(Operation operation) throws LibrarySystemException {
+    	try{Auth role = Permission.getOperationMap().get(operation);
+    	Auth currentRole = Context.getContext().getAuth();
+    	if(currentRole != null && role == currentRole || role == Auth.BOTH) {
+    		return;
+    	}
+    	}
+    	catch(LoginException ex)
+    	{
+    		throw new LibrarySystemException("User is not allowed to perform operation " + operation.toString() + " " + ex.getMessage());
+    	}
+    	throw new LibrarySystemException("User is not allowed to perform operation " + operation.toString());
+    }
 }

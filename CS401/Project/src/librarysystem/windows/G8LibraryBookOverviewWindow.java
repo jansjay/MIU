@@ -153,7 +153,12 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	@Override
 	public void populate() {
 		SystemController sc = new SystemController();		
-		fillWindow(sc.allBooks());
+		try{
+			fillWindow(sc.allBooks());
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 		setFieldStatus(CrudMode.Read);
 		this.clearBookUIFields();
 	}
@@ -215,7 +220,12 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to create a copy of the book with ISBN: " + book.getIsbn() + "?");
 		if(confirmation!=0) return;
 		book.addCopy();
-		SystemController.getInstance().saveBook(book, CrudMode.Update);
+		try{
+			SystemController.getInstance().saveBook(book, CrudMode.Update);
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 		getG8JFrame().setSuccessMessage("A copy of the Book added successfully!!!");			
 		this.populate();
 	}
@@ -223,14 +233,25 @@ public class G8LibraryBookOverviewWindow extends G8PanelOverview implements G8Na
 	@Override 
 	public void searchClicked() {
 		SystemController sc = new SystemController();
-		fillWindow(sc.searchBookByIsbnOrTitle(this.textFieldSearch.getText()));
+		try{
+			fillWindow(sc.searchBookByIsbnOrTitle(this.textFieldSearch.getText()));
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 		setFieldStatus(CrudMode.Read);
 	}
 	
 	private void populateAuthorsForNewBookCreation() {
 		DefaultListModel listModel = new DefaultListModel();
-		listModel.addAll(SystemController.getInstance().getAllAuthors());
-		listAuthors.setModel(listModel);
+		try{
+			listModel.addAll(SystemController.getInstance().getAllAuthors());
+		
+			listAuthors.setModel(listModel);
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 	
 	private void clearBookUIFields() {

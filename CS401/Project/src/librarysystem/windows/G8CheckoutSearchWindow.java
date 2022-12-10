@@ -77,10 +77,16 @@ public class G8CheckoutSearchWindow extends G8JPanel implements G8Navigatable {
 		JButton btnSearchCheckedOut = new JButton("Search");
 		btnSearchCheckedOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				checkoutModel.setRowCount(0);
-				String value = txtCheckoutSearch.getText();
-				List<business.CheckoutRecord> crs = controller.searchCheckedOutBookByMemberIdOrIsbn(value);
-				DataModelMapper.addAllCheckoutBook(crs,checkoutModel, chckbxOverdueOnly.isSelected());
+				try{
+					checkoutModel.setRowCount(0);
+				
+					String value = txtCheckoutSearch.getText();
+					List<business.CheckoutRecord> crs = controller.searchCheckedOutBookByMemberIdOrIsbn(value);
+					DataModelMapper.addAllCheckoutBook(crs,checkoutModel, chckbxOverdueOnly.isSelected());
+				}
+				catch(Exception ex) {
+					getG8JFrame().setErrorMessage(ex.getMessage());
+				}
 			}
 		});
 		btnSearchCheckedOut.setBounds(670, 48, 147, 26);

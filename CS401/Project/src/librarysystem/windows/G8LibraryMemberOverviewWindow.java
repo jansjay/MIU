@@ -90,7 +90,7 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		});
 	}
 	
-	private void performAddAction() {
+	private void performAddAction() throws Exception{
 		if(!validateFields()) {
 			JOptionPane.showMessageDialog(null, "Please insert the values");
 			return;
@@ -115,10 +115,16 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		}
 		int confirmation = JOptionPane.showConfirmDialog(null, "Do you want to delete the Member with Member ID: " + model.getValueAt(rowNumber,0).toString() + "?");
 		if(confirmation!=0)return;		
-		controller.removeMember(model.getValueAt(rowNumber,0).toString());
-		clearMemberUIFields();
-		getG8JFrame().setSuccessMessage("Member deleted successfully!!!");
-		populate();
+		try{
+			controller.removeMember(model.getValueAt(rowNumber,0).toString());
+		
+			clearMemberUIFields();
+			getG8JFrame().setSuccessMessage("Member deleted successfully!!!");
+			populate();
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 	
 	private void performModifyAction() {
@@ -133,9 +139,15 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 			return;
 		}
 		DataModelMapper.UpdateModelRow(model,values,rowNumber);
-		controller.saveMember(DataModelMapper.mapLibraryMember(values), CrudMode.Update);
-		clearMemberUIFields();
-		getG8JFrame().setSuccessMessage("Member updated successfully!!!");
+		try{
+			controller.saveMember(DataModelMapper.mapLibraryMember(values), CrudMode.Update);
+		
+			clearMemberUIFields();
+			getG8JFrame().setSuccessMessage("Member updated successfully!!!");
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
+		}
 	}
 	
 	private void addJTable(String searchValue, boolean initOnly) {
@@ -146,12 +158,16 @@ public class G8LibraryMemberOverviewWindow extends G8PanelOverview implements G8
 		table.setModel(model);
 		table.setBounds(1137, 283, -1077, 280);
 		table.setShowGrid(true);
-
-		if(!initOnly) {
-			if(searchValue == null || searchValue.isBlank())
-				DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
-			else
-				DataModelMapper.addAllLibraryMember(controller.searchMemberByIdFirstLastNames(searchValue), model);
+		try {
+			if(!initOnly) {
+				if(searchValue == null || searchValue.isBlank())
+					DataModelMapper.addAllLibraryMember(controller.getLibraryMembers(), model);
+				else
+					DataModelMapper.addAllLibraryMember(controller.searchMemberByIdFirstLastNames(searchValue), model);
+			}
+		}
+		catch(Exception ex) {
+			getG8JFrame().setErrorMessage(ex.getMessage());
 		}
 	}
 	
