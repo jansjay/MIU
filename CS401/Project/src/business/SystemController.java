@@ -80,6 +80,13 @@ public class SystemController extends BaseController implements ControllerInterf
 		else{
 			if(!Validator.validateMemberId(member.getMemberId())) throw new IllegalArgumentException("Invalid Member ID");
 		}
+		if(Validator.isEmpty(member.getFirstName())) throw new IllegalArgumentException("Empty First Name");
+		if(Validator.isEmpty(member.getLastName())) throw new IllegalArgumentException("Empty Last Name");
+		if(!Validator.isValidIntegerWithLength(member.getTelephone(), 10)) throw new IllegalArgumentException("Telephone - Invalid number - 10 digit");
+		if(Validator.isEmpty(member.getAddress().getCity())) throw new IllegalArgumentException("Empty City");
+		if(Validator.isEmpty(member.getAddress().getState())) throw new IllegalArgumentException("Empty State");
+		if(Validator.isEmpty(member.getAddress().getStreet())) throw new IllegalArgumentException("Empty Street");
+		if(!Validator.isValidIntegerWithLength(member.getAddress().getZip(), 5)) throw new IllegalArgumentException("Zip - Invalid number - 5 digit");
 		da.saveNewMember(member);
 	}
 	
