@@ -35,7 +35,7 @@ public class CheckoutEntry  implements Serializable{
 	public CheckoutEntry(BookCopy bookCopy, LocalDate checkoutDate, LocalDate dueDate) {
 		this.bookCopy = bookCopy;
 		this.checkoutDate = checkoutDate;
-		this.dueDate = LocalDate.ofYearDay(2022, 300);
+		this.dueDate = dueDate;
 		
 	}
 
